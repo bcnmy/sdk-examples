@@ -1,0 +1,19 @@
+body {
+  margin: 0;
+  font-family: rubik, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code, pre {
+  font-size: 14px;
+  font-family: Inconsolata, Monaco, Consolas, "Courier New", Courier, monospace;
+}
+
+p {
+  margin: 10px 0;
+}
+
+.Toastify__toast-body {
+  word-break: break-all;
+}
