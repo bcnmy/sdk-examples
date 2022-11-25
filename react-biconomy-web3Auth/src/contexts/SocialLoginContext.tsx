@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
-import SocialLogin from "@biconomy/web3-auth";
+import SocialLogin, { getSocialLoginSDK } from "@biconomy/web3-auth";
 import { activeChainId } from "../utils/chainConfig";
 
 interface web3AuthContextType {
@@ -57,7 +57,7 @@ export const Web3AuthProvider = ({ children }: any) => {
   // if wallet already connected close widget
   useEffect(() => {
     console.log("hidelwallet");
-    if (socialLoginSDK && address) {
+    if (socialLoginSDK && socialLoginSDK.provider) {
       socialLoginSDK.hideWallet();
     }
   }, [address, socialLoginSDK]);
@@ -88,11 +88,7 @@ export const Web3AuthProvider = ({ children }: any) => {
       return socialLoginSDK;
     }
     setLoading(true);
-    const sdk = new SocialLogin();
-    await sdk.init(ethers.utils.hexValue(80001), {
-      "http://localhost:3000":
-        "MEQCIEiFEZ1LJG9MczYhw5F9mPBKSSfAR8Ipg8ynmoKwu5tRAiBaB_nhULey7ibZdo8lhZODR7Yl9jOTq-ZmVcXkMPMbgQ",
-    });
+    const sdk = await getSocialLoginSDK(ethers.utils.hexValue(80001));
     sdk.showConnectModal();
     sdk.showWallet();
     setSocialLoginSDK(sdk);
@@ -103,11 +99,12 @@ export const Web3AuthProvider = ({ children }: any) => {
   // after social login -> set provider info
   useEffect(() => {
     (async () => {
-      if (socialLoginSDK?.provider && !address) {
-        connect();
+      if (window && (window as any).location.hash && !address) {
+        const sdk = await getSocialLoginSDK(ethers.utils.hexValue(80001));
+        setSocialLoginSDK(sdk);
       }
     })();
-  }, [address, connect, socialLoginSDK, socialLoginSDK?.provider]);
+  }, [connect, address]);
 
   // after metamask login -> get provider event
   useEffect(() => {
@@ -115,7 +112,7 @@ export const Web3AuthProvider = ({ children }: any) => {
       if (address) {
         clearInterval(interval);
       }
-      if (socialLoginSDK?.provider && !address) {
+      if (socialLoginSDK && !address) {
         connect();
       }
     }, 1000);
@@ -137,7 +134,9 @@ export const Web3AuthProvider = ({ children }: any) => {
       address: "",
       chainId: activeChainId,
     });
+    (window as any).getSocialLoginSDK = null;
     socialLoginSDK.hideWallet();
+    setSocialLoginSDK(null);
   }, [socialLoginSDK]);
 
   return (

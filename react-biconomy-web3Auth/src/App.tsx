@@ -6,7 +6,12 @@ import Button from "./components/Button";
 
 const App: React.FC = () => {
   const classes = useStyles();
-  const { address, connect, disconnect } = useWeb3AuthContext();
+  const {
+    address,
+    loading: eoaLoading,
+    connect,
+    disconnect,
+  } = useWeb3AuthContext();
   const {
     selectedAccount,
     loading: scwLoading,
@@ -30,6 +35,8 @@ const App: React.FC = () => {
           }
           title={!address ? "Connect Wallet" : "Disconnect Wallet"}
         />
+
+        {eoaLoading && <h2>Loading EOA...</h2>}
 
         {address && (
           <div>
