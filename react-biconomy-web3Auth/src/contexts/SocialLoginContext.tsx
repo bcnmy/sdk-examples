@@ -6,22 +6,26 @@ import { activeChainId } from "../utils/chainConfig";
 interface web3AuthContextType {
   connect: () => Promise<SocialLogin | null | undefined>;
   disconnect: () => Promise<void>;
+  getUserInfo: () => Promise<any>;
   provider: any;
   ethersProvider: ethers.providers.Web3Provider | null;
   web3Provider: ethers.providers.Web3Provider | null;
   loading: boolean;
   chainId: number;
   address: string;
+  userInfo: any;
 }
 export const Web3AuthContext = React.createContext<web3AuthContextType>({
   connect: () => Promise.resolve(null),
   disconnect: () => Promise.resolve(),
+  getUserInfo: () => Promise.resolve(),
   loading: false,
   provider: null,
   ethersProvider: null,
   web3Provider: null,
   chainId: activeChainId,
   address: "",
+  userInfo: null,
 });
 export const useWeb3AuthContext = () => useContext(Web3AuthContext);
 
@@ -53,6 +57,7 @@ export const Web3AuthProvider = ({ children }: any) => {
   const [socialLoginSDK, setSocialLoginSDK] = useState<SocialLogin | null>(
     null
   );
+  const [userInfo, setUserInfo] = useState<any>(null);
 
   // if wallet already connected close widget
   useEffect(() => {
@@ -96,6 +101,14 @@ export const Web3AuthProvider = ({ children }: any) => {
     return socialLoginSDK;
   }, [address, socialLoginSDK]);
 
+  const getUserInfo = useCallback(async () => {
+    if (socialLoginSDK) {
+      const userInfo = await socialLoginSDK.getUserInfo();
+      console.log("userInfo", userInfo);
+      setUserInfo(userInfo);
+    }
+  }, [socialLoginSDK]);
+
   // after social login -> set provider info
   useEffect(() => {
     (async () => {
@@ -134,6 +147,7 @@ export const Web3AuthProvider = ({ children }: any) => {
       address: "",
       chainId: activeChainId,
     });
+    setUserInfo(null);
     (window as any).getSocialLoginSDK = null;
     socialLoginSDK.hideWallet();
     setSocialLoginSDK(null);
@@ -144,12 +158,14 @@ export const Web3AuthProvider = ({ children }: any) => {
       value={{
         connect,
         disconnect,
+        getUserInfo,
         loading,
         provider: provider,
         ethersProvider: ethersProvider || null,
         web3Provider: web3Provider || null,
         chainId: chainId || 0,
         address: address || "",
+        userInfo,
       }}
     >
       {children}

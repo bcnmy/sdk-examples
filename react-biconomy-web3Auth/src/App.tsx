@@ -9,8 +9,10 @@ const App: React.FC = () => {
   const {
     address,
     loading: eoaLoading,
+    userInfo,
     connect,
     disconnect,
+    getUserInfo,
   } = useWeb3AuthContext();
   const {
     selectedAccount,
@@ -53,6 +55,19 @@ const App: React.FC = () => {
             <p>{selectedAccount.smartAccountAddress}</p>
           </div>
         )}
+
+        {address && (
+          <Button onClickFunc={() => getUserInfo()} title="Get User Info" />
+        )}
+
+        {userInfo && (
+          <div style={{ maxWidth: 800, wordBreak: "break-all" }}>
+            <h2>User Info</h2>
+            <pre style={{ whiteSpace: "pre-wrap" }}>
+              {JSON.stringify(userInfo, null, 2)}
+            </pre>
+          </div>
+        )}
       </main>
     </div>
   );
@@ -71,7 +86,8 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     flexDirection: "column",
     width: "100%",
-    height: "80vh",
+    minHeight: "80vh",
+    height: 'auto',
     justifyContent: "center",
     alignItems: "center",
   },
