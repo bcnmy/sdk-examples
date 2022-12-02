@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@biconomy/core-types": "/Users/aman/Desktop/work/bico/biconomy-client-sdk/packages/core-types",
-    "@biconomy/smart-account": "/Users/aman/Desktop/work/bico/biconomy-client-sdk/packages/smart-account",
-    "@biconomy/web3-auth": "/Users/aman/Desktop/work/bico/biconomy-client-sdk/packages/web3-auth",
+    "@biconomy/core-types": "0.0.4",
+    "@biconomy/smart-account": "0.0.4",
+    "@biconomy/web3-auth": "0.0.4",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
