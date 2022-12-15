@@ -51,7 +51,7 @@ async function main() {
   // Sending transaction
   const txResponse = await smartAccount.sendGasLessTransaction({ transaction: tx });
   console.log('Transaction hash', txResponse.hash);
-  process.exit(0);
+  // process.exit(0);
 }
 
 main().catch((error) => {
