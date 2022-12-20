@@ -6,8 +6,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { connectWallet } from "../utils/ConnectWallet";
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import Web3Auth, {
+  LOGIN_PROVIDER,
+  OPENLOGIN_NETWORK,
+} from "@web3auth/react-native-sdk";
+import * as WebBrowser from "expo-web-browser";
+import Constants, { AppOwnership } from "expo-constants";
+import * as Linking from "expo-linking";
+import { Buffer } from "buffer";
+
+global.Buffer = global.Buffer || Buffer;
+
+const scheme = "web3authrnsample"; // Or your desired app redirection scheme
+
+const resolvedRedirectUrl =
+  Constants.appOwnership == AppOwnership.Expo ||
+  Constants.appOwnership == AppOwnership.Guest
+    ? Linking.createURL("web3auth", {})
+    : Linking.createURL("web3auth", { scheme: scheme });
 
 const Homepage = () => {
   const [eoa, setEoa] = useState("0x42138576848E839827585A3539305774D36B9602");
@@ -16,11 +32,31 @@ const Homepage = () => {
   const [socailLoading, setSocailLoading] = useState(false);
   const [scwLoading, setScwLoading] = useState(false);
 
-  const connector = useWalletConnect();
+  const [key, setKey] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const login = async () => {
+    try {
+      console.log("here");
+      const web3auth = new Web3Auth(WebBrowser, {
+        clientId: `BEQgHQ6oRgaJXc3uMnGIr-AY-FLTwRinuq8xfgnInrnDrQZYXxDO0e53osvXzBXC1dcUTyD2Itf-zN1VEB8xZlo`,
+        network: OPENLOGIN_NETWORK.TESTNET,
+        originData: {
+          "exp://192.168.0.104:19000":
+            "MEQCICJf-zJJkV4iyGBWiKqEUvbGSd0hyQrV2mz5IxtDy10eAiAv_Xpcgm-ImTg3ohGOsX1Wo7ePlHUegyKuBMpvPUyvbQ",
+        },
+      } as any);
 
-  const connectWallet = React.useCallback(() => {
-    return connector.connect();
-  }, [connector]);
+      const state = await web3auth.login({
+        loginProvider: LOGIN_PROVIDER.GOOGLE,
+        redirectUrl: resolvedRedirectUrl,
+      });
+
+      setKey(state.privKey || "no key");
+    } catch (e) {
+      console.error(e);
+      setErrorMsg(String(e));
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -29,7 +65,7 @@ const Homepage = () => {
       <View style={styles.smallCont}>
         <TouchableOpacity
           style={styles.buttonContainer}
-          onPress={() => connectWallet()}
+          onPress={() => login()}
         >
           <Text style={styles.buttonText}>Connect Wallet</Text>
         </TouchableOpacity>
@@ -49,7 +85,16 @@ const Homepage = () => {
       </View> */}
 
       <View style={styles.smallCont}>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={() => {
+            try {
+              console.log("here");
+            } catch (error) {
+              console.log(error);
+            }
+          }}
+        >
           <Text style={styles.buttonText}>Init Smart Account</Text>
         </TouchableOpacity>
         <Text style={styles.text}>SCW Info:</Text>
