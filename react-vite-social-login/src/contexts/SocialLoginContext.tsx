@@ -93,8 +93,8 @@ export const Web3AuthProvider = ({ children }: any) => {
       return socialLoginSDK;
     }
     setLoading(true);
-    const sdk = await getSocialLoginSDK();
-    sdk.showConnectModal();
+    const sdk = new SocialLogin();
+    await sdk.init();
     sdk.showWallet();
     setSocialLoginSDK(sdk);
     setLoading(false);
