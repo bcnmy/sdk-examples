@@ -7,13 +7,15 @@
     "start": "node scripts/init.js",
     "init": "node scripts/init.js",
     "getAddress": "node scripts/address.js",
-    "erc20TransferGasless": "node scripts/erc20TransferGasless.js"
+    "erc20TransferGasless": "node scripts/erc20TransferGasless.js",
+    "batchErc20TransferGasless": "node scripts/batchErc20TransferGasless.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@biconomy/smart-account": "^0.0.2",
+    "@biconomy/core-types": "1.0.0",
+    "@biconomy/smart-account": "1.0.0",
     "@truffle/hdwallet-provider": "^2.1.1",
     "ethers": "^5.7.2",
     "prettier": "^2.8.1"

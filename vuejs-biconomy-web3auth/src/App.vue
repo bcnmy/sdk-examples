@@ -9,6 +9,7 @@ let socialLoginSDK: SocialLogin;
 let address: string = "";
 const connectWallet = async () => {
   if (address) return;
+  address = "";
   if (socialLoginSDK?.provider) {
     console.info("socialLoginSDK.provider", socialLoginSDK.provider);
     const web3Provider = new ethers.providers.Web3Provider(
@@ -22,9 +23,9 @@ const connectWallet = async () => {
   }
   socialLoginSDK = new SocialLogin();
   await socialLoginSDK.init();
-  socialLoginSDK.showConnectModal();
   socialLoginSDK.showWallet();
 };
+
 onMounted(() => {
   const interval = setInterval(async () => {
     if (address) {
@@ -38,6 +39,7 @@ onMounted(() => {
 
 const disconnectWallet = async () => {
   console.log("disconnectWallet");
+  address = "";
   socialLoginSDK.logout();
 };
 </script>

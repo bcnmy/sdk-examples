@@ -32,9 +32,10 @@ const Home = () => {
       return socialLoginSDK;
     }
     const sdk = new SocialLogin();
-    await sdk.init(ethers.utils.hexValue(80001));
+    await sdk.init({
+      chainId: ethers.utils.hexValue(80001),
+    });
     setSocialLoginSDK(sdk);
-    sdk.showConnectModal();
     sdk.showWallet();
     return socialLoginSDK;
   }, [socialLoginSDK]);

@@ -1,6 +1,7 @@
 const { ethers } = require("ethers");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const SmartAccount = require("@biconomy/smart-account").default;
+const { ChainId } = require("@biconomy/core-types");
 const config = require("../config.json");
 
 async function main() {
@@ -12,9 +13,8 @@ async function main() {
 
   // get SmartAccount address from wallet provider
   const wallet = new SmartAccount(walletProvider, {
-    debug: false,
-    activeNetworkId: 5,
-    supportedNetworksIds: [5],
+    activeNetworkId: ChainId.POLYGON_MUMBAI,
+    supportedNetworksIds: [ChainId.GOERLI, ChainId.POLYGON_MAINNET, ChainId.POLYGON_MUMBAI],
   });
   const smartAccount = await wallet.init();
   const address = await smartAccount.getSmartAccountState();

@@ -9,7 +9,6 @@ async function main() {
   const walletProvider = new ethers.providers.Web3Provider(provider);
   // create SmartAccount instance
   const wallet = new SmartAccount(walletProvider, {
-    debug: false,
     activeNetworkId: config.chainId,
     supportedNetworksIds: [ChainId.GOERLI, ChainId.POLYGON_MAINNET, ChainId.POLYGON_MUMBAI],
     networkConfig: [
@@ -26,8 +25,8 @@ async function main() {
     'function transfer(address _to, uint256 _value)'
   ])
   // Encode an ERC-20 token transfer to recipient of the specified amount
-  const recipientAddress = process.argv[2] || '0x0000000000000000000000000000000000000000'
-  const amount = process.argv[3] ? ethers.BigNumber.from(process.argv[3]) : ethers.BigNumber.from("1000000")
+  const recipientAddress = '0x0000000000000000000000000000000000000000'
+  const amount = ethers.BigNumber.from("1000000")
   const usdcAddress = '0xdA5289fCAAF71d52a80A254da614a192b693e977'
   const data = erc20Interface.encodeFunctionData(
     'transfer', [recipientAddress, amount]
