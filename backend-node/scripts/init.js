@@ -1,10 +1,11 @@
 const fs = require("fs").promises;
 const path = require("path");
 const prettier = require("prettier");
+const { ChainId } = require("@biconomy/core-types");
 const { Wallet, utils } = require("ethers");
 
 const INIT_CONFIG = {
-  chainId: 80001,
+  chainId: ChainId.POLYGON_MUMBAI,
   rpcUrl: "https://rpc-mumbai.maticvigil.com",
   privateKey: Wallet.fromMnemonic(
     utils.entropyToMnemonic(utils.randomBytes(32))
