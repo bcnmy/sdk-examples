@@ -6,9 +6,9 @@ import SocialLogin from "@biconomy/web3-auth";
 import SmartAccount from "@biconomy/smart-account";
 
 import { useSession, signIn, signOut, getCsrfToken } from "next-auth/react";
-import { SiweMessage } from "siwe"
-import { useConnect, useNetwork, useSignMessage } from "wagmi"
-import { InjectedConnector } from 'wagmi/connectors/injected'
+import { SiweMessage } from "siwe";
+import { useConnect, useNetwork, useSignMessage } from "wagmi";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 const Home = (req: any, res: any) => {
   const [provider, setProvider] = useState<any>();
@@ -20,16 +20,17 @@ const Home = (req: any, res: any) => {
     null
   );
 
-  const { signMessageAsync } = useSignMessage()
-  const { chain } = useNetwork()
+  const { signMessageAsync } = useSignMessage();
+  const { chain } = useNetwork();
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
-  const { data: session, status } = useSession()
+  const [signer, setSigner] = useState<ethers.Signer | null>(null);
+  const { data: session, status } = useSession();
 
   const handleLogin = async () => {
     try {
-      const callbackUrl = "/protected"
+      const callbackUrl = "/";
       const message = new SiweMessage({
         domain: window.location.host,
         address: account,
@@ -38,20 +39,19 @@ const Home = (req: any, res: any) => {
         version: "1",
         chainId: chain?.id,
         nonce: await getCsrfToken(),
-      })
-      const signature = await signMessageAsync({
-        message: message.prepareMessage(),
-      })
+      });
+      const signature = await signer?.signMessage(message.prepareMessage());
+      console.log("signature", signature)
       signIn("credentials", {
         message: JSON.stringify(message),
         redirect: false,
         signature,
         callbackUrl,
-      })
+      });
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const connectWeb3 = useCallback(async () => {
     if (typeof window === "undefined") return;
@@ -80,11 +80,11 @@ const Home = (req: any, res: any) => {
 
   // if wallet connected and session not provided -> auto login with siwe
   useEffect(() => {
-    console.log(account);
-    if (account && !session) {
-      handleLogin()
+    console.log(signer);
+    if (signer && !session) {
+      handleLogin();
     }
-  }, [account])
+  }, [signer, session]);
 
   // if wallet already connected close widget
   useEffect(() => {
@@ -133,6 +133,7 @@ const Home = (req: any, res: any) => {
       });
       await smartAccount.init();
       const context = smartAccount.getSmartAccountContext();
+      setSigner(smartAccount.getsigner());
       setScwAddress(context.baseWallet.getAddress());
       setSmartAccount(smartAccount);
       setScwLoading(false);
