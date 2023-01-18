@@ -5,7 +5,12 @@ import { ChainId } from "@biconomy/core-types";
 import SocialLogin from "@biconomy/web3-auth";
 import SmartAccount from "@biconomy/smart-account";
 
-const Home = () => {
+import { useSession, signIn, signOut, getCsrfToken } from "next-auth/react";
+import { SiweMessage } from "siwe"
+import { useConnect, useNetwork, useSignMessage } from "wagmi"
+import { InjectedConnector } from 'wagmi/connectors/injected'
+
+const Home = (req: any, res: any) => {
   const [provider, setProvider] = useState<any>();
   const [account, setAccount] = useState<string>();
   const [smartAccount, setSmartAccount] = useState<SmartAccount | null>(null);
@@ -14,6 +19,39 @@ const Home = () => {
   const [socialLoginSDK, setSocialLoginSDK] = useState<SocialLogin | null>(
     null
   );
+
+  const { signMessageAsync } = useSignMessage()
+  const { chain } = useNetwork()
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+  const { data: session, status } = useSession()
+
+  const handleLogin = async () => {
+    try {
+      const callbackUrl = "/protected"
+      const message = new SiweMessage({
+        domain: window.location.host,
+        address: account,
+        statement: "Sign in with Ethereum to the app.",
+        uri: window.location.origin,
+        version: "1",
+        chainId: chain?.id,
+        nonce: await getCsrfToken(),
+      })
+      const signature = await signMessageAsync({
+        message: message.prepareMessage(),
+      })
+      signIn("credentials", {
+        message: JSON.stringify(message),
+        redirect: false,
+        signature,
+        callbackUrl,
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const connectWeb3 = useCallback(async () => {
     if (typeof window === "undefined") return;
@@ -40,9 +78,17 @@ const Home = () => {
     return socialLoginSDK;
   }, [socialLoginSDK]);
 
+  // if wallet connected and session not provided -> auto login with siwe
+  useEffect(() => {
+    console.log(account);
+    if (account && !session) {
+      handleLogin()
+    }
+  }, [account])
+
   // if wallet already connected close widget
   useEffect(() => {
-    console.log("hidelwallet");
+    console.log("hide wallet");
     if (socialLoginSDK && socialLoginSDK.provider) {
       socialLoginSDK.hideWallet();
     }
@@ -73,6 +119,8 @@ const Home = () => {
     setProvider(undefined);
     setAccount(undefined);
     setScwAddress("");
+    // signout from next auth
+    signOut();
   };
 
   useEffect(() => {
@@ -102,6 +150,12 @@ const Home = () => {
         <button onClick={!account ? connectWeb3 : disconnectWeb3}>
           {!account ? "Connect Wallet" : "Disconnect Wallet"}
         </button>
+
+        {session && (
+          <h2>
+            Signed in as {session.user?.email} <br />
+          </h2>
+        )}
 
         {account && (
           <div>
