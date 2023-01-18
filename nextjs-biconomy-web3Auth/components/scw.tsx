@@ -7,8 +7,7 @@ import SmartAccount from "@biconomy/smart-account";
 
 import { useSession, signIn, signOut, getCsrfToken } from "next-auth/react";
 import { SiweMessage } from "siwe";
-import { useConnect, useNetwork, useSignMessage } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
+import { useNetwork } from "wagmi";
 
 const Home = (req: any, res: any) => {
   const [provider, setProvider] = useState<any>();
@@ -20,11 +19,7 @@ const Home = (req: any, res: any) => {
     null
   );
 
-  const { signMessageAsync } = useSignMessage();
   const { chain } = useNetwork();
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  });
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
   const { data: session, status } = useSession();
 
@@ -80,11 +75,11 @@ const Home = (req: any, res: any) => {
 
   // if wallet connected and session not provided -> auto login with siwe
   useEffect(() => {
-    console.log(signer);
-    if (signer && !session) {
+    console.log(smartAccount);
+    if (smartAccount && !session) {
       handleLogin();
     }
-  }, [signer, session]);
+  }, [smartAccount, session]);
 
   // if wallet already connected close widget
   useEffect(() => {
@@ -154,7 +149,7 @@ const Home = (req: any, res: any) => {
 
         {session && (
           <h2>
-            Signed in as {session.user?.email} <br />
+            Signed in with Next Auth as {session.user?.id} <br />
           </h2>
         )}
 
