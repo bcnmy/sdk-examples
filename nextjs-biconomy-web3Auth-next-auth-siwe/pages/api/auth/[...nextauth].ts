@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { getCsrfToken } from "next-auth/react";
 import { SiweMessage } from "siwe";
 import * as jsonwebtoken from "jsonwebtoken";
-import { NextAuthOptions, User, Account, Profile } from "next-auth";
+import { User, Account, Profile } from "next-auth";
 import type { JWT, JWTOptions } from "next-auth/jwt";
 import { isAddress } from 'ethers/lib/utils';
 
@@ -18,16 +18,12 @@ export const jwtOptions: JWTOptions = {
     const decodedToken = jsonwebtoken.verify(token!, secret, {
       algorithms: ["RS256"],
     });
-    // run some checks on the returned payload, perhaps you expect some specific values
-
-    // if its all good, return it, or perhaps just return a boolean
     return decodedToken as JWT;
   },
 };
 
 const refreshAccessToken = async (token: JWT) => {
   try {
-    console.log("refreshing access token", { token });
     // how to refresh the access token ?
     return token;
   } catch (error) {
@@ -96,18 +92,14 @@ export default async function auth(req: any, res: any) {
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
       async session({ session, token }) {
-        // needed for hasura claims_map
         session.user = token.user as User;
-        // used to detect if provider with same email exists
         session.error = token.error as string;
-        // handle when user is logged in with siwe
         if (isAddress(token.sub as string)) {
           session.address = token.sub as string;
           session.user.name = token.sub;
         }
         return session;
       },
-      // Add hasura data needed for claims_map + accessToken
       async jwt(args) {
         const {
           token,

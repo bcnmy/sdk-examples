@@ -36,7 +36,6 @@ const Home = (req: any, res: any) => {
         nonce: await getCsrfToken(),
       });
       const signature = await signer?.signMessage(message.prepareMessage());
-      console.log("signature", signature)
       signIn("credentials", {
         message: JSON.stringify(message),
         redirect: false,
@@ -50,7 +49,6 @@ const Home = (req: any, res: any) => {
 
   const connectWeb3 = useCallback(async () => {
     if (typeof window === "undefined") return;
-    console.log("socialLoginSDK", socialLoginSDK);
     if (socialLoginSDK?.provider) {
       const web3Provider = new ethers.providers.Web3Provider(
         socialLoginSDK.provider
@@ -75,7 +73,6 @@ const Home = (req: any, res: any) => {
 
   // if wallet connected and session not provided -> auto login with siwe
   useEffect(() => {
-    console.log(smartAccount);
     if (smartAccount && !session) {
       handleLogin();
     }
@@ -83,7 +80,6 @@ const Home = (req: any, res: any) => {
 
   // if wallet already connected close widget
   useEffect(() => {
-    console.log("hide wallet");
     if (socialLoginSDK && socialLoginSDK.provider) {
       socialLoginSDK.hideWallet();
     }
@@ -135,7 +131,6 @@ const Home = (req: any, res: any) => {
     }
     if (!!provider && !!account) {
       setupSmartAccount();
-      console.log("Provider...", provider);
     }
   }, [account, provider]);
 
