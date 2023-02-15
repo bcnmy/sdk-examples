@@ -3,12 +3,7 @@ import type { AppProps } from "next/app";
 import "@biconomy/web3-auth/dist/src/style.css";
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-import {
-  chain,
-  configureChains,
-  createClient,
-  WagmiConfig,
-} from "wagmi";
+import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
