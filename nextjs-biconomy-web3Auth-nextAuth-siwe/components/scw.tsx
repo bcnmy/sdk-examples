@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState, useMemo } from "react";
 import { ethers } from "ethers";
 import { ChainId } from "@biconomy/core-types";
 import SocialLogin from "@biconomy/web3-auth";
-import SmartAccount from "@biconomy/smart-account";
 
 import { useSession, signIn, signOut, getCsrfToken } from "next-auth/react";
 import { SiweMessage } from "siwe";
@@ -14,65 +13,67 @@ const Home = (req: any, res: any) => {
   const { chain } = useNetwork();
   const { data: session, status } = useSession();
 
-  const setProviderAndAccount = useBiconomyStore.use.setProviderAndAccount();
   const smartAccountLoading = useBiconomyStore.use.smartAccountLoading();
-  // const provider = useBiconomyStore.use.provider();
   const smartAccountAddress = useBiconomyStore.use.smartAccountAddress();
+  const setupBiconomy = useBiconomyStore.use.setupBiconomy();
   const account = useBiconomyStore.use.account();
-  const setSmartAccount = useBiconomyStore.use.setSmartAccount();
   const resetBiconomyStore = useBiconomyStore.use.reset();
-  const signer = useBiconomyStore.use.signer();
 
   // wrap the initialization of 'sdk' in its own useMemo() to avoid rerender
   const sdk = useMemo(() => new SocialLogin(), []);
   const Mumbai = 80001;
 
-  // init biconomy sdk on load, if get provider means user is logged in so init provider and account
-  useEffect(() => {
-    const handleLogin = async () => {
-      try {
-        if (!account || !signer) throw new Error("No account or signer");
-        const message = new SiweMessage({
-          domain: window.location.host,
-          address: account as string,
-          statement: "Sign in with Ethereum to the app.",
-          uri: window.location.origin,
-          version: "1",
-          chainId: Mumbai,
-          nonce: await getCsrfToken(),
-        });
-        const signature = await signer?.signMessage(message.prepareMessage());
-        signIn("credentials", {
-          message: JSON.stringify(message),
-          redirect: false,
-          signature,
-          callbackUrl: window.location.href,
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    const init = async () => {
+  // signin with siwe to provide a JWT through next-auth
+  const handleSiwe = useCallback(async () => {
+    try {
+      // here mean waiting for smart account to be setup
+      if (!account || !window.biconomySmartAccount) return;
+      const signer = window.biconomySmartAccount.getsigner();
+      const message = new SiweMessage({
+        domain: window.location.host,
+        address: account as string,
+        statement: "Sign in with Ethereum to the app.",
+        uri: window.location.origin,
+        version: "1",
+        chainId: Mumbai,
+        nonce: await getCsrfToken(),
+      });
+      const signature = await signer?.signMessage(message.prepareMessage());
+      signIn("credentials", {
+        message: JSON.stringify(message),
+        redirect: false,
+        signature,
+        callbackUrl: window.location.href,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [account]);
+
+  const handleBiconomy = useCallback(async () => {
+    if (!window.biconomySocialLogin) {
       await sdk.init({
         chainId: ethers.utils.hexValue(Mumbai),
       });
+      // store the sdk on the window object
+      window.biconomySocialLogin = sdk;
+      console.log("initial setup of sdk", window.biconomySocialLogin);
+    }
+    if (!window.biconomySmartAccount && window.biconomySocialLogin.provider) {
+      await setupBiconomy(Mumbai as ChainId);
+      console.log("smartAccount", window.biconomySmartAccount);
+    }
+  }, [sdk, setupBiconomy]);
+
+  // init biconomy sdk on load, if get provider means user is logged in so init provider and account
+  useEffect(() => {
+    const init = async () => {
       // TODO handle case where next auth or biconomy session is expired
-      if (sdk.provider) {
-        await setProviderAndAccount(sdk);
-        await setSmartAccount(Mumbai as ChainId);
-        if (!session) await handleLogin();
-      }
+      await handleBiconomy();
+      if (!session && window.biconomySmartAccount) await handleSiwe();
     };
-    init().catch(console.error);
-  }, [
-    sdk,
-    sdk.provider,
-    session,
-    signer,
-    account,
-    setProviderAndAccount,
-    setSmartAccount,
-  ]);
+    init().catch((error) => console.error(error));
+  }, [session, account, handleSiwe, handleBiconomy]);
 
   // user intend to log in, show wallet widget
   const connectWeb3 = useCallback(async () => {
@@ -86,21 +87,23 @@ const Home = (req: any, res: any) => {
         clearInterval(interval);
         sdk.hideWallet();
       }
-      if (sdk?.provider && !account) {
-        setProviderAndAccount(sdk);
+      if (window.biconomySocialLogin?.provider && !account) {
+        await handleBiconomy();
       }
-    }, 1000);
+    }, 100);
     return () => {
       clearInterval(interval);
     };
-  }, [account, setProviderAndAccount, sdk]);
+  }, [account, handleBiconomy, sdk]);
 
+  // signout from biconomy and next auth
   const disconnectWeb3 = async () => {
-    await sdk.logout();
-    sdk.hideWallet();
+    if (window.biconomySocialLogin?.provider)
+      await window.biconomySocialLogin.logout();
+    window.biconomySocialLogin?.hideWallet();
     resetBiconomyStore();
     // signout from next auth
-    signOut();
+    signOut({ callbackUrl: window.location.href, redirect: false});
   };
 
   return (

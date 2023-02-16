@@ -6,6 +6,16 @@ import { SessionProvider } from "next-auth/react";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import { ethers } from "ethers";
+import type SocialLogin from "@biconomy/web3-auth";
+import type SmartAccount from "@biconomy/smart-account";
+
+declare global {
+  interface Window {
+    biconomySocialLogin?: SocialLogin;
+    biconomySmartAccount?: SmartAccount;
+  }
+}
 
 const { chains, provider, webSocketProvider } = configureChains(
   [chain.mainnet, chain.polygon, chain.arbitrum],
