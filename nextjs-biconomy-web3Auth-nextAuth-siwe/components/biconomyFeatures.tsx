@@ -1,12 +1,11 @@
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { useSession } from "next-auth/react";
-import { FC } from "react";
 
 const SignMessage = dynamic(() => import("./signMessage"), { ssr: false });
 const GasslessTx = dynamic(() => import("./gasslessTx"), { ssr: false });
 
-const BiconomyFeatures: FC = () => {
+const BiconomyFeatures = () => {
   const { data: session } = useSession();
 
   return session ? (

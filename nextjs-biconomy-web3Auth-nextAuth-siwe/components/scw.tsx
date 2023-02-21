@@ -50,6 +50,17 @@ const Home = (req: any, res: any) => {
     }
   }, [account]);
 
+  // signout from biconomy and next auth
+  const disconnectWeb3 = useCallback(async () => {
+    if (window.biconomySocialLogin?.provider)
+      await window.biconomySocialLogin.logout();
+    window.biconomySocialLogin?.hideWallet();
+    resetBiconomyStore();
+    // signout from next auth
+    signOut({ callbackUrl: window.location.href, redirect: false });
+  }, [resetBiconomyStore]);
+
+  // 
   const handleBiconomy = useCallback(async () => {
     if (!window.biconomySocialLogin) {
       await sdk.init({
@@ -65,6 +76,7 @@ const Home = (req: any, res: any) => {
     }
   }, [sdk, setupBiconomy]);
 
+  // this is the main hook that will be called on initial loading of the page
   // init biconomy sdk on load, if get provider means user is logged in so init provider and account
   useEffect(() => {
     const init = async () => {
@@ -72,20 +84,20 @@ const Home = (req: any, res: any) => {
       await handleBiconomy();
       // if user session for biconomy is active and user is not logged in to next auth, then login to next auth
       if (!session && window.biconomySmartAccount) await handleSiwe();
-      // // if user is logged in to next auth and biconomy session is inactive, then logout from next auth and reset biconomy store
-      // else if (session && !window.biconomySmartAccount) {
-      //   await disconnectWeb3();
-      // }
+      // if user is logged in to next auth and biconomy session is inactive, then logout from next auth and reset biconomy store
+      else if (session && !window.biconomySmartAccount) {
+        await disconnectWeb3();
+      }
     };
     init().catch((error) => console.error(error));
-  }, [session, account, handleSiwe, handleBiconomy]);
+  }, [session, account, handleSiwe, handleBiconomy, disconnectWeb3]);
 
   // user intend to log in, show wallet widget
   const connectWeb3 = useCallback(async () => {
     sdk.showWallet();
   }, [sdk]);
 
-  // get the event after biconomy wallet is connected
+  // get the event after biconomy wallet is connected, should hide the wallet widget once connected
   useEffect(() => {
     const interval = setInterval(async () => {
       if (account) {
@@ -100,16 +112,6 @@ const Home = (req: any, res: any) => {
       clearInterval(interval);
     };
   }, [account, handleBiconomy]);
-
-  // signout from biconomy and next auth
-  const disconnectWeb3 = async () => {
-    if (window.biconomySocialLogin?.provider)
-      await window.biconomySocialLogin.logout();
-    window.biconomySocialLogin?.hideWallet();
-    resetBiconomyStore();
-    // signout from next auth
-    signOut({ callbackUrl: window.location.href, redirect: false });
-  };
 
   return (
     <div className={styles.container}>
