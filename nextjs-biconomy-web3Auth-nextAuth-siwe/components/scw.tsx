@@ -85,7 +85,7 @@ const Home = (req: any, res: any) => {
     const interval = setInterval(async () => {
       if (account) {
         clearInterval(interval);
-        sdk.hideWallet();
+        window.biconomySocialLogin?.hideWallet();
       }
       if (window.biconomySocialLogin?.provider && !account) {
         await handleBiconomy();
@@ -94,7 +94,7 @@ const Home = (req: any, res: any) => {
     return () => {
       clearInterval(interval);
     };
-  }, [account, handleBiconomy, sdk]);
+  }, [account, handleBiconomy]);
 
   // signout from biconomy and next auth
   const disconnectWeb3 = async () => {
