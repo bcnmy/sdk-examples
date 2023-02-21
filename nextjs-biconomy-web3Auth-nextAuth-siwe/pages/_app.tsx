@@ -27,12 +27,9 @@ const client = createClient({
   provider,
 });
 
-export default function App({
-  Component,
-  pageProps,
-}: AppProps<{
-  session: Session;
-}>) {
+export type MyAppProps = { session: Session };
+
+export default function App({ Component, pageProps }: AppProps<MyAppProps>) {
   return (
     <WagmiConfig client={client}>
       <SessionProvider session={pageProps.session} refetchInterval={0}>

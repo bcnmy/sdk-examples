@@ -70,7 +70,12 @@ const Home = (req: any, res: any) => {
     const init = async () => {
       // TODO handle case where next auth or biconomy session is expired
       await handleBiconomy();
+      // if user session for biconomy is active and user is not logged in to next auth, then login to next auth
       if (!session && window.biconomySmartAccount) await handleSiwe();
+      // // if user is logged in to next auth and biconomy session is inactive, then logout from next auth and reset biconomy store
+      // else if (session && !window.biconomySmartAccount) {
+      //   await disconnectWeb3();
+      // }
     };
     init().catch((error) => console.error(error));
   }, [session, account, handleSiwe, handleBiconomy]);
@@ -103,7 +108,7 @@ const Home = (req: any, res: any) => {
     window.biconomySocialLogin?.hideWallet();
     resetBiconomyStore();
     // signout from next auth
-    signOut({ callbackUrl: window.location.href, redirect: false});
+    signOut({ callbackUrl: window.location.href, redirect: false });
   };
 
   return (

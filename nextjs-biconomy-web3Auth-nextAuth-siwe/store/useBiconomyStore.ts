@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import localForage from "localforage";
 import createSelectors from "./selectors";
 
 import { ethers } from "ethers";
@@ -107,7 +106,6 @@ const useBiconomyStore = create<BiconomyState & BiconomyActions>()(
     {
       name: "biconomy-storage", // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => sessionStorage), // see here if need to use IndexedDB or Ionic Storage https://docs.pmnd.rs/zustand/integrations/persisting-store-data#how-can-i-use-a-custom-storage-engine?
-      // getStorage: () => localForage as never,
       onRehydrateStorage: (state) => {
         console.log("hydration starts");
         // optional

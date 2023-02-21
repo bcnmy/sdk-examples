@@ -1,30 +1,20 @@
 import dynamic from "next/dynamic";
-import { Suspense, useState } from "react";
-import useBiconomyStore from "../store/useBiconomyStore";
-import GasslessTx from "../components/gasslessTx";
-import SignMessage from "../components/signMessage";
+import { Suspense } from "react";
+import BiconomyFeatures from "../components/biconomyFeatures";
 
 const Index = () => {
-  const SocialLoginDynamic = dynamic(
-    () => import("../components/scw").then((res) => res.default),
-    {
-      ssr: false,
-    }
-  );
-  const smartAccountLoading = useBiconomyStore.use.smartAccountLoading();
-  const smartAccountAddress = useBiconomyStore.use.smartAccountAddress();
+  // we need to instantiate this component dynamically to avoid SSR,
+  // otherwise we get an issue with window and the generated code from biconomy
+  const SocialLoginDynamic = dynamic(() => import("../components/scw"), {
+    ssr: false,
+  });
 
   return (
     <div>
       <Suspense fallback={<div>Loading...</div>}>
         <SocialLoginDynamic />
       </Suspense>
-      {!smartAccountLoading && smartAccountAddress && (
-        <div>
-          <SignMessage />
-          <GasslessTx />
-        </div>
-      )}
+      <BiconomyFeatures />
     </div>
   );
 };

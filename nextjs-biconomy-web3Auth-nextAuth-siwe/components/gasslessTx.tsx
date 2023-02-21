@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import { useState } from "react";
 import useBiconomyStore from "../store/useBiconomyStore";
 
+
 const GasslessTx = () => {
   const [successMsg, setSuccessMsg] = useState<string | undefined>(undefined);
   const [errorMsg, setErrorMsg] = useState<string | undefined>(undefined);
@@ -11,7 +12,7 @@ const GasslessTx = () => {
   const sendNFT = async () => {
     const smartAccount = window.biconomySmartAccount;
     if (!smartAccount) return;
-    // dummy poly addresses
+    // dummy poly address
     const recipientAddress = "0x0000000000000000000000000000000000000000";
     // test poly contract address
     const nftAddress = "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619";
@@ -50,7 +51,7 @@ const GasslessTx = () => {
     });
     console.log("txResponse", txResponse);
   };
-  return (
+  return smartAccountAddress && (
     <div
       style={{
         display: "flex",
@@ -66,7 +67,7 @@ const GasslessTx = () => {
         {errorMsg && <p>{errorMsg}</p>}
       </div>
     </div>
-  );
+  ) || null;
 };
 
 export default GasslessTx;
