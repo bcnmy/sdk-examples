@@ -15,7 +15,12 @@ const batchMintNft = async () => {
     backendUrl: 'https://sdk-backend.test.biconomy.io/v1/',
     relayerUrl: 'https://sdk-relayer.test.biconomy.io/api/v1/relay',
     activeNetworkId: config.chainId,
+    backendUrl: 'https://sdk-backend.test.biconomy.io/v1',
+    socketServerUrl: 'wss://sdk-testing-ws.staging.biconomy.io/connection/websocket',
+    relayerUrl: 'https://sdk-relayer.staging.biconomy.io/api/v1/relay',
+    bundlerUrl: 'https://sdk-relayer.test.biconomy.io/api/v1/relay',
     supportedNetworksIds: [ChainId.GOERLI, ChainId.POLYGON_MUMBAI],
+    biconomySigningServiceUrl: 'https://paymaster-signing-service.staging.biconomy.io/api/v1/sign',
     networkConfig: [
       {
         chainId: config.chainId,
