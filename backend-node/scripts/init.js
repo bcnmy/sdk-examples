@@ -3,7 +3,7 @@ const path = require("path");
 const prettier = require("prettier");
 const { Wallet, utils } = require("ethers");
 const chalk = require('chalk');
-const { ChainId } = require("@biconomy/core-types");
+const { ChainId } = require("@biconomy-sdk-dev/core-types");
 
 const INIT_CONFIG = {
   privateKey: Wallet.fromMnemonic(

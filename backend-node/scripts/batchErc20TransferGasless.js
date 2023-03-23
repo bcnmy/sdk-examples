@@ -1,7 +1,7 @@
 const { ethers } = require("ethers");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const SmartAccount = require("@biconomy/smart-account").default;
-const { ChainId } = require("@biconomy/core-types");
+const SmartAccount = require("@biconomy-sdk-dev/smart-account").default;
+const { ChainId } = require("@biconomy-sdk-dev/core-types");
 const config = require("../config.json");
 
 async function main() {
