@@ -11,9 +11,9 @@ yarn install
 ## Run
 
 ```bash
-npm run smartAccount init --network=mumbai
-npm run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=1
-npm run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount=10 --token=0x0987654321098765432109876543210987654321
-npm run smartAccount mint
-npm run smartAccount batchMint
+yarn run smartAccount init --network=mumbai
+yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=1
+yarn run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount=10 --token=0x0987654321098765432109876543210987654321
+yarn run smartAccount mint
+yarn run smartAccount batchMint
 ```
