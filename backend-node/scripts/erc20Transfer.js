@@ -26,7 +26,7 @@ const erc20Transfer = async (recipientAddress, amount, tokenAddress) => {
     'function transfer(address _to, uint256 _value)'
   ])
   // Encode an ERC-20 token transfer to recipient of the specified amount
-  const amountGwei = ethers.parseUnits(amount, 6);
+  const amountGwei = ethers.utils.parseUnits(amount.toString(), 6);
   const data = erc20Interface.encodeFunctionData(
     'transfer', [recipientAddress, amountGwei]
   )
