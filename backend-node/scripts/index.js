@@ -4,10 +4,11 @@ const chalk = require('chalk');
 const { init } = require('./init');
 const { getAddress } = require('./address');
 const { nativeTransfer } = require('./nativeTransfer');
+const { mintErc20 } = require('./mintErc20');
 const { erc20Transfer } = require('./erc20Transfer');
+const { batchErc20Transfer } = require('./batchErc20Transfer');
 const { mintNft } = require('./mintNft');
 const { batchMintNft } = require('./batchMintNft');
-const { batchErc20Transfer } = require('./batchErc20Transfer');
 
 yargs
   .scriptName(chalk.green('smartAccount'))
@@ -49,6 +50,18 @@ yargs
     const recipientAddress = argv.to;
     console.log(chalk.magenta(`Transferring ${amount} ether to ${recipientAddress}...`));
     nativeTransfer(recipientAddress, amount);
+  })
+  // Mint erc20 tokens
+  .command('mintErc20', chalk.blue('Mint ERC20 tokens'), {
+    amount: {
+      describe: chalk.cyan('Amount of ether to transfer'),
+      demandOption: true,
+      type: 'number',
+    },
+  }, (argv) => {
+    const amount = argv.amount;
+    console.log(chalk.magenta(`Minting ${amount} tokens to SCW...`));
+    mintErc20(amount);
   })
   // Transfer an ERC20 token
   .command('erc20Transfer', chalk.blue('Transfer an ERC20 token'), {

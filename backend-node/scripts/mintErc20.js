@@ -4,7 +4,7 @@ const SmartAccount = require("@biconomy-sdk-dev/smart-account").default;
 const { ChainId, Environments } = require("@biconomy-sdk-dev/core-types");
 const config = require("../config.json");
 
-const batchErc20Transfer = async (recipientAddress, amount, tokenAddress) => {
+const mintErc20 = async (amount) => {
   let provider = new HDWalletProvider(config.privateKey, config.rpcUrl);
   const walletProvider = new ethers.providers.Web3Provider(provider);
   // create SmartAccount instance
@@ -21,25 +21,18 @@ const batchErc20Transfer = async (recipientAddress, amount, tokenAddress) => {
   });
   const smartAccount = await wallet.init();
 
-  // transfer ERC-20 tokens to recipient
   const erc20Interface = new ethers.utils.Interface([
-    'function transfer(address _to, uint256 _value)'
+    'function mint(address _to, uint256 _amount)'
   ])
-  // Encode an ERC-20 token transfer to recipient of the specified amount
   const amountGwei = ethers.utils.parseUnits(amount.toString(), 18);
-  console.log("transfering tokens to", recipientAddress);
-  // create tx array to all the recipientAddress
-  const txArray = [];
-  for (let i = 0; i < recipientAddress.length; i++) {
-    const tx = {
-      to: tokenAddress,
-      data: erc20Interface.encodeFunctionData(
-        'transfer', [recipientAddress[i], amountGwei]
-      )
-    }
-    txArray.push(tx);
+  const data = erc20Interface.encodeFunctionData(
+    'mint', [smartAccount.address, amountGwei]
+  )
+  const erc20Address = "0x43Eb7ebe789BC8a749Be41089a963D7e68759a6A" // same for goerli and mumbai
+  const tx = {
+    to: erc20Address,
+    data: data,
   }
-
   // Transaction events subscription
   smartAccount.on('txHashGenerated', (response) => {
     console.log('txHashGenerated event received via emitter', response);
@@ -48,14 +41,13 @@ const batchErc20Transfer = async (recipientAddress, amount, tokenAddress) => {
     console.log('txMined event received via emitter', response);
   });
   smartAccount.on('error', (response) => {
-    console.log('error event received via emitter', response);
+    console.log('error event received via emitter', JSON.stringify(response));
   });
-
   // Sending transaction
-  const txResponse = await smartAccount.sendGaslessTransactionBatch({ transactions: txArray });
+  const txResponse = await smartAccount.sendGaslessTransaction({ transaction: tx });
   console.log('Tx Response', txResponse);
   const txReciept = await txResponse.wait();
   console.log('Tx hash', txReciept.transactionHash);
 }
 
-module.exports = { batchErc20Transfer };
+module.exports = { mintErc20 };
