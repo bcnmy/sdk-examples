@@ -1,16 +1,17 @@
 const { ethers } = require("ethers");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const SmartAccount = require("@biconomy-sdk-dev/smart-account").default;
-const { ChainId } = require("@biconomy-sdk-dev/core-types");
+const { ChainId, Environments } = require("@biconomy-sdk-dev/core-types");
 const config = require("../config.json");
 
-async function main() {
+const batchErc20Transfer = async (recipientAddress, amount, tokenAddress) => {
   let provider = new HDWalletProvider(config.privateKey, config.rpcUrl);
   const walletProvider = new ethers.providers.Web3Provider(provider);
   // create SmartAccount instance
   const wallet = new SmartAccount(walletProvider, {
+    environment: Environments.QA,
     activeNetworkId: config.chainId,
-    supportedNetworksIds: [ChainId.GOERLI, ChainId.POLYGON_MAINNET, ChainId.POLYGON_MUMBAI],
+    supportedNetworksIds: [ChainId.GOERLI, ChainId.POLYGON_MUMBAI],
     networkConfig: [
       {
         chainId: config.chainId,
@@ -25,15 +26,18 @@ async function main() {
     'function transfer(address _to, uint256 _value)'
   ])
   // Encode an ERC-20 token transfer to recipient of the specified amount
-  const recipientAddress = '0x0000000000000000000000000000000000000000'
-  const amount = ethers.BigNumber.from("1000000")
-  const usdcAddress = '0xdA5289fCAAF71d52a80A254da614a192b693e977'
-  const data = erc20Interface.encodeFunctionData(
-    'transfer', [recipientAddress, amount]
-  )
-  const tx = {
-    to: usdcAddress,
-    data
+  const amountGwei = ethers.utils.parseUnits(amount.toString(), 6);
+  console.log("transfering tokens to", recipientAddress);
+  // create tx array to all the recipientAddress
+  const txArray = [];
+  for (let i = 0; i < recipientAddress.length; i++) {
+    const tx = {
+      to: tokenAddress,
+      data: erc20Interface.encodeFunctionData(
+        'transfer', [recipientAddress[i], amountGwei]
+      )
+    }
+    txArray.push(tx);
   }
 
   // Transaction events subscription
@@ -48,12 +52,10 @@ async function main() {
   });
 
   // Sending transaction
-  const txResponse = await smartAccount.sendGaslessTransaction({ transaction: tx });
-  console.log('Transaction hash', txResponse.hash);
-  // process.exit(0);
+  // const txResponse = await smartAccount.sendGaslessTransactionBatch({ transactions: txArray });
+  // console.log('Tx Response', txResponse);
+  // const txReciept = await txResponse.wait();
+  // console.log('Tx hash', txReciept.transactionHash);
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+module.exports = { batchErc20Transfer };
