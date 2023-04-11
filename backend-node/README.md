@@ -17,10 +17,13 @@ yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 -
 
 yarn run smartAccount mintErc20 --amount 100
 
-yarn run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount=0.01 --token=0x0987654321098765432109876543210987654321
+yarn run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount 10 --token=0x43Eb7ebe789BC8a749Be41089a963D7e68759a6A
 
 # batch transfer x amount to n addresses separated by comma
-yarn run smartAccount batchErc20Transfer --to 0x1234,0x1234,0x1234 --token 0x0987654321098765432109876543210987654321 --amount 0.01
+yarn run smartAccount batchErc20Transfer --to 0x1234,0x1234,0x1234 --token 0x43Eb7ebe789BC8a749Be41089a963D7e68759a6A --amount 2
+
+# bulk transactions on n addresses, deploy and mint nft
+yarn run smartAccount bulkTx -n 20
 
 yarn run smartAccount mint
 

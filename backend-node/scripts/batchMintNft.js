@@ -1,7 +1,7 @@
 const { ethers } = require("ethers");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const SmartAccount = require("@biconomy-sdk-dev/smart-account").default;
-const { ChainId, Environments } = require("@biconomy-sdk-dev/core-types");
+const SmartAccount = require("@biconomy-devx/smart-account").default;
+const { ChainId, Environments } = require("@biconomy-devx/core-types");
 const config = require("../config.json");
 
 const batchMintNft = async () => {
@@ -27,7 +27,7 @@ const batchMintNft = async () => {
   const data = nftInterface.encodeFunctionData(
     'safeMint', [smartAccount.address]
   )
-  const nftAddress = "0xdd526eba63ef200ed95f0f0fb8993fe3e20a23d0" // same for goerli and mumbai
+  const nftAddress = "0xdd526eba63ef200ed95f0f0fb8993fe3e20a23d0" // same for goerli, mumbai, polygon
   const tx = {
     to: nftAddress,
     data: data,

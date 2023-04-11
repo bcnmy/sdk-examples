@@ -1,15 +1,16 @@
 const { ethers } = require("ethers");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const SmartAccount = require("@biconomy-sdk-dev/smart-account").default;
-const { ChainId, Environments } = require("@biconomy-sdk-dev/core-types");
+const SmartAccount = require("@biconomy-devx/smart-account").default;
+const { ChainId, Environments } = require("@biconomy-devx/core-types");
 const config = require("../config.json");
+const abi = require("./abi.json");
 
 const batchErc20Transfer = async (recipientAddress, amount, tokenAddress) => {
   let provider = new HDWalletProvider(config.privateKey, config.rpcUrl);
   const walletProvider = new ethers.providers.Web3Provider(provider);
+  const eoa = await walletProvider.getSigner().getAddress();
   // create SmartAccount instance
   const wallet = new SmartAccount(walletProvider, {
-    environment: Environments.QA,
     activeNetworkId: config.chainId,
     supportedNetworksIds: [ChainId.GOERLI, ChainId.POLYGON_MUMBAI],
     networkConfig: [
@@ -20,42 +21,43 @@ const batchErc20Transfer = async (recipientAddress, amount, tokenAddress) => {
     ]
   });
   const smartAccount = await wallet.init();
+  console.log('EOA address: ', eoa)
+  console.log('SmartAccount address: ', smartAccount.address);
+  const scwContract = new ethers.Contract(smartAccount.address, abi, walletProvider);
 
-  // transfer ERC-20 tokens to recipient
+  // Encode an ERC-20 token transfer to recipient of the specified amount
   const erc20Interface = new ethers.utils.Interface([
     'function transfer(address _to, uint256 _value)'
   ])
-  // Encode an ERC-20 token transfer to recipient of the specified amount
   const amountGwei = ethers.utils.parseUnits(amount.toString(), 18);
-  console.log("transfering tokens to", recipientAddress);
-  // create tx array to all the recipientAddress
-  const txArray = [];
-  for (let i = 0; i < recipientAddress.length; i++) {
-    const tx = {
-      to: tokenAddress,
-      data: erc20Interface.encodeFunctionData(
-        'transfer', [recipientAddress[i], amountGwei]
-      )
-    }
-    txArray.push(tx);
+  const erc20Data1 = erc20Interface.encodeFunctionData(
+    'transfer', [recipientAddress[0], amountGwei]
+  )
+  const erc20Data2 = erc20Interface.encodeFunctionData(
+    'transfer', [recipientAddress[1], amountGwei]
+  )
+  console.log([recipientAddress[0], recipientAddress[1]], [0, 0], [erc20Data1, erc20Data2])
+  // SCW executeCall
+  const scwData = await scwContract.populateTransaction.executeBatchCall([tokenAddress, tokenAddress], [0, 0], [erc20Data1, erc20Data2]);
+  const tx = {
+    to: smartAccount.address,
+    data: scwData.data,
+    from: eoa
   }
+  console.log(tx)
+  const txResponse = await walletProvider.send('eth_sendTransaction', [tx]);
+  console.log('executeCall tx', txResponse);
 
-  // Transaction events subscription
-  smartAccount.on('txHashGenerated', (response) => {
-    console.log('txHashGenerated event received via emitter', response);
-  });
-  smartAccount.on('txMined', (response) => {
-    console.log('txMined event received via emitter', response);
-  });
-  smartAccount.on('error', (response) => {
-    console.log('error event received via emitter', response);
-  });
-
-  // Sending transaction
-  const txResponse = await smartAccount.sendGaslessTransactionBatch({ transactions: txArray });
-  console.log('Tx Response', txResponse);
-  const txReciept = await txResponse.wait();
-  console.log('Tx hash', txReciept.transactionHash);
+  // SCW pullTokens
+  // const scwPullTokensData = await scwContract.populateTransaction.pullTokens(tokenAddress, recipientAddress, amountGwei);
+  // const pullTokensTx = {
+  //   to: smartAccount.address,
+  //   data: scwPullTokensData.data,
+  //   from: eoa
+  // }
+  // console.log(pullTokensTx)
+  // const pullTokensTxResponse = await walletProvider.send('eth_sendTransaction', [pullTokensTx]);
+  // console.log('pullTokens tx', pullTokensTxResponse);
 }
 
 module.exports = { batchErc20Transfer };

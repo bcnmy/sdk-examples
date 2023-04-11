@@ -1,14 +1,30 @@
-const { ethers } = require("ethers");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const SmartAccount = require("@biconomy-devx/smart-account").default;
-const { ChainId, Environments } = require("@biconomy-devx/core-types");
+const { ethers, Wallet, utils } = require("ethers");
+const SmartAccount = require("@biconomy/smart-account").default;
+const { ChainId, Environments } = require("@biconomy/core-types");
 const config = require("../config.json");
 
-const mintErc20 = async (amount) => {
-  let provider = new HDWalletProvider(config.privateKey, config.rpcUrl);
+const txHashs = [];
+const bulkTransactions = async (n) => {
+  for (let i = 0; i < n; ++i) {
+    const hashs = doTx()
+    txHashs.push(hashs)
+  }
+  // promise resolve all txHashs
+  Promise.all(txHashs).then((values) => {
+    console.log("values", values);
+  });
+}
+
+const doTx = async () => {
+  const privateKey = Wallet.fromMnemonic(
+    utils.entropyToMnemonic(utils.randomBytes(32))
+  ).mnemonic.phrase;
+  let provider = new HDWalletProvider(privateKey, config.rpcUrl);
   const walletProvider = new ethers.providers.Web3Provider(provider);
   // create SmartAccount instance
   const wallet = new SmartAccount(walletProvider, {
+    environment: Environments.QA,
     activeNetworkId: config.chainId,
     supportedNetworksIds: [ChainId.GOERLI, ChainId.POLYGON_MUMBAI],
     networkConfig: [
@@ -20,16 +36,15 @@ const mintErc20 = async (amount) => {
   });
   const smartAccount = await wallet.init();
 
-  const erc20Interface = new ethers.utils.Interface([
-    'function mint(address _to, uint256 _amount)'
+  const nftInterface = new ethers.utils.Interface([
+    'function safeMint(address _to)'
   ])
-  const amountGwei = ethers.utils.parseUnits(amount.toString(), 18);
-  const data = erc20Interface.encodeFunctionData(
-    'mint', [smartAccount.address, amountGwei]
+  const data = nftInterface.encodeFunctionData(
+    'safeMint', [smartAccount.address]
   )
-  const erc20Address = "0x43Eb7ebe789BC8a749Be41089a963D7e68759a6A" // same for goerli, mumbai, polygon
+  const nftAddress = "0xdd526eba63ef200ed95f0f0fb8993fe3e20a23d0" // same for goerli, mumbai, polygon
   const tx = {
-    to: erc20Address,
+    to: nftAddress,
     data: data,
   }
   // Transaction events subscription
@@ -46,7 +61,7 @@ const mintErc20 = async (amount) => {
   const txResponse = await smartAccount.sendGaslessTransaction({ transaction: tx });
   console.log('Tx Response', txResponse);
   const txReciept = await txResponse.wait();
-  console.log('Tx hash', txReciept.transactionHash);
+  return txReciept.transactionHash;
 }
 
-module.exports = { mintErc20 };
+module.exports = { bulkTransactions };

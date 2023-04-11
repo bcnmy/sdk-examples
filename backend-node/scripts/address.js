@@ -1,8 +1,8 @@
 const { ethers } = require("ethers");
 const chalk = require('chalk');
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const SmartAccount = require("@biconomy-sdk-dev/smart-account").default;
-const { ChainId, Environments } = require("@biconomy-sdk-dev/core-types");
+const SmartAccount = require("@biconomy-devx/smart-account").default;
+const { ChainId, Environments } = require("@biconomy-devx/core-types");
 const config = require("../config.json");
 
 async function getAddress() {
@@ -14,7 +14,7 @@ async function getAddress() {
 
   // get SmartAccount address from wallet provider
   const wallet = new SmartAccount(walletProvider, {
-    environment: Environments.QA,
+    environment: Environments.PROD,
     activeNetworkId: config.chainId,
     supportedNetworksIds: [ChainId.GOERLI, ChainId.POLYGON_MUMBAI],
   });

@@ -3,7 +3,7 @@ const path = require("path");
 const prettier = require("prettier");
 const { Wallet, utils } = require("ethers");
 const chalk = require('chalk');
-const { ChainId } = require("@biconomy-sdk-dev/core-types");
+const { ChainId } = require("@biconomy-devx/core-types");
 
 const INIT_CONFIG = {
   privateKey: Wallet.fromMnemonic(
@@ -17,7 +17,7 @@ const init = async (chainId) => {
   if (chainId === 'mumbai') {
     INIT_CONFIG.chainId = ChainId.POLYGON_MUMBAI;
     INIT_CONFIG.rpcUrl = "https://rpc-mumbai.maticvigil.com";
-    INIT_CONFIG.dappAPIKey = "yUvsiKayF.24bd641b-d4db-41f4-85b3-a4492e1e79f8";
+    INIT_CONFIG.dappAPIKey = "C-tKDuijb.2110a35a-08bd-4c35-8301-cf3424ba1c7b";
   } else {
     INIT_CONFIG.chainId = ChainId.GOERLI;
     INIT_CONFIG.rpcUrl = "https://rpc.ankr.com/eth_goerli";

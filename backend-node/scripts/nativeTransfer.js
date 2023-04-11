@@ -1,15 +1,16 @@
 const { ethers } = require("ethers");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const SmartAccount = require("@biconomy-sdk-dev/smart-account").default;
-const { ChainId, Environments } = require("@biconomy-sdk-dev/core-types");
+const SmartAccount = require("@biconomy-devx/smart-account").default;
+const { ChainId, Environments } = require("@biconomy-devx/core-types");
 const config = require("../config.json");
+const abi = require("./abi.json");
 
 const nativeTransfer = async (to, amount) => {
   let provider = new HDWalletProvider(config.privateKey, config.rpcUrl);
   const walletProvider = new ethers.providers.Web3Provider(provider);
+  const eoa = await walletProvider.getSigner().getAddress();
   // create SmartAccount instance
   const wallet = new SmartAccount(walletProvider, {
-    environment: Environments.QA,
     activeNetworkId: config.chainId,
     supportedNetworksIds: [ChainId.GOERLI, ChainId.POLYGON_MUMBAI],
     networkConfig: [
@@ -20,27 +21,33 @@ const nativeTransfer = async (to, amount) => {
     ]
   });
   const smartAccount = await wallet.init();
-  // transfer native asset
+  console.log('EOA address: ', eoa)
+  console.log('SmartAccount address: ', smartAccount.address);
+  const scwContract = new ethers.Contract(smartAccount.address, abi, walletProvider);
+
+  const amountGwei = ethers.utils.parseUnits(amount.toString(), 18);
+
+  // SCW executeCall_s1m
+  const scwData = await scwContract.populateTransaction.executeCall_s1m(to, amountGwei, "0x");
   const tx = {
-    to: to || "0x0000000000000000000000000000000000000000",
-    data: "0x",
-    value: ethers.utils.parseEther(amount.toString()),
+    to: smartAccount.address,
+    data: scwData.data,
+    from: eoa
   }
-  // Transaction events subscription
-  smartAccount.on('txHashGenerated', (response) => {
-    console.log('txHashGenerated event received via emitter', response);
-  });
-  smartAccount.on('txMined', (response) => {
-    console.log('txMined event received via emitter', response);
-  });
-  smartAccount.on('error', (response) => {
-    console.log('error event received via emitter', response);
-  });
-  // Sending transaction
-  const txResponse = await smartAccount.sendGaslessTransaction({ transaction: tx });
-  console.log('Tx Response', txResponse);
-  const txReciept = await txResponse.wait();
-  console.log('Tx hash', txReciept.transactionHash);
+  console.log(tx)
+  const txResponse = await walletProvider.send('eth_sendTransaction', [tx]);
+  console.log('executeCall tx', txResponse);
+
+  // SCW pullTokens
+  // const scwTransferData = await scwContract.populateTransaction.transfer(to, amountGwei);
+  // const TransferTx = {
+  //   to: smartAccount.address,
+  //   data: scwTransferData.data,
+  //   from: eoa
+  // }
+  // console.log(TransferTx)
+  // const TransferTxResponse = await walletProvider.send('eth_sendTransaction', [TransferTx]);
+  // console.log('Transfer tx', TransferTxResponse);
 }
 
 module.exports = { nativeTransfer };
