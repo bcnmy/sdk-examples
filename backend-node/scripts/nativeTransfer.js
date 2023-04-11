@@ -1,7 +1,7 @@
 const { ethers } = require("ethers");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const SmartAccount = require("@biconomy-sdk-dev/smart-account").default;
-const { ChainId, Environments } = require("@biconomy-sdk-dev/core-types");
+const SmartAccount = require("@biconomy-devx/smart-account").default;
+const { ChainId, Environments } = require("@biconomy-devx/core-types");
 const config = require("../config.json");
 
 const nativeTransfer = async (to, amount) => {
@@ -37,7 +37,7 @@ const nativeTransfer = async (to, amount) => {
     console.log('error event received via emitter', response);
   });
   // Sending transaction
-  const txResponse = await smartAccount.sendGaslessTransaction({ transaction: tx });
+  const txResponse = await smartAccount.sendTransaction({ transaction: tx });
   console.log('Tx Response', txResponse);
   const txReciept = await txResponse.wait();
   console.log('Tx hash', txReciept.transactionHash);

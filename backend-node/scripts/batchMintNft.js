@@ -1,7 +1,7 @@
 const { ethers } = require("ethers");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const SmartAccount = require("@biconomy-sdk-dev/smart-account").default;
-const { ChainId, Environments } = require("@biconomy-sdk-dev/core-types");
+const SmartAccount = require("@biconomy-devx/smart-account").default;
+const { ChainId, Environments } = require("@biconomy-devx/core-types");
 const config = require("../config.json");
 
 const batchMintNft = async () => {
@@ -43,7 +43,7 @@ const batchMintNft = async () => {
     console.log('error event received via emitter', response);
   });
   // Sending transaction
-  const txResponse = await smartAccount.sendGaslessTransactionBatch({ transactions: [tx, tx] });
+  const txResponse = await smartAccount.sendTransactionBatch({ transactions: [tx, tx] });
   console.log('Tx Response', txResponse);
   const txReciept = await txResponse.wait();
   console.log('Tx hash', txReciept.transactionHash);
