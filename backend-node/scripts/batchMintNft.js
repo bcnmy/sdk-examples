@@ -1,7 +1,7 @@
 const { ethers } = require("ethers");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const SmartAccount = require("@biconomy-devx/smart-account").default;
-const { ChainId, Environments } = require("@biconomy-devx/core-types");
+const SmartAccount = require("@biconomy/smart-account").default;
+const { ChainId, Environments } = require("@biconomy/core-types");
 const config = require("../config.json");
 
 const batchMintNft = async () => {
@@ -9,7 +9,6 @@ const batchMintNft = async () => {
   const walletProvider = new ethers.providers.Web3Provider(provider);
   // create SmartAccount instance
   const wallet = new SmartAccount(walletProvider, {
-    environment: Environments.QA,
     activeNetworkId: config.chainId,
     supportedNetworksIds: [ChainId.GOERLI, ChainId.POLYGON_MUMBAI],
     networkConfig: [
