@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@biconomy/core-types": "^1.0.0",
-    "@biconomy/smart-account": "^1.0.0",
+    "@biconomy/core-types": "2.0.0",
+    "@biconomy/smart-account": "2.0.0",
     "@magic-ext/flow": "^10.0.0",
     "@magic-ext/webauthn": "^9.0.0",
     "buffer": "^6.0.3",
