@@ -1,6 +1,7 @@
 ## SDK by Example
 
-This repository contains a set of examples that demonstrate how to use the Biconomy SDk to build decentralised applications.
+This repository contains a set of examples that demonstrate how to use the Biconomy SDk smart-account to build decentralised applications.
+The SmartAccount package generates a smart wallet contract for each user EOA. It takes a provider, provider can be anything, here we have different examples of providers.
 
 ### Important Links
 
