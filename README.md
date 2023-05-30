@@ -16,6 +16,7 @@ The SmartAccount package generates a smart wallet contract for each user EOA. It
 | [react-biconomy-web3Auth](/react-biconomy-web3Auth)     |      React.js      |    biconomy-web3Auth     |
 | [react-vite-social-login](/react-vite-social-login)     | React.js + vite.js |    biconomy-web3Auth     |
 | [nextjs-biconomy-web3Auth](/nextjs-biconomy-web3Auth)   |      Next.js       |    biconomy-web3Auth     |
+| [react-vite-particle-auth](/react-vite-particle-auth)   | React.js + vite.js |  biconomy-particleAuth   |
 | [react-native-web3Auth](/react-native-web3Auth)         |    React Native    | biconomy-web3Auth-native |
 | [react-native-smartAccount](/react_native_smartAccount) |    React Native    |   ethers (private key)   |
 | [nextjs-rainbow](/nextjs-rainbow)                       |      Next.js       |      rainbow wallet      |
