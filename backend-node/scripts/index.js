@@ -16,15 +16,14 @@ yargs
   // Initialize config file
   .command('init', chalk.blue('Create a config file'), {
     network: {
-      describe: chalk.cyan('Choose chain type (goerli or mumbai)'),
+      describe: chalk.cyan('Choose chain type'),
       demandOption: false,
       type: 'string',
     },
   }, (argv) => {
     const chainType = argv.network;
     console.log(chalk.magenta(`Initializing config for ${chainType} network`));
-    if (chainType === 'mumbai') init('mumbai');
-    else init('goerli');
+    init(chainType)
   })
   // Get SmartAccount address
   .command('address', chalk.blue('Get counterfactual address'), {}, () => {

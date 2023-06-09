@@ -10,8 +10,11 @@
   "keywords": [],
   "license": "ISC",
   "dependencies": {
-    "@biconomy-sdk-dev/core-types": "1.0.16",
-    "@biconomy-sdk-dev/smart-account": "1.0.16",
+    "@biconomy/account": "file:../../biconomy-client-sdk-original/packages/account",
+    "@biconomy/bundler": "file:../../biconomy-client-sdk-original/packages/bundler",
+    "@biconomy/common": "file:../../biconomy-client-sdk-original/packages/common",
+    "@biconomy/core-types": "file:../../biconomy-client-sdk-original/packages/core-types",
+    "@biconomy/paymaster": "file:../../biconomy-client-sdk-original/packages/paymaster",
     "@truffle/hdwallet-provider": "^2.1.1",
     "chalk": "^4.1.2",
     "ethers": "^5.7.2",
