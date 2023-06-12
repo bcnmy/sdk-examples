@@ -39,6 +39,15 @@ async function createBiconomyAccountInstance() {
     return biconomySmartAccount
 }
 
+async function buildAndSendUserOpForBatch(biconomySmartAccount, transactions) {
+    // Sending transaction
+    const userOp = await biconomySmartAccount.buildUserOp(transactions)
+    const userOpResponse = await biconomySmartAccount.sendUserOp(userOp)
+    console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
+    const transactionDetails = await userOpResponse.wait()
+    console.log(chalk.green(`transactionDetails: ${JSON.stringify(transactionDetails)}`));
+}
+
 async function buildAndSendUserOp(biconomySmartAccount, transaction) {
     // Sending transaction
     const userOp = await biconomySmartAccount.buildUserOp([transaction])
@@ -50,5 +59,6 @@ async function buildAndSendUserOp(biconomySmartAccount, transaction) {
 
 module.exports = {
     createBiconomyAccountInstance,
-    buildAndSendUserOp
+    buildAndSendUserOp,
+    buildAndSendUserOpForBatch
 }

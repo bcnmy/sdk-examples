@@ -1,5 +1,5 @@
 const { ethers } = require("ethers");
-const { createBiconomyAccountInstance, buildAndSendUserOp } = require('./helperFunctions')
+const { createBiconomyAccountInstance, buildAndSendUserOpForBatch } = require('./helperFunctions')
 
 const batchMintNft = async () => {
   const biconomySmartAccount = await createBiconomyAccountInstance()
@@ -16,7 +16,10 @@ const batchMintNft = async () => {
     data: data,
   }
   // Sending transaction
-  buildAndSendUserOp(biconomySmartAccount, transaction)
+  buildAndSendUserOpForBatch(biconomySmartAccount, [transaction, transaction]).catch(error => {
+    // Code to execute when the promise is rejected
+    console.error(error);
+  });
 
 }
 
