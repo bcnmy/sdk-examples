@@ -17,7 +17,7 @@ const init = async (chainId) => {
   console.log('network is ------', chainId);
   if (chainId === 'mumbai') {
     INIT_CONFIG.chainId = ChainId.POLYGON_MUMBAI;
-    INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.MAINNET];
+    INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.POLYGON_MUMBAI];
   } else if (chainId === 'ethereum'){
     INIT_CONFIG.chainId = ChainId.MAINNET;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.MAINNET];
