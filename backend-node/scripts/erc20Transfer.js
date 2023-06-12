@@ -1,5 +1,5 @@
 const { ethers } = require("ethers");
-const { createBiconomyAccountInstance, buildAndSendUserOp } = require('./createInstance')
+const { createBiconomyAccountInstance, buildAndSendUserOp } = require('./helperFunctions')
 
 const erc20Transfer = async (recipientAddress, amount, tokenAddress) => {
   const biconomySmartAccount = await createBiconomyAccountInstance()

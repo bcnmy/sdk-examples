@@ -5,14 +5,10 @@ const { Wallet, utils } = require("ethers");
 const chalk = require('chalk');
 const { ChainId } = require("@biconomy/core-types");
 const { RPC_PROVIDER_URLS } = require("@biconomy/common");
-// const INIT_CONFIG = {
-//   privateKey: Wallet.fromMnemonic(
-//     utils.entropyToMnemonic(utils.randomBytes(32))
-//   ).mnemonic.phrase,
-// };
-let index = 300000;
+
+let index = 500000;
 const INIT_CONFIG = {
-  privateKey: Wallet.fromMnemonic("announce room limb pattern dry unit scale effort smooth jazz weasel alcohol", `m/44'/60'/0'/0/${index}`).privateKey.substring(2)
+  privateKey: Wallet.fromMnemonic(utils.entropyToMnemonic(utils.randomBytes(32)), `m/44'/60'/0'/0/${index}`).privateKey.substring(2)
 };
 
 const CONFIG_PATH = path.resolve(__dirname, "../config.json");
