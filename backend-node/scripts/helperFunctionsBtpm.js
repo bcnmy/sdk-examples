@@ -1,6 +1,6 @@
 const { BiconomySmartAccount, DEFAULT_ENTRYPOINT_ADDRESS } = require("@biconomy/account");
 const { Bundler } = require("@biconomy/bundler")
-const { BiconomyVerifyingPaymaster } = require("@biconomy/paymaster")
+const { BiconomyTokenPaymaster } = require("@biconomy/paymaster")
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const { ethers } = require("ethers");
 const chalk = require('chalk');
@@ -21,11 +21,9 @@ async function createBiconomyAccountInstance() {
         apiKey: config.dappAPIKey,
     })
 
-    const paymaster = new BiconomyVerifyingPaymaster({
+    const paymaster = new BiconomyTokenPaymaster({
         paymasterUrl: config.paymasterUrl,
     })
-
-    console.log('paymaster being passed ', paymaster)
 
     const biconomySmartAccountConfig = {
         signer: walletProvider.getSigner(),

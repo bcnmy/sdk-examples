@@ -7,6 +7,7 @@ const { nativeTransfer } = require('./nativeTransfer');
 const { erc20Transfer } = require('./erc20Transfer');
 const { mintNft } = require('./mintNft');
 const { batchMintNft } = require('./batchMintNft');
+const { batchMintNftPayERC20, mintNftPayERC20 } = require('./tokenPaymaster');
 
 yargs
   .scriptName(chalk.green('smartAccount'))
@@ -75,6 +76,11 @@ yargs
   .command('mint', chalk.blue('Mint nft token'), {}, () => {
     console.log(chalk.magenta('Minting an NFT token to the SmartAccount...'));
     mintNft();
+  })
+  // Mint NFT Pay using BTPM
+  .command('mintWithBtpm', chalk.blue('Mint nft token'), {}, () => {
+    console.log(chalk.magenta('Minting an NFT token to the SmartAccount...'));
+    mintNftPayERC20();
   })
   // Mint nft token to SmartAccount
   .command('batchMint', chalk.blue('Batch mint nft 2 times'), {}, () => {

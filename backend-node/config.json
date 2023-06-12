@@ -2,7 +2,6 @@
   "privateKey": "38bf3583e5f4928cab7664ca2005a0786ddde58e52f909f2043dc9b1bf033c32",
   "chainId": 80001,
   "rpcUrl": "https://polygon-mumbai.g.alchemy.com/v2/Q4WqQVxhEEmBYREX22xfsS2-s5EXWD31",
-  "dappAPIKey": "GvsHham4E.b7dabaf4-37ef-4daf-8267-0c063e18dd5a",
   "bundlerUrl": "https://sdk-relayer.prod.biconomy.io/api/v1/bundler",
-  "paymasterUrl": "https://paymaster-signing-service.prod.biconomy.io/api/v1/sign/user-op"
+  "paymasterUrl": "https://paymaster-signing-service-573.staging.biconomy.io/api/v1/80001/_j_KOEYSy.600ae7b1-e6f9-4a8d-9b0e-34645024663a"
 }
