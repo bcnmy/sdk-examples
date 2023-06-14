@@ -45,9 +45,7 @@ const mintNft = async () => {
 
   partialUserOp.paymasterAndData = paymasterData
 
-  // Sending transaction
-  const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp)
-  console.log('userOpResponse ', userOpResponse)
+  await sendUserOp(biconomySmartAccount, partialUserOp)
 }
 
 module.exports = { mintNft };

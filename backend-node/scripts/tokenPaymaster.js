@@ -48,7 +48,7 @@ const mintNftPayERC20 = async () => {
   // const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp)
   // console.log('userOpResponse ', userOpResponse)
 
-  sendUserOp(biconomySmartAccount, partialUserOp)
+  await sendUserOp(biconomySmartAccount, partialUserOp)
 
 
     
