@@ -22,7 +22,7 @@ async function createBiconomyAccountInstance() {
     })
 
     const paymaster = new BiconomyTokenPaymaster({
-        paymasterUrl: config.paymasterUrl,
+        paymasterUrl: config.tokenPaymasterUrl,
     })
 
     const biconomySmartAccountConfig = {
@@ -47,6 +47,13 @@ async function buildAndSendUserOpForBatch(biconomySmartAccount, transactions) {
     console.log(chalk.green(`transactionDetails: ${JSON.stringify(transactionDetails)}`));
 }
 
+async function sendUserOp(biconomySmartAccount, userOp) {
+    const userOpResponse = await biconomySmartAccount.sendUserOp(userOp)
+    console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
+    const transactionDetails = await userOpResponse.wait()
+    console.log(chalk.green(`transactionDetails: ${JSON.stringify(transactionDetails)}`));
+}
+
 async function buildAndSendUserOp(biconomySmartAccount, transaction) {
     // Sending transaction
     const userOp = await biconomySmartAccount.buildUserOp([transaction])
@@ -59,5 +66,6 @@ async function buildAndSendUserOp(biconomySmartAccount, transaction) {
 module.exports = {
     createBiconomyAccountInstance,
     buildAndSendUserOp,
+    sendUserOp,
     buildAndSendUserOpForBatch
 }

@@ -25,13 +25,11 @@ async function createBiconomyAccountInstance() {
         paymasterUrl: config.verifyingPaymasterUrl,
     })
 
-    console.log('paymaster being passed ', paymaster)
-
     const biconomySmartAccountConfig = {
         signer: walletProvider.getSigner(),
         chainId: config.chainId,
         rpcUrl: config.rpcUrl,
-        // paymaster: paymaster,
+        // paymaster: paymaster, // temp disable
         bundler: bundler,
     }
 
@@ -58,8 +56,16 @@ async function buildAndSendUserOp(biconomySmartAccount, transaction) {
     console.log(chalk.green(`transactionDetails: ${JSON.stringify(transactionDetails)}`));
 }
 
+async function sendUserOp(biconomySmartAccount, userOp) {
+    const userOpResponse = await biconomySmartAccount.sendUserOp(userOp)
+    console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
+    const transactionDetails = await userOpResponse.wait()
+    console.log(chalk.green(`transactionDetails: ${JSON.stringify(transactionDetails)}`));
+}
+
 module.exports = {
     createBiconomyAccountInstance,
     buildAndSendUserOp,
+    sendUserOp,
     buildAndSendUserOpForBatch
 }
