@@ -3,7 +3,5 @@
   "chainId": 80001,
   "rpcUrl": "https://rpc.ankr.com/polygon_mumbai",
   "bundlerUrl": "https://sdk-relayer.prod.biconomy.io/api/v1/bundler",
-  "tokenPaymasterUrl": "https://paymaster-signing-service-573.staging.biconomy.io/api/v1/80001/_j_KOEYSy.600ae7b1-e6f9-4a8d-9b0e-34645024663a",
-  "verifyingPaymasterUrl": "https://paymaster-signing-service-573.staging.biconomy.io/api/v1/80001/Dmwq9akSk.719c1e33-cd54-48f1-a527-0573091e6f0e",
-  "hybridPaymasterUrl": "https://paymaster-signing-service-573.staging.biconomy.io/api/v1/80001/tzetpYiFF.9c24317f-945b-496d-91e3-e26760b0049a"
+  "biconomyPaymasterUrl": "https://paymaster-signing-service-573.staging.biconomy.io/api/v1/80001/tzetpYiFF.9c24317f-945b-496d-91e3-e26760b0049a"
 }

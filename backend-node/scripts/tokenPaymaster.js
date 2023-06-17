@@ -21,6 +21,9 @@ const mintNftPayERC20 = async () => {
   // instead of using attached paymaster create BTPM instance
 
   let partialUserOp = await biconomySmartAccount.buildUserOp([transaction])
+
+  console.log('partial userOp')
+  console.log(partialUserOp)
   
   const feeQuotes = await tokenPaymaster?.getPaymasterFeeQuotes(partialUserOp, ["0xda5289fcaaf71d52a80a254da614a192b693e977", "0x27a44456bedb94dbd59d0f0a14fe977c777fc5c3"], "0xda5289fcaaf71d52a80a254da614a192b693e977")
   console.log('<<<<<<<<<<<<<<<<<< ====================== fee quotes received')
@@ -30,10 +33,20 @@ const mintNftPayERC20 = async () => {
 
   const paymasterServiceData = 
     {
-      "tokenPaymasterData": 
+      "mode": "ERC20",
+      "tokenInfo": 
       {
       "feeTokenAddress": feeQuotes[0].tokenAddress // for now or always
+      },
+      /*
+      sponsorshipInfo: {
+        "webhookData": {},
+        "smartAccountInfo": {
+            "name": "BICONOMY",
+            "version": "1.0.0"
+        }
       }
+      */
     }
 
   console.log('partialUserOp is ')

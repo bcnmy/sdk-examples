@@ -19,7 +19,7 @@ const mintNft = async () => {
   }
 
   const verifyingPaymaster =  new BiconomyVerifyingPaymaster({
-    paymasterUrl: config.verifyingPaymasterUrl,
+    paymasterUrl: config.biconomyPaymasterUrl,
   })
 
   console.log('verifying paymaster ', verifyingPaymaster)
@@ -30,11 +30,14 @@ const mintNft = async () => {
   let partialUserOp = await biconomySmartAccount.buildUserOp([transaction])
 
   const paymasterServiceData = {
+    "mode": "SPONSORED",
+    "sponsorshipInfo": {
     "webhookData": {},
-    "smartAccountTypeVersionData": {
+    "smartAccountInfo": {
       "name": "BICONOMY",
       "version": "1.0.0"
     }
+  }
   }
 
   console.log('partialUserOp is ')

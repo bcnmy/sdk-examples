@@ -22,7 +22,7 @@ async function createBiconomyAccountInstance() {
     })
 
     const paymaster = new BiconomyTokenPaymaster({
-        paymasterUrl: config.tokenPaymasterUrl,
+        paymasterUrl: config.biconomyPaymasterUrl,
     })
 
     const biconomySmartAccountConfig = {
