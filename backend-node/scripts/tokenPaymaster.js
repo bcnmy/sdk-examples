@@ -16,7 +16,7 @@ const mintNftPayERC20 = async () => {
     data: data,
   }
 
-  const tokenPaymaster = biconomySmartAccount.paymaster;
+  const biconomyPaymaster = biconomySmartAccount.paymaster;
   // todo
   // instead of using attached paymaster create BTPM instance
 
@@ -25,11 +25,18 @@ const mintNftPayERC20 = async () => {
   console.log('partial userOp')
   console.log(partialUserOp)
   
-  const feeQuotes = await tokenPaymaster?.getPaymasterFeeQuotes(partialUserOp, ["0xda5289fcaaf71d52a80a254da614a192b693e977", "0x27a44456bedb94dbd59d0f0a14fe977c777fc5c3"], "0xda5289fcaaf71d52a80a254da614a192b693e977")
+  const feeQuotesResponse = await biconomyPaymaster?.getPaymasterFeeQuotes(partialUserOp, ["0xda5289fcaaf71d52a80a254da614a192b693e977", "0x27a44456bedb94dbd59d0f0a14fe977c777fc5c3"], "0xda5289fcaaf71d52a80a254da614a192b693e977")
   console.log('<<<<<<<<<<<<<<<<<< ====================== fee quotes received')
-  // console.log(feeQuotes)
+  const feeQuotes = feeQuotesResponse.feeQuotes
+  console.log(feeQuotes)
+
+  const spender = feeQuotesResponse.tokenPaymasterAddress
+  console.log('paymaster to give approval to ', spender)
 
   console.log(feeQuotes[0].tokenAddress)
+
+  let finalUserOp = await biconomySmartAccount.buildTokenPaymasterUserOp(partialUserOp, {feeQuote: feeQuotes[0], spender:spender, maxApproval: false})
+  console.log('updated userop ', finalUserOp)
 
   const paymasterServiceData = 
     {
@@ -45,23 +52,19 @@ const mintNftPayERC20 = async () => {
             "name": "BICONOMY",
             "version": "1.0.0"
         }
-      }
-      */
+      }*/
     }
-
-  console.log('partialUserOp is ')
-  console.log(partialUserOp)
   
-  const paymasterData = await tokenPaymaster?.getPaymasterAndData(partialUserOp, paymasterServiceData);
+  const paymasterData = await biconomyPaymaster?.getPaymasterAndData(finalUserOp, paymasterServiceData);
   console.log('successfull call return: paymasterAndData ', paymasterData)
 
-  partialUserOp.paymasterAndData = paymasterData
+  finalUserOp.paymasterAndData = paymasterData
 
   // Sending transaction
   // const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp)
   // console.log('userOpResponse ', userOpResponse)
 
-  await sendUserOp(biconomySmartAccount, partialUserOp)
+  await sendUserOp(biconomySmartAccount, finalUserOp)
 
 
     
