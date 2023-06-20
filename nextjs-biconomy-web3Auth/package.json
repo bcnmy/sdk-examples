@@ -12,6 +12,7 @@
     "@biconomy/core-types": "2.0.0",
     "@biconomy/smart-account": "2.0.0",
     "@biconomy/web3-auth": "2.0.0",
+    "@privy-io/react-auth": "^1.27.0",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
