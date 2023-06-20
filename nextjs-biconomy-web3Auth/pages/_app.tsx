@@ -6,8 +6,8 @@ import {PrivyProvider} from '@privy-io/react-auth'
 export default function App({ Component, pageProps }: AppProps) {
   return(
     <PrivyProvider
-      appId='cla06f34x0001mh08l8nsr496'
-      apiUrl='https://auth.staging.privy.io'
+      appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID as string}
+      apiUrl={process.env.NEXT_PUBLIC_PRIVY_API_URL || 'https://auth.privy.io'}
       config={{
         embeddedWallets: {
           createOnLogin: 'all-users'
