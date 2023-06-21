@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ParticleAuthModule,
   ParticleProvider,
@@ -24,7 +24,6 @@ const particle = new ParticleAuthModule.ParticleNetwork({
     customStyle: {}, //optional: custom wallet style
   },
 });
-
 function App() {
   const [account, setAccount] = useState("");
   const [eoaLoading, setEoaLoading] = useState(false);
@@ -55,10 +54,10 @@ function App() {
       console.error(error);
     }
   };
+
   const disconnect = async () => {
-    // await magic.wallet.disconnect();
-    localStorage.removeItem("user");
-    setAccount("");
+    localStorage.removeItem("user"); // Remove user from local storage
+    setAccount(""); // Reset the account state
   };
 
   // for smart-account
@@ -106,11 +105,16 @@ function App() {
     const signer = provider.getSigner();
     const txResponse = await signer.sendTransaction(tx);
     console.log("Tx Response", txResponse);
-    const txReciept = await txResponse.wait();
-    console.log("Tx hash", txReciept.transactionHash);
-    setTxHash(txReciept.transactionHash);
+    const txReceipt = await txResponse.wait();
+    console.log("Tx hash", txReceipt.transactionHash);
+    setTxHash(txReceipt.transactionHash);
     setScwLoading(false);
   };
+
+  useEffect(() => {
+    // Reset txHash when the account state changes
+    setTxHash("");
+  }, [account]);
 
   return (
     <main className="App">
