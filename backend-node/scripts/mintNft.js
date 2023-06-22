@@ -1,6 +1,6 @@
 const { ethers } = require("ethers");
 const { createBiconomyAccountInstance, buildAndSendUserOp, sendUserOp } = require('./helperFunctionsBvpm')
-const { BiconomyVerifyingPaymaster } = require("@biconomy/paymaster")
+const { BiconomyPaymaster } = require("@biconomy/paymaster")
 const config = require("../config.json");
 
 const mintNft = async () => {
@@ -18,11 +18,11 @@ const mintNft = async () => {
     data: data,
   }
 
-  const verifyingPaymaster =  new BiconomyVerifyingPaymaster({
+  const biconomyPaymaster =  new BiconomyPaymaster({
     paymasterUrl: config.biconomyPaymasterUrl,
   })
 
-  console.log('verifying paymaster ', verifyingPaymaster)
+  console.log('verifying paymaster ', biconomyPaymaster)
 
   console.log('biconomySmartAccount.paymaster ', biconomySmartAccount.paymaster)
 
@@ -43,7 +43,7 @@ const mintNft = async () => {
   console.log('partialUserOp is ')
   console.log(partialUserOp)
 
-  const paymasterData = await verifyingPaymaster?.getPaymasterAndData(partialUserOp, paymasterServiceData);
+  const paymasterData = await biconomyPaymaster?.getPaymasterAndData(partialUserOp, paymasterServiceData);
   console.log('successfull call return: paymasterAndData ', paymasterData)
 
   partialUserOp.paymasterAndData = paymasterData

@@ -25,7 +25,7 @@ const mintNftPayERC20 = async () => {
   console.log('partial userOp')
   console.log(partialUserOp)
   
-  const feeQuotesResponse = await biconomyPaymaster?.getPaymasterFeeQuotes(partialUserOp, ["0xda5289fcaaf71d52a80a254da614a192b693e977", "0x27a44456bedb94dbd59d0f0a14fe977c777fc5c3"], "0xda5289fcaaf71d52a80a254da614a192b693e977")
+  const feeQuotesResponse = await biconomyPaymaster?.getPaymasterFeeQuotesOrData(partialUserOp, { mode: "ERC20", tokenInfo:{tokenList: ["0xda5289fcaaf71d52a80a254da614a192b693e977", "0x27a44456bedb94dbd59d0f0a14fe977c777fc5c3"], preferredToken: "0xda5289fcaaf71d52a80a254da614a192b693e977"}})
   console.log('<<<<<<<<<<<<<<<<<< ====================== fee quotes received')
   const feeQuotes = feeQuotesResponse.feeQuotes
   console.log(feeQuotes)
@@ -35,6 +35,7 @@ const mintNftPayERC20 = async () => {
 
   console.log(feeQuotes[0].tokenAddress)
 
+  // pm_getFeeQuoteOrData
   let finalUserOp = await biconomySmartAccount.buildTokenPaymasterUserOp(partialUserOp, {feeQuote: feeQuotes[0], spender:spender, maxApproval: false})
   console.log('updated userop ', finalUserOp)
 
@@ -55,6 +56,7 @@ const mintNftPayERC20 = async () => {
       }*/
     }
   
+  // pm_sponsorUserOp
   const paymasterData = await biconomyPaymaster?.getPaymasterAndData(finalUserOp, paymasterServiceData);
   console.log('successfull call return: paymasterAndData ', paymasterData)
 
