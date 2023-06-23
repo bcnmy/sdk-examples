@@ -1,5 +1,5 @@
 const { ethers } = require("ethers");
-const { createBiconomyAccountInstance, buildAndSendUserOp, sendUserOp } = require('./helperFunctionsBtpm')
+const { createBiconomyAccountInstance, buildAndSendUserOp, sendUserOp } = require('./helperFunctions')
 
 const mintNftPayERC20 = async () => {
   const biconomySmartAccount = await createBiconomyAccountInstance()

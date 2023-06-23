@@ -1,6 +1,6 @@
 const { ethers } = require("ethers");
-const { createBiconomyAccountInstance, buildAndSendUserOp, sendUserOp } = require('./helperFunctionsBvpm')
-const { BiconomyPaymaster } = require("@biconomy/paymaster")
+const { createBiconomyAccountInstance, buildAndSendUserOp, sendUserOp } = require('./helperFunctions')
+const { BiconomyPaymaster } = require("@biconomy-devx/paymaster")
 const config = require("../config.json");
 
 const mintNft = async () => {

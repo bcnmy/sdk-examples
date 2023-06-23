@@ -1,6 +1,6 @@
-const { BiconomySmartAccount, DEFAULT_ENTRYPOINT_ADDRESS } = require("@biconomy/account");
-const { Bundler } = require("@biconomy/bundler")
-const { BiconomyVerifyingPaymaster } = require("@biconomy/paymaster")
+const { BiconomySmartAccount, DEFAULT_ENTRYPOINT_ADDRESS } = require("@biconomy-devx/account");
+const { Bundler } = require("@biconomy-devx/bundler")
+const { BiconomyPaymaster } = require("@biconomy-devx/paymaster")
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const { ethers } = require("ethers");
 const chalk = require('chalk');
@@ -21,17 +21,15 @@ async function createBiconomyAccountInstance() {
         apiKey: config.dappAPIKey,
     })
 
-    const paymaster = new BiconomyVerifyingPaymaster({
+    const paymaster = new BiconomyPaymaster({
         paymasterUrl: config.biconomyPaymasterUrl,
     })
-
-    console.log('paymaster being passed ', paymaster)
 
     const biconomySmartAccountConfig = {
         signer: walletProvider.getSigner(),
         chainId: config.chainId,
         rpcUrl: config.rpcUrl,
-        // paymaster: paymaster,
+        paymaster: paymaster,
         bundler: bundler,
     }
 
@@ -43,6 +41,13 @@ async function createBiconomyAccountInstance() {
 async function buildAndSendUserOpForBatch(biconomySmartAccount, transactions) {
     // Sending transaction
     const userOp = await biconomySmartAccount.buildUserOp(transactions)
+    const userOpResponse = await biconomySmartAccount.sendUserOp(userOp)
+    console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
+    const transactionDetails = await userOpResponse.wait()
+    console.log(chalk.green(`transactionDetails: ${JSON.stringify(transactionDetails)}`));
+}
+
+async function sendUserOp(biconomySmartAccount, userOp) {
     const userOpResponse = await biconomySmartAccount.sendUserOp(userOp)
     console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
     const transactionDetails = await userOpResponse.wait()
@@ -61,5 +66,6 @@ async function buildAndSendUserOp(biconomySmartAccount, transaction) {
 module.exports = {
     createBiconomyAccountInstance,
     buildAndSendUserOp,
+    sendUserOp,
     buildAndSendUserOpForBatch
 }

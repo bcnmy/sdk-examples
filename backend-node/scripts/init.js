@@ -3,8 +3,8 @@ const path = require("path");
 const prettier = require("prettier");
 const { Wallet, utils } = require("ethers");
 const chalk = require('chalk');
-const { ChainId } = require("@biconomy/core-types");
-const { RPC_PROVIDER_URLS } = require("@biconomy/common");
+const { ChainId } = require("@biconomy-devx/core-types");
+const { RPC_PROVIDER_URLS } = require("@biconomy-devx/common");
 
 let index = 500000;
 const INIT_CONFIG = {
