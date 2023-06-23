@@ -43,7 +43,10 @@ const mintNft = async () => {
   console.log('partialUserOp is ')
   console.log(partialUserOp)
 
-  const paymasterData = await biconomyPaymaster?.getPaymasterAndData(partialUserOp, paymasterServiceData);
+  // const paymasterData = await biconomyPaymaster?.getPaymasterAndData(partialUserOp, paymasterServiceData);
+  // console.log('successfull call return: paymasterAndData ', paymasterData)
+
+  const paymasterData = (await biconomyPaymaster?.getPaymasterFeeQuotesOrData(partialUserOp, paymasterServiceData)).paymasterAndData;
   console.log('successfull call return: paymasterAndData ', paymasterData)
 
   partialUserOp.paymasterAndData = paymasterData
