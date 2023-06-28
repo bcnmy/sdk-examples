@@ -36,15 +36,18 @@ const mintNft = async () => {
 
   // console.log('partialUserOp is ', partialUserOp)
 
+  try{
   const paymasterAndDataWithLimits = await biconomyPaymaster?.getPaymasterFeeQuotesOrData(partialUserOp, paymasterServiceData);
   console.log('successfull call return: paymasterAndDataWithLimits ', paymasterAndDataWithLimits)
-
+  
   partialUserOp.paymasterAndData = paymasterAndDataWithLimits.paymasterAndData
   partialUserOp.callGasLimit = paymasterAndDataWithLimits.callGasLimit
   partialUserOp.verificationGasLimit = paymasterAndDataWithLimits.verificationGasLimit
   partialUserOp.preVerificationGas = paymasterAndDataWithLimits.preVerificationGas
-
   await sendUserOp(biconomySmartAccount, partialUserOp)
+} catch (e) {
+  console.log('error received ', e)
+}
 }
 
 module.exports = { mintNft };

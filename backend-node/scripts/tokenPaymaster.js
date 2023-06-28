@@ -2,6 +2,7 @@ const { ethers } = require("ethers");
 const { createBiconomyAccountInstance, buildAndSendUserOp, sendUserOp } = require('./helperFunctions')
 
 const mintNftPayERC20 = async () => {
+  try{
   const biconomySmartAccount = await createBiconomyAccountInstance()
 
   const nftInterface = new ethers.utils.Interface([
@@ -57,6 +58,9 @@ const mintNftPayERC20 = async () => {
   finalUserOp.preVerificationGas = paymasterAndDataWithLimits.preVerificationGas
 
   await sendUserOp(biconomySmartAccount, finalUserOp)
+  } catch (e) {
+    console.log('error received ', e)
+  }
 }
 
 module.exports = { mintNftPayERC20 };
