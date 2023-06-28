@@ -12,21 +12,13 @@ const mintNft = async () => {
   const data = nftInterface.encodeFunctionData(
     'safeMint', [biconomySmartAccount.address]
   )
-  const nftAddress = "0xdd526eba63ef200ed95f0f0fb8993fe3e20a23d0" // same for goerli and mumbai
+  const nftAddress = "0x1758f42Af7026fBbB559Dc60EcE0De3ef81f665e" // same for goerli and mumbai
   const transaction = {
     to: nftAddress,
     data: data,
   }
 
-  /*const biconomyPaymaster =  new BiconomyPaymaster({
-    paymasterUrl: config.biconomyPaymasterUrl,
-  })*/
-
   const biconomyPaymaster = biconomySmartAccount.paymaster;
-
-  console.log('verifying paymaster ', biconomyPaymaster)
-
-  console.log('biconomySmartAccount.paymaster ', biconomySmartAccount.paymaster)
 
   let partialUserOp = await biconomySmartAccount.buildUserOp([transaction])
 
@@ -42,11 +34,7 @@ const mintNft = async () => {
     }
   }
 
-  console.log('partialUserOp is ')
-  console.log(partialUserOp)
-
-  // const paymasterData = await biconomyPaymaster?.getPaymasterAndData(partialUserOp, paymasterServiceData);
-  // console.log('successfull call return: paymasterAndData ', paymasterData)
+  // console.log('partialUserOp is ', partialUserOp)
 
   const paymasterAndDataWithLimits = await biconomyPaymaster?.getPaymasterFeeQuotesOrData(partialUserOp, paymasterServiceData);
   console.log('successfull call return: paymasterAndDataWithLimits ', paymasterAndDataWithLimits)

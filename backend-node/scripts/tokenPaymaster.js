@@ -10,15 +10,13 @@ const mintNftPayERC20 = async () => {
   const data = nftInterface.encodeFunctionData(
     'safeMint', [biconomySmartAccount.address]
   )
-  const nftAddress = "0xdd526eba63ef200ed95f0f0fb8993fe3e20a23d0" // same for goerli and mumbai
+  const nftAddress = "0x1758f42Af7026fBbB559Dc60EcE0De3ef81f665e" // same for goerli and mumbai
   const transaction = {
     to: nftAddress,
     data: data,
   }
 
   const biconomyPaymaster = biconomySmartAccount.paymaster;
-  // todo
-  // instead of using attached paymaster create BTPM instance
 
   let partialUserOp = await biconomySmartAccount.buildUserOp([transaction])
 
@@ -26,7 +24,7 @@ const mintNftPayERC20 = async () => {
   console.log(partialUserOp)
   
   const feeQuotesResponse = await biconomyPaymaster?.getPaymasterFeeQuotesOrData(partialUserOp, { mode: "ERC20", tokenInfo:{tokenList: ["0xda5289fcaaf71d52a80a254da614a192b693e977", "0x27a44456bedb94dbd59d0f0a14fe977c777fc5c3"], preferredToken: "0xda5289fcaaf71d52a80a254da614a192b693e977"}})
-  console.log('<<<<<<<<<<<<<<<<<< ====================== fee quotes received')
+  console.log('<<<<<<<<<<<<<<<<<< ====================== fee quotes received ====================== >>>>>>>>>>>>>>>>>>>')
   const feeQuotes = feeQuotesResponse.feeQuotes
   console.log(feeQuotes)
 
@@ -45,16 +43,8 @@ const mintNftPayERC20 = async () => {
       "calculateGasLimits": true,
       "tokenInfo": 
       {
-      "feeTokenAddress": feeQuotes[0].tokenAddress // for now or always
-      },
-      /*
-      sponsorshipInfo: {
-        "webhookData": {},
-        "smartAccountInfo": {
-            "name": "BICONOMY",
-            "version": "1.0.0"
-        }
-      }*/
+      "feeTokenAddress": feeQuotes[0].tokenAddress // sending 0th quote now
+      }
     }
   
   // pm_sponsorUserOp
@@ -66,34 +56,7 @@ const mintNftPayERC20 = async () => {
   finalUserOp.verificationGasLimit = paymasterAndDataWithLimits.verificationGasLimit
   finalUserOp.preVerificationGas = paymasterAndDataWithLimits.preVerificationGas
 
-  // Sending transaction
-  // const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp)
-  // console.log('userOpResponse ', userOpResponse)
-
   await sendUserOp(biconomySmartAccount, finalUserOp)
-
-
-    
-  
-  ///////////////////////////////////////
-
-
-  // 1. 
-  // Pass the partialUserOp and feeTokenAddress (mandatory quote) to account package for updating calldata with approval
-  // Pass the partial userOp and tokenAddress/Quote to tokenPaymaster.getPaymasterAndData()
-  // update the partialUserOp with paymasterandData and sendUserOp to bundler
-
-  // 2.
-  // Pass the partialUserOp and preferredTokenAddress
-  // get the fee quote for your preferred token by tokenPaymaster.getFeeQuote()
-  // Manage appending approval to calldata on your end [ In order to do this you need : tokenAddress, spender, quote (or choose infinite approval)]
-  // Pass the updated partial userOp and tokenAddress/Quote to tokenPaymaster.getPaymasterAndData()
-  // update the partialUserOp with paymasterandData and sendUserOp to bundler
-
-
-
-  // Sending transaction
-  // buildAndSendUserOp(biconomySmartAccount, transaction)
 }
 
 module.exports = { mintNftPayERC20 };
