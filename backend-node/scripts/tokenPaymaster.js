@@ -42,6 +42,7 @@ const mintNftPayERC20 = async () => {
   const paymasterServiceData = 
     {
       "mode": "ERC20",
+      "calculateGasLimits": true,
       "tokenInfo": 
       {
       "feeTokenAddress": feeQuotes[0].tokenAddress // for now or always
@@ -57,10 +58,13 @@ const mintNftPayERC20 = async () => {
     }
   
   // pm_sponsorUserOp
-  const paymasterData = await biconomyPaymaster?.getPaymasterAndData(finalUserOp, paymasterServiceData);
-  console.log('successfull call return: paymasterAndData ', paymasterData)
+  const paymasterAndDataWithLimits  = await biconomyPaymaster?.getPaymasterAndData(finalUserOp, paymasterServiceData);
+  console.log('successfull call return: paymasterAndDataWithLimits ', paymasterAndDataWithLimits)
 
-  finalUserOp.paymasterAndData = paymasterData
+  finalUserOp.paymasterAndData = paymasterAndDataWithLimits.paymasterAndData
+  finalUserOp.callGasLimit = paymasterAndDataWithLimits.callGasLimit
+  finalUserOp.verificationGasLimit = paymasterAndDataWithLimits.verificationGasLimit
+  finalUserOp.preVerificationGas = paymasterAndDataWithLimits.preVerificationGas
 
   // Sending transaction
   // const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp)

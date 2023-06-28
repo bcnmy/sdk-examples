@@ -1,6 +1,6 @@
-const { BiconomySmartAccount, DEFAULT_ENTRYPOINT_ADDRESS } = require("@biconomy-devx/account");
-const { Bundler } = require("@biconomy-devx/bundler")
-const { BiconomyPaymaster } = require("@biconomy-devx/paymaster")
+const { BiconomySmartAccount, DEFAULT_ENTRYPOINT_ADDRESS } = require("@biconomy/account");
+const { Bundler } = require("@biconomy/bundler")
+const { BiconomyPaymaster } = require("@biconomy/paymaster")
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const { ethers } = require("ethers");
 const chalk = require('chalk');

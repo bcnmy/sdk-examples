@@ -88,3 +88,39 @@ yargs
     batchMintNft();
   })
   .help().argv;
+
+// --withSponsorshipPaymaster (// yarn run smartAccount mint --withSponsorshipPaymaster) 
+
+// mintNFT = gasless + wallet deployed (index 0 from config)  
+// mintNFT = gasless + wallet undeployed (get index from config)
+// batchMintNft = gasless + wallet deployed (index 0 from config)
+// batchMintNft = gasless + wallet undeployed (get index from config)
+// setQuote = setQuote gasless + wallet deployed (index 0 from config)
+// setQuote = setQuote gasless + walletundeployed (index from config)
+// erc20Transfer = gasless + wallet deployed (index 0 from config)
+// erc20Transfer = gasless + wallet undeployed (index from config)
+// transfer = gasless + wallet deployed (index 0 from config)
+// transfer = gasless + wallet undeployed (index from config)
+// batchNativeTransfer = gasless + wallet deployed (index 0 from config)
+// batchNativeTransfer = gasless + wallet undeployed (index from config)
+// batchErc20Transfer = gasless + wallet deployed (index 0 from config)
+// batchErc20Transfer = gasless + wallet undeployed (index from config)
+
+// --withSponsorshipPaymaster (// yarn run smartAccount mint --withTokenPaymaster) 
+
+// mintNFT = gasless + wallet deployed (index 0 from config)  
+// mintNFT = gasless + wallet undeployed (get index from config)
+// batchMintNft = gasless + wallet deployed (index 0 from config)
+// batchMintNft = gasless + wallet undeployed (get index from config)
+// setQuote = setQuote gasless + wallet deployed (index 0 from config)
+// setQuote = setQuote gasless + walletundeployed (index from config)
+// erc20Transfer = gasless + wallet deployed (index 0 from config)
+// erc20Transfer = gasless + wallet undeployed (index from config)
+// transfer = gasless + wallet deployed (index 0 from config)
+// transfer = gasless + wallet undeployed (index from config)
+// batchErc20Transfer = gasless + wallet deployed (index 0 from config)
+// batchErc20Transfer = gasless + wallet undeployed (index from config)
+
+
+
+
