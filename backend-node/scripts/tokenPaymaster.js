@@ -24,7 +24,7 @@ const mintNftPayERC20 = async () => {
   console.log('partial userOp')
   console.log(partialUserOp)
   
-  const feeQuotesResponse = await biconomyPaymaster?.getPaymasterFeeQuotesOrData(partialUserOp, { mode: "ERC20", tokenInfo:{tokenList: ["0xda5289fcaaf71d52a80a254da614a192b693e977", "0x27a44456bedb94dbd59d0f0a14fe977c777fc5c3"], preferredToken: "0xda5289fcaaf71d52a80a254da614a192b693e977"}})
+  const feeQuotesResponse = await biconomyPaymaster?.getPaymasterFeeQuotesOrData(partialUserOp, { mode: "ERC20", tokenInfo:{tokenList: ["0x355c8c8395fadf2eaa6bb27f86e53e432e3de4e6", "0x03bbb5660b8687c2aa453a0e42dcb6e0732b1266", "0x1ffa9c87ead57adc9e4f9a7d26ec3a52150db3b0", "0x81f9e7a56f6869a9a8c385d1e0701b312439501f", "0xdeb12ea437c116ed823ab49244cafec4e41704cb"], preferredToken: "0xc1537ab4f2e0b1c578baea06b5baae8f87ce971c"}})
   console.log('<<<<<<<<<<<<<<<<<< ====================== fee quotes received ====================== >>>>>>>>>>>>>>>>>>>')
   const feeQuotes = feeQuotesResponse.feeQuotes
   console.log(feeQuotes)
