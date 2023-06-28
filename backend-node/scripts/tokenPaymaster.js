@@ -24,7 +24,7 @@ const mintNftPayERC20 = async () => {
   console.log('partial userOp')
   console.log(partialUserOp)
   
-  const feeQuotesResponse = await biconomyPaymaster?.getPaymasterFeeQuotesOrData(partialUserOp, { mode: "ERC20", tokenInfo:{tokenList: ["0x355c8c8395fadf2eaa6bb27f86e53e432e3de4e6", "0x03bbb5660b8687c2aa453a0e42dcb6e0732b1266", "0x1ffa9c87ead57adc9e4f9a7d26ec3a52150db3b0", "0x81f9e7a56f6869a9a8c385d1e0701b312439501f", "0xdeb12ea437c116ed823ab49244cafec4e41704cb"], preferredToken: "0x355c8c8395fadf2eaa6bb27f86e53e432e3de4e6"}})
+  const feeQuotesResponse = await biconomyPaymaster?.getPaymasterFeeQuotesOrData(partialUserOp, { mode: "ERC20", tokenInfo:{tokenList: ["0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d", "0x55d398326f99059fF775485246999027B3197955", "0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3", "0xfb6115445Bff7b52FeB98650C87f44907E58f802", "0x111111111117dC0aa78b770fA6A738034120C302", "0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD", "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82", "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", "0x4b0f1812e5df2a09796481ff14017e6005508003"], preferredToken: "0x4b0f1812e5df2a09796481ff14017e6005508003"}})
   console.log('<<<<<<<<<<<<<<<<<< ====================== fee quotes received ====================== >>>>>>>>>>>>>>>>>>>')
   const feeQuotes = feeQuotesResponse.feeQuotes
   console.log(feeQuotes)

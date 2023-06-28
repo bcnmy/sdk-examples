@@ -1,9 +1,9 @@
 {
   "privateKey": "38bf3583e5f4928cab7664ca2005a0786ddde58e52f909f2043dc9b1bf033c32",
   "index": 0,
-  "chainId": 97,
-  "rpcUrl": "https://data-seed-prebsc-1-s2.binance.org:8545",
+  "chainId": 56,
+  "rpcUrl": "https://bsc.blockpi.network/v1/rpc/public",
   "bundlerUrl": "https://sdk-relayer.prod.biconomy.io/api/v1/bundler",
-  "biconomyPaymasterUrl": "https://paymaster-signing-service-573.staging.biconomy.io/api/v1/97/PPDt2ZTkS.dad7311e-67b5-4b36-998f-e99be4d45ab1",
+  "biconomyPaymasterUrl": "https://paymaster-signing-service-573.staging.biconomy.io/api/v1/56/oKtjsRUE7.8357637d-33ea-4a55-89c8-5888f23475fe",
   "preferredTokenAddress": ""
 }
