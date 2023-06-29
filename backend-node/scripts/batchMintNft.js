@@ -1,5 +1,5 @@
 const { ethers } = require("ethers");
-const { createBiconomyAccountInstance, buildAndSendUserOpForBatch } = require('./helperFunctions')
+const { createBiconomyAccountInstance, sendUserOp } = require('./helperFunctions')
 
 const batchMintNft = async () => {
   const biconomySmartAccount = await createBiconomyAccountInstance()
@@ -10,17 +10,42 @@ const batchMintNft = async () => {
   const data = nftInterface.encodeFunctionData(
     'safeMint', [biconomySmartAccount.address]
   )
-  const nftAddress = "0xdd526eba63ef200ed95f0f0fb8993fe3e20a23d0" // same for goerli and mumbai
+  const nftAddress = "0x1758f42Af7026fBbB559Dc60EcE0De3ef81f665e"
   const transaction = {
     to: nftAddress,
     data: data,
   }
-  // Sending transaction
-  buildAndSendUserOpForBatch(biconomySmartAccount, [transaction, transaction]).catch(error => {
-    // Code to execute when the promise is rejected
-    console.error(error);
-  });
 
+  const biconomyPaymaster = biconomySmartAccount.paymaster;
+
+  let partialUserOp = await biconomySmartAccount.buildUserOp([transaction, transaction])
+
+  const paymasterServiceData = {
+    "mode": "SPONSORED",
+    "calculateGasLimits": true,
+    "sponsorshipInfo": {
+       "webhookData": {},
+       "smartAccountInfo": {
+         "name": "BICONOMY",
+         "version": "1.0.0"
+       }
+    }
+  }
+
+  // console.log('partialUserOp is ', partialUserOp)
+
+  try{
+  const paymasterAndDataWithLimits = await biconomyPaymaster?.getPaymasterFeeQuotesOrData(partialUserOp, paymasterServiceData);
+  console.log('successfull call return: paymasterAndDataWithLimits ', paymasterAndDataWithLimits)
+  
+  partialUserOp.paymasterAndData = paymasterAndDataWithLimits.paymasterAndData
+  partialUserOp.callGasLimit = paymasterAndDataWithLimits.callGasLimit
+  partialUserOp.verificationGasLimit = paymasterAndDataWithLimits.verificationGasLimit
+  partialUserOp.preVerificationGas = paymasterAndDataWithLimits.preVerificationGas
+  await sendUserOp(biconomySmartAccount, partialUserOp)
+} catch (e) {
+  console.log('error received ', e)
+}
 }
 
 module.exports = { batchMintNft };
