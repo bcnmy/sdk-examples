@@ -1,5 +1,5 @@
 const { ethers } = require("ethers");
-const { createBiconomyAccountInstance, buildAndSendUserOp, sendUserOp } = require('./helperFunctions')
+const { createBiconomyAccountInstance, sendUserOp } = require('./helperFunctions')
 const { BiconomyPaymaster } = require("@biconomy/paymaster")
 const config = require("../config.json");
 
@@ -41,9 +41,11 @@ const mintNft = async () => {
   console.log('successfull call return: paymasterAndDataWithLimits ', paymasterAndDataWithLimits)
   
   partialUserOp.paymasterAndData = paymasterAndDataWithLimits.paymasterAndData
-  partialUserOp.callGasLimit = paymasterAndDataWithLimits.callGasLimit
-  partialUserOp.verificationGasLimit = paymasterAndDataWithLimits.verificationGasLimit
-  partialUserOp.preVerificationGas = paymasterAndDataWithLimits.preVerificationGas
+  if(paymasterAndDataWithLimits.callGasLimit && paymasterAndDataWithLimits.verificationGasLimit && paymasterAndDataWithLimits.preVerificationGas) {
+    partialUserOp.callGasLimit = paymasterAndDataWithLimits.callGasLimit
+    partialUserOp.verificationGasLimit = paymasterAndDataWithLimits.verificationGasLimit
+    partialUserOp.preVerificationGas = paymasterAndDataWithLimits.preVerificationGas
+  }
   await sendUserOp(biconomySmartAccount, partialUserOp)
 } catch (e) {
   console.log('error received ', e)

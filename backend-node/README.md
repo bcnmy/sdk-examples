@@ -12,11 +12,11 @@ yarn install
 
 ```bash
 
-yarn run smartAccount mint
-yarn run smartAccount mintWithBtpm
-
 yarn run smartAccount init --network=mumbai
-yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=1
-yarn run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount=10 --token=0x0987654321098765432109876543210987654321
+
+yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=0.01
+yarn run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount=0.1 --token=0xdA5289fCAAF71d52a80A254da614a192b693e977
+yarn run smartAccount mint
 yarn run smartAccount batchMint
+yarn run smartAccount mintWithBtpm
 ```

@@ -1,5 +1,6 @@
 const { ethers } = require("ethers");
-const { createBiconomyAccountInstance, buildAndSendUserOp, sendUserOp } = require('./helperFunctions')
+const { createBiconomyAccountInstance, sendUserOp } = require('./helperFunctions')
+const config = require("../config.json");
 
 const mintNftPayERC20 = async () => {
   try{
@@ -21,18 +22,18 @@ const mintNftPayERC20 = async () => {
 
   let partialUserOp = await biconomySmartAccount.buildUserOp([transaction])
 
-  console.log('partial userOp')
-  console.log(partialUserOp)
+  // console.log('partial userOp ', partialUserOp)
+
   
-  const feeQuotesResponse = await biconomyPaymaster?.getPaymasterFeeQuotesOrData(partialUserOp, { mode: "ERC20", tokenInfo:{tokenList: ["0xda5289fcaaf71d52a80a254da614a192b693e977", "0x27a44456bedb94dbd59d0f0a14fe977c777fc5c3"], preferredToken: "0xda5289fcaaf71d52a80a254da614a192b693e977"}})
+  const feeQuotesResponse = await biconomyPaymaster?.getPaymasterFeeQuotesOrData(partialUserOp, { mode: "ERC20", tokenInfo:{tokenList: ["0xda5289fcaaf71d52a80a254da614a192b693e977", "0x27a44456bedb94dbd59d0f0a14fe977c777fc5c3"], preferredToken: config.preferredTokenAddress}})
   console.log('<<<<<<<<<<<<<<<<<< ====================== fee quotes received ====================== >>>>>>>>>>>>>>>>>>>')
   const feeQuotes = feeQuotesResponse.feeQuotes
-  console.log(feeQuotes)
+  // console.log(feeQuotes)
 
   const spender = feeQuotesResponse.tokenPaymasterAddress
-  console.log('paymaster to give approval to ', spender)
+  // console.log('paymaster to give approval to ', spender)
 
-  console.log(feeQuotes[0].tokenAddress)
+  // console.log(feeQuotes[0].tokenAddress)
 
   // pm_getFeeQuoteOrData
   let finalUserOp = await biconomySmartAccount.buildTokenPaymasterUserOp(partialUserOp, {feeQuote: feeQuotes[0], spender:spender, maxApproval: false})
@@ -53,9 +54,11 @@ const mintNftPayERC20 = async () => {
   console.log('successfull call return: paymasterAndDataWithLimits ', paymasterAndDataWithLimits)
 
   finalUserOp.paymasterAndData = paymasterAndDataWithLimits.paymasterAndData
-  finalUserOp.callGasLimit = paymasterAndDataWithLimits.callGasLimit
-  finalUserOp.verificationGasLimit = paymasterAndDataWithLimits.verificationGasLimit
-  finalUserOp.preVerificationGas = paymasterAndDataWithLimits.preVerificationGas
+  if(paymasterAndDataWithLimits.callGasLimit && paymasterAndDataWithLimits.verificationGasLimit && paymasterAndDataWithLimits.preVerificationGas) {
+    finalUserOp.callGasLimit = paymasterAndDataWithLimits.callGasLimit
+    finalUserOp.verificationGasLimit = paymasterAndDataWithLimits.verificationGasLimit
+    finalUserOp.preVerificationGas = paymasterAndDataWithLimits.preVerificationGas
+  }
 
   await sendUserOp(biconomySmartAccount, finalUserOp)
   } catch (e) {

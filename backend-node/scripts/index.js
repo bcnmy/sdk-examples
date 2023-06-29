@@ -7,7 +7,7 @@ const { nativeTransfer } = require('./nativeTransfer');
 const { erc20Transfer } = require('./erc20Transfer');
 const { mintNft } = require('./mintNft');
 const { batchMintNft } = require('./batchMintNft');
-const { batchMintNftPayERC20, mintNftPayERC20 } = require('./tokenPaymaster');
+const { batchMintNftPayERC20, mintNftPayERC20 } = require('./mintNFTBtpm');
 
 yargs
   .scriptName(chalk.green('smartAccount'))
