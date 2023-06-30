@@ -13,6 +13,7 @@ yarn install
 ```bash
 yarn run smartAccount --help
 yarn run smartAccount init --network=mumbai
+# get scw address
 yarn run smartAccount address
 # update the biconomyPaymasterUrl in config.json
 yarn run smartAccount mint

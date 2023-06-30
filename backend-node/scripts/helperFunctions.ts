@@ -40,26 +40,11 @@ async function createBiconomyAccountInstance() {
   return biconomySmartAccount;
 }
 
-async function buildAndSendUserOpForBatch(
-  biconomySmartAccount: BiconomySmartAccount,
-  transactions: Transaction[]
-) {
-  // Sending transaction
-  const userOp = await biconomySmartAccount.buildUserOp(transactions);
-  const userOpResponse = await biconomySmartAccount.sendUserOp(userOp);
-  console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
-  const transactionDetails = await userOpResponse.wait();
-  console.log(
-    chalk.blue(
-      `transactionDetails: ${JSON.stringify(transactionDetails, null, "\t")}`
-    )
-  );
-}
-
 async function sendUserOp(
   biconomySmartAccount: BiconomySmartAccount,
   userOp: Partial<UserOperation>
 ) {
+  console.log(chalk.blue(`userOp: ${JSON.stringify(userOp, null, "\t")}`));
   const userOpResponse = await biconomySmartAccount.sendUserOp(userOp);
   console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
   const transactionDetails = await userOpResponse.wait();
@@ -70,25 +55,4 @@ async function sendUserOp(
   );
 }
 
-async function buildAndSendUserOp(
-  biconomySmartAccount: BiconomySmartAccount,
-  transaction: Transaction
-) {
-  // Sending transaction
-  const userOp = await biconomySmartAccount.buildUserOp([transaction]);
-  const userOpResponse = await biconomySmartAccount.sendUserOp(userOp);
-  console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
-  const transactionDetails = await userOpResponse.wait();
-  console.log(
-    chalk.blue(
-      `transactionDetails: ${JSON.stringify(transactionDetails, null, "\t")}`
-    )
-  );
-}
-
-export {
-  createBiconomyAccountInstance,
-  buildAndSendUserOp,
-  sendUserOp,
-  buildAndSendUserOpForBatch,
-};
+export { createBiconomyAccountInstance, sendUserOp };
