@@ -2,6 +2,7 @@
   "privateKey": "38bf3583e5f4928cab7664ca2005a0786ddde58e52f909f2043dc9b1bf033c32",
   "accountIndex": 0,
   "chainId": 80001,
+  "dappAPIKey": "",
   "rpcUrl": "https://rpc.ankr.com/polygon_mumbai",
   "bundlerUrl": "https://sdk-relayer.prod.biconomy.io/api/v1/bundler",
   "biconomyPaymasterUrl": "https://paymaster-signing-service-573.staging.biconomy.io/api/v1/80001/8sVI3Nh5F.35402c9d-d993-4e35-8109-0d59d31f4ae4"

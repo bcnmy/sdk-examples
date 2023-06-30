@@ -4,8 +4,8 @@
   "description": "Biconomy SDK SmartAccount",
   "main": "scripts/index.js",
   "scripts": {
-    "start": "node scripts/index.js",
-    "smartAccount": "node scripts/index.js"
+    "start": "ts-node scripts/index.js",
+    "smartAccount": "ts-node scripts/index.js"
   },
   "keywords": [],
   "license": "ISC",
@@ -20,5 +20,10 @@
     "inquirer": "^8.0.0",
     "prettier": "^2.8.1",
     "yargs": "^17.7.1"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.3",
+    "@types/yargs": "^17.0.24",
+    "ts-node": "^10.9.1"
   }
 }
