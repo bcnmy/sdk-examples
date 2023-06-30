@@ -54,7 +54,6 @@ export const init = async (chainId: string) => {
   } else {
     throw new Error("Invalid network type");
   }
-  INIT_CONFIG.dappAPIKey = "abc";
   INIT_CONFIG.preferredToken = "";
   INIT_CONFIG.bundlerUrl =
     "https://sdk-relayer.prod.biconomy.io/api/v1/bundler";

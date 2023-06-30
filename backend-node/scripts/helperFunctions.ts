@@ -20,7 +20,6 @@ async function createBiconomyAccountInstance() {
   const bundler = new Bundler({
     bundlerUrl: config.bundlerUrl,
     chainId: config.chainId,
-    apiKey: config.dappAPIKey,
     entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
   });
   const paymaster = new BiconomyPaymaster({
