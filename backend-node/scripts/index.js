@@ -7,7 +7,6 @@ const { nativeTransfer } = require('./nativeTransfer');
 const { erc20Transfer } = require('./erc20Transfer');
 const { mintNft } = require('./mintNft');
 const { batchMintNft } = require('./batchMintNft');
-const { batchMintNftPayERC20, mintNftPayERC20 } = require('./mintNFTBtpm');
 
 yargs
   .scriptName(chalk.green('smartAccount'))
@@ -42,11 +41,16 @@ yargs
       demandOption: true,
       type: 'number',
     },
+    withTokenPaymaster: {
+      describe: chalk.cyan('enable token paymaster payment'),
+      demandOption: false,
+      type: 'boolean',
+    },
   }, (argv) => {
     const amount = argv.amount;
     const recipientAddress = argv.to;
     console.log(chalk.magenta(`Transferring ${amount} ether to ${recipientAddress}...`));
-    nativeTransfer(recipientAddress, amount);
+    nativeTransfer(recipientAddress, amount, argv.withTokenPaymaster);
   })
   // Transfer an ERC20 token
   .command('erc20Transfer', chalk.blue('Transfer an ERC20 token'), {
@@ -65,27 +69,39 @@ yargs
       demandOption: true,
       type: 'string',
     },
+    withTokenPaymaster: {
+      describe: chalk.cyan('enable token paymaster payment'),
+      demandOption: false,
+      type: 'boolean',
+    },
   }, (argv) => {
     const amount = argv.amount;
     const tokenAddress = argv.token;
     const recipientAddress = argv.to;
     console.log(chalk.magenta(`Transferring ${amount} tokens of ${tokenAddress} to ${recipientAddress}...`));
-    erc20Transfer(recipientAddress, amount, tokenAddress);
+    erc20Transfer(recipientAddress, amount, tokenAddress, argv.withTokenPaymaster);
   })
   // Mint nft token to SmartAccount
-  .command('mint', chalk.blue('Mint nft token'), {}, () => {
+  .command('mint', chalk.blue('Mint nft token'), {
+    withTokenPaymaster: {
+      describe: chalk.cyan('Mint nft token with token paymaster'),
+      demandOption: false,
+      type: 'boolean',
+    },
+  }, (argv) => {
     console.log(chalk.magenta('Minting an NFT token to the SmartAccount...'));
-    mintNft();
+    mintNft(argv.withTokenPaymaster);
   })
-  // Mint NFT Pay using BTPM
-  .command('mintWithBtpm', chalk.blue('Mint nft token'), {}, () => {
-    console.log(chalk.magenta('Minting an NFT token to the SmartAccount...'));
-    mintNftPayERC20();
-  })
-  // Mint nft token to SmartAccount
-  .command('batchMint', chalk.blue('Batch mint nft 2 times'), {}, () => {
+  // Batch mint nft token to SmartAccount
+  .command('batchMint', chalk.blue('Batch mint nft 2 times'), {
+    withTokenPaymaster: {
+      describe: chalk.cyan('enable token paymaster payment'),
+      demandOption: false,
+      type: 'boolean',
+    },
+  }, (argv) => {
     console.log(chalk.magenta('Batch minting 2 NFT tokens to the SmartAccount...'));
-    batchMintNft();
+    batchMintNft(argv.withTokenPaymaster);
   })
   .help().argv;
 

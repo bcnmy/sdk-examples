@@ -18,10 +18,10 @@ const init = async (chainId) => {
   if (chainId === 'mumbai') {
     INIT_CONFIG.chainId = ChainId.POLYGON_MUMBAI;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.POLYGON_MUMBAI];
-  } else if (chainId === 'ethereum'){
+  } else if (chainId === 'ethereum') {
     INIT_CONFIG.chainId = ChainId.MAINNET;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.MAINNET];
-  }else if (chainId === 'goerli') {
+  } else if (chainId === 'goerli') {
     INIT_CONFIG.chainId = ChainId.GOERLI;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.GOERLI];
   }
@@ -56,16 +56,15 @@ const init = async (chainId) => {
   else if (chainId === 'arbitrum-nova-mainnet') {
     INIT_CONFIG.chainId = ChainId.ARBITRUM_NOVA_MAINNET;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.ARBITRUM_NOVA_MAINNET];
-  }else{
+  } else {
     throw new Error('Invalid network type')
   }
-  INIT_CONFIG.dappAPIKey = ''
   INIT_CONFIG.bundlerUrl = 'https://sdk-relayer.prod.biconomy.io/api/v1/bundler',
-  INIT_CONFIG.paymasterUrl = 'https://paymaster-signing-service.prod.biconomy.io/api/v1/sign/user-op',
-  fs.writeFile(
-    CONFIG_PATH,
-    prettier.format(JSON.stringify(INIT_CONFIG, null, 2), { parser: "json" })
-  );
+    INIT_CONFIG.biconomyPaymasterUrl = 'https://paymaster-signing-service.prod.biconomy.io/api/v1/sign/user-op',
+    fs.writeFile(
+      CONFIG_PATH,
+      prettier.format(JSON.stringify(INIT_CONFIG, null, 2), { parser: "json" })
+    );
   console.log(chalk.green(`Config written to ${CONFIG_PATH}`))
 }
 

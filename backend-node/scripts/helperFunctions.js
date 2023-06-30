@@ -1,38 +1,36 @@
 const { BiconomySmartAccount, DEFAULT_ENTRYPOINT_ADDRESS } = require("@biconomy-devx/account");
 const { Bundler } = require("@biconomy-devx/bundler")
 const { BiconomyPaymaster } = require("@biconomy-devx/paymaster")
-const HDWalletProvider = require("@truffle/hdwallet-provider");
 const { ethers } = require("ethers");
 const chalk = require('chalk');
 const config = require("../config.json");
 
 async function createBiconomyAccountInstance() {
-
-    let provider = new HDWalletProvider(config.privateKey, config.rpcUrl);
-    const walletProvider = new ethers.providers.Web3Provider(provider);
     // get EOA address from wallet provider
-    const eoa = await walletProvider.getSigner().getAddress();
+    let provider = new ethers.providers.JsonRpcProvider(config.rpcUrl);
+    let signer = new ethers.Wallet(config.privateKey, provider);
+    const eoa = await signer.getAddress();
     console.log(chalk.blue(`EOA address: ${eoa}`));
 
+    // create bundler and paymaster instances
     const bundler = new Bundler({
         bundlerUrl: config.bundlerUrl,
         chainId: config.chainId,
-        entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
         apiKey: config.dappAPIKey,
+        entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
     })
-
     const paymaster = new BiconomyPaymaster({
         paymasterUrl: config.biconomyPaymasterUrl,
     })
 
+    // create biconomy smart account instance
     const biconomySmartAccountConfig = {
-        signer: walletProvider.getSigner(),
+        signer: signer,
         chainId: config.chainId,
         rpcUrl: config.rpcUrl,
         paymaster: paymaster,
         bundler: bundler,
     }
-
     const biconomyAccount = new BiconomySmartAccount(biconomySmartAccountConfig)
     const biconomySmartAccount = await biconomyAccount.init()
     return biconomySmartAccount
@@ -44,14 +42,14 @@ async function buildAndSendUserOpForBatch(biconomySmartAccount, transactions) {
     const userOpResponse = await biconomySmartAccount.sendUserOp(userOp)
     console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
     const transactionDetails = await userOpResponse.wait()
-    console.log(chalk.green(`transactionDetails: ${JSON.stringify(transactionDetails)}`));
+    console.log(chalk.blue(`transactionDetails: ${JSON.stringify(transactionDetails, null, '\t')}`));
 }
 
 async function sendUserOp(biconomySmartAccount, userOp) {
     const userOpResponse = await biconomySmartAccount.sendUserOp(userOp)
     console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
     const transactionDetails = await userOpResponse.wait()
-    console.log(chalk.green(`transactionDetails: ${JSON.stringify(transactionDetails)}`));
+    console.log(chalk.blue(`transactionDetails: ${JSON.stringify(transactionDetails, null, '\t')}`));
 }
 
 async function buildAndSendUserOp(biconomySmartAccount, transaction) {
@@ -60,7 +58,7 @@ async function buildAndSendUserOp(biconomySmartAccount, transaction) {
     const userOpResponse = await biconomySmartAccount.sendUserOp(userOp)
     console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
     const transactionDetails = await userOpResponse.wait()
-    console.log(chalk.green(`transactionDetails: ${JSON.stringify(transactionDetails)}`));
+    console.log(chalk.blue(`transactionDetails: ${JSON.stringify(transactionDetails, null, '\t')}`));
 }
 
 module.exports = {
