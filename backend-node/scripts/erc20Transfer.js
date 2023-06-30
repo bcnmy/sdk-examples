@@ -75,15 +75,15 @@ const erc20Transfer = async (recipientAddress, amount, tokenAddress, withTokenPa
   }
 
   try {
-    const paymasterAndDataWithLimits = await biconomyPaymaster?.getPaymasterAndData(partialUserOp, paymasterServiceData);
+    const paymasterAndDataWithLimits = await biconomyPaymaster?.getPaymasterAndData(finalUserOp, paymasterServiceData);
 
-    partialUserOp.paymasterAndData = paymasterAndDataWithLimits.paymasterAndData
+    finalUserOp.paymasterAndData = paymasterAndDataWithLimits.paymasterAndData
     if (paymasterAndDataWithLimits.callGasLimit && paymasterAndDataWithLimits.verificationGasLimit && paymasterAndDataWithLimits.preVerificationGas) {
-      partialUserOp.callGasLimit = paymasterAndDataWithLimits.callGasLimit
-      partialUserOp.verificationGasLimit = paymasterAndDataWithLimits.verificationGasLimit
-      partialUserOp.preVerificationGas = paymasterAndDataWithLimits.preVerificationGas
+      finalUserOp.callGasLimit = paymasterAndDataWithLimits.callGasLimit
+      finalUserOp.verificationGasLimit = paymasterAndDataWithLimits.verificationGasLimit
+      finalUserOp.preVerificationGas = paymasterAndDataWithLimits.preVerificationGas
     }
-    await sendUserOp(biconomySmartAccount, partialUserOp)
+    await sendUserOp(biconomySmartAccount, finalUserOp)
   } catch (e) {
     console.log('error received ', e)
   }
