@@ -54,7 +54,7 @@ export const erc20Transfer = async (
       await biconomyPaymaster.getPaymasterFeeQuotesOrData(partialUserOp, {
         mode: PaymasterMode.ERC20,
         tokenInfo: {
-          tokenList: [],
+          tokenList: config.tokenList ? config.tokenList : [],
           preferredToken: config.preferredToken,
         },
       });
