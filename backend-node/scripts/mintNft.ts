@@ -59,6 +59,7 @@ export const mintNft = async (withTokenPaymaster: boolean) => {
     const choices = feeQuotes?.map((quote: any, index: number) => ({
       name: `Option ${index + 1}: ${quote.symbol}`,
       value: index,
+      
     }));
     // Use inquirer to prompt user to select an option
     const { selectedOption } = await inquirer.prompt([
@@ -109,6 +110,6 @@ export const mintNft = async (withTokenPaymaster: boolean) => {
     }
     await sendUserOp(biconomySmartAccount, finalUserOp);
   } catch (e) {
-    console.log(e);
+    console.log("error received ", e);
   }
 };
