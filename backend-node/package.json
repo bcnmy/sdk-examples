@@ -10,11 +10,11 @@
   "keywords": [],
   "license": "ISC",
   "dependencies": {
-    "@biconomy-devx/account": "1.0.22",
-    "@biconomy-devx/bundler": "1.0.22",
-    "@biconomy-devx/common": "1.0.22",
-    "@biconomy-devx/core-types": "1.0.22",
-    "@biconomy-devx/paymaster": "1.0.22",
+    "@biconomy-devx/account": "1.0.24",
+    "@biconomy-devx/bundler": "1.0.24",
+    "@biconomy-devx/common": "1.0.24",
+    "@biconomy-devx/core-types": "1.0.24",
+    "@biconomy-devx/paymaster": "1.0.24",
     "chalk": "^4.1.2",
     "ethers": "^5.7.2",
     "inquirer": "^8.0.0",
@@ -24,6 +24,7 @@
   "devDependencies": {
     "@types/inquirer": "^9.0.3",
     "@types/node": "^20.3.2",
+    "@types/prettier": "^2.7.3",
     "@types/yargs": "^17.0.24",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
