@@ -21,7 +21,7 @@ export const erc20Transfer = async (
   // Encode an ERC-20 token transfer to recipient of the specified amount
   const readProvider = new ethers.providers.JsonRpcProvider(config.rpcUrl)
   const tokenContract = new ethers.Contract(tokenAddress, ERC20ABI, readProvider)
-  let decimals = 1
+  let decimals = 18
   try {
     decimals = await tokenContract.decimals()
   } catch (error) {
