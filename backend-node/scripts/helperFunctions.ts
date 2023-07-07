@@ -24,7 +24,7 @@ async function createBiconomyAccountInstance() {
   });
   const paymaster = new BiconomyPaymaster({
     paymasterUrl: config.biconomyPaymasterUrl,
-    // strictMode: false // by default is true. If set to false, then paymaster and data is still sent as 0x and account will pay in native
+    strictMode: false // by default is true. If set to false, then paymaster and data is still sent as 0x and account will pay in native
   });
 
   // create biconomy smart account instance

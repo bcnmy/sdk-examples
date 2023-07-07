@@ -29,6 +29,7 @@ export const batchMintNft = async (withTokenPaymaster: boolean) => {
     biconomySmartAccount.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
   let partialUserOp = await biconomySmartAccount.buildUserOp([transaction, transaction]);
   console.log("partialUserOp.callData", partialUserOp.callData);
+  console.log("partialUserOp.callGasLimit", partialUserOp.callGasLimit);
   let finalUserOp = partialUserOp;
   let paymasterServiceData: SponsorUserOperationDto = {
     mode: PaymasterMode.SPONSORED,
@@ -46,6 +47,7 @@ export const batchMintNft = async (withTokenPaymaster: boolean) => {
     const feeQuotesResponse =
       await biconomyPaymaster.getPaymasterFeeQuotesOrData(partialUserOp, {
         mode: PaymasterMode.ERC20,
+        calculateGasLimits: true,
         tokenInfo: {
           tokenList: config.tokenList ? config.tokenList : [],
           preferredToken: config.preferredToken,
@@ -106,6 +108,8 @@ export const batchMintNft = async (withTokenPaymaster: boolean) => {
       finalUserOp.preVerificationGas =
         paymasterAndDataWithLimits.preVerificationGas;
     }
+    console.log("finalUserOp.callGasLimit", finalUserOp.callGasLimit);
+    console.log("finalUserOp.callData", finalUserOp.callData);
     await sendUserOp(biconomySmartAccount, finalUserOp);
   } catch (e) {
     console.log("error received ", e);

@@ -22,7 +22,7 @@ export const erc20Transfer = async (
     "function transfer(address _to, uint256 _value)",
   ]);
   // Encode an ERC-20 token transfer to recipient of the specified amount
-  const amountGwei = ethers.utils.parseUnits(amount.toString(), 6); // TODO: if it's USDC on Mumbai and decimals are 6
+  const amountGwei = ethers.utils.parseUnits(amount.toString(), 18); // TODO: if it's USDC on Mumbai and decimals are 6
   const data = erc20Interface.encodeFunctionData("transfer", [
     recipientAddress,
     amountGwei,
