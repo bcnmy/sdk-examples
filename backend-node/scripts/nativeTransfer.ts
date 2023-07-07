@@ -32,23 +32,19 @@ export const nativeTransfer = async (
   let paymasterServiceData: SponsorUserOperationDto = {
     mode: PaymasterMode.SPONSORED,
     calculateGasLimits: true,
-    sponsorshipInfo: {
-      webhookData: {},
-      smartAccountInfo: {
+    // webhookData: {},
+    /*smartAccountInfo: {
         name: "BICONOMY",
         version: "1.0.0",
-      },
-    },
+    },*/
   };
   // if withTokenPaymaster is true, then get fee quotes and ask user to select one
   if (withTokenPaymaster) {
     const feeQuotesResponse =
       await biconomyPaymaster.getPaymasterFeeQuotesOrData(partialUserOp, {
         mode: PaymasterMode.ERC20,
-        tokenInfo: {
-          tokenList: config.tokenList ? config.tokenList : [],
-          preferredToken: config.preferredToken,
-        },
+        tokenList: config.tokenList ? config.tokenList : [],
+        preferredToken: config.preferredToken,
       });
     const feeQuotes = feeQuotesResponse.feeQuotes as PaymasterFeeQuote[];
     const spender = feeQuotesResponse.tokenPaymasterAddress || "";
@@ -81,9 +77,7 @@ export const nativeTransfer = async (
     paymasterServiceData = {
       mode: PaymasterMode.ERC20,
       calculateGasLimits: true,
-      tokenInfo: {
-        feeTokenAddress: selectedFeeQuote.tokenAddress,
-      },
+      feeTokenAddress: selectedFeeQuote.tokenAddress,
     };
   }
 
