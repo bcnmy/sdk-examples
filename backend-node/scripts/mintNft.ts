@@ -18,6 +18,7 @@ export const mintNft = async (withTokenPaymaster: boolean) => {
   ]);
   const scwAddress = await biconomySmartAccount.getSmartAccountAddress();
   const data = nftInterface.encodeFunctionData("safeMint", [scwAddress]);
+  // 0xDd526EBa63eF200Ed95f0F0fb8993FE3E20a23d0
   const nftAddress = "0x1758f42Af7026fBbB559Dc60EcE0De3ef81f665e";
   const transaction = {
     to: nftAddress,
@@ -56,7 +57,7 @@ export const mintNft = async (withTokenPaymaster: boolean) => {
 
     // Generate list of options for the user to select
     const choices = feeQuotes?.map((quote: any, index: number) => ({
-      name: `Option ${index + 1}: ${quote.symbol}`,
+      name: `Option ${index + 1}: ${quote.maxGasFee}: ${quote.symbol} `,
       value: index,
     }));
     // Use inquirer to prompt user to select an option
@@ -88,7 +89,7 @@ export const mintNft = async (withTokenPaymaster: boolean) => {
     };
   }
 
-  try {
+  try{
     const paymasterAndDataWithLimits =
       await biconomyPaymaster.getPaymasterAndData(
         finalUserOp,

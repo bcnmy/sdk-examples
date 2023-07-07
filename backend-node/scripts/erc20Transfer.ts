@@ -65,7 +65,7 @@ export const erc20Transfer = async (
 
     // Generate list of options for the user to select
     const choices = feeQuotes?.map((quote: any, index: number) => ({
-      name: `Option ${index + 1}: ${quote.symbol}`,
+      name: `Option ${index + 1}: ${quote.maxGasFee}: ${quote.symbol} `,
       value: index,
     }));
     // Use inquirer to prompt user to select an option

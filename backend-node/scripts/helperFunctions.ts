@@ -24,6 +24,7 @@ async function createBiconomyAccountInstance() {
   });
   const paymaster = new BiconomyPaymaster({
     paymasterUrl: config.biconomyPaymasterUrl,
+    strictMode: false // by default is true. If set to false, then paymaster and data is still sent as 0x and account will pay in native
   });
 
   // create biconomy smart account instance
@@ -31,11 +32,12 @@ async function createBiconomyAccountInstance() {
     signer: signer,
     chainId: config.chainId,
     rpcUrl: config.rpcUrl,
-    paymaster: paymaster,
-    bundler: bundler,
+    paymaster: paymaster, // optional
+    bundler: bundler, // optional
+    // nodeClientUrl: config.nodeClientUrl, // if needed to override
   };
   const biconomyAccount = new BiconomySmartAccount(biconomySmartAccountConfig);
-  const biconomySmartAccount = await biconomyAccount.init();
+  const biconomySmartAccount = await biconomyAccount.init( {accountIndex: config.accountIndex} );
   return biconomySmartAccount;
 }
 
