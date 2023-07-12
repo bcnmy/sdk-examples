@@ -3,10 +3,10 @@ import chalk from "chalk";
 import {
   BiconomySmartAccount,
   DEFAULT_ENTRYPOINT_ADDRESS,
-} from "@biconomy-devx/account";
-import { Bundler } from "@biconomy-devx/bundler";
-import { BiconomyPaymaster } from "@biconomy-devx/paymaster";
-import { Transaction, UserOperation } from "@biconomy-devx/core-types";
+} from "@biconomy/account";
+import { Bundler } from "@biconomy/bundler";
+import { BiconomyPaymaster } from "@biconomy/paymaster";
+import { Transaction, UserOperation } from "@biconomy/core-types";
 import config from "../config.json";
 
 async function createBiconomyAccountInstance() {

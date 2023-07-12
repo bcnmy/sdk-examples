@@ -3,10 +3,16 @@ import * as yargs from "yargs";
 import chalk from "chalk";
 import { init } from "./init.ts";
 import { getAddress } from "./address";
-import { nativeTransfer } from "./nativeTransfer";
-import { erc20Transfer } from "./erc20Transfer";
-import { mintNft } from "./mintNft.ts";
-import { batchMintNft } from "./batchMintNft";
+import { nativeTransfer } from "./gasless/nativeTransfer";
+import { nativeTransferPayERC20 } from "./erc20/nativeTransfer";
+import { erc20Transfer } from "./gasless/erc20Transfer";
+import { erc20TransferPayERC20 } from "./erc20/erc20Transfer";
+import { mintNft } from "./gasless/mintNFT";
+import { mintNftPayERC20 } from "./erc20/mintNFT";
+import { batchMintNft } from "./gasless/batchMintNFT";
+import { batchMintNftPayERC20 } from "./erc20/batchMintNFT";
+import { batchMintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/batchMintNFT";
+import { mintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/mintNFT";
 
 yargs
   .scriptName(chalk.green("smartAccount"))
@@ -51,10 +57,10 @@ yargs
         demandOption: true,
         type: "number",
       },
-      withTokenPaymaster: {
-        describe: chalk.cyan("enable token paymaster payment"),
+      mode: {
+        describe: chalk.cyan("Paymaster mode"),
         demandOption: false,
-        type: "boolean",
+        type: "string",
       },
     },
     (argv) => {
@@ -63,11 +69,18 @@ yargs
       console.log(
         chalk.magenta(`Transferring ${amount} ether to ${recipientAddress}...`)
       );
-      nativeTransfer(
-        recipientAddress,
-        amount,
-        argv.withTokenPaymaster || false
-      );
+      if(argv.mode === "TOKEN") {
+        nativeTransferPayERC20(
+          recipientAddress,
+          amount
+        );
+      }
+      else {
+        nativeTransfer(
+          recipientAddress,
+          amount
+        );
+      }
     }
   )
   // Transfer an ERC20 token
@@ -90,10 +103,10 @@ yargs
         demandOption: true,
         type: "string",
       },
-      withTokenPaymaster: {
-        describe: chalk.cyan("enable token paymaster payment"),
+      mode: {
+        describe: chalk.cyan("Paymaster mode"),
         demandOption: false,
-        type: "boolean",
+        type: "string",
       },
     },
     (argv) => {
@@ -105,12 +118,20 @@ yargs
           `Transferring ${amount} tokens of ${tokenAddress} to ${recipientAddress}...`
         )
       );
-      erc20Transfer(
-        recipientAddress,
-        amount,
-        tokenAddress,
-        argv.withTokenPaymaster || false
-      );
+      if(argv.mode === "TOKEN") {
+        erc20TransferPayERC20(
+          recipientAddress,
+          amount,
+          tokenAddress
+        );
+      }
+      else {
+        erc20Transfer(
+          recipientAddress,
+          amount,
+          tokenAddress
+        );
+      }
     }
   )
   // Mint nft token to SmartAccount
@@ -118,15 +139,23 @@ yargs
     "mint",
     chalk.blue("Mint nft token"),
     {
-      withTokenPaymaster: {
-        describe: chalk.cyan("Mint nft token with token paymaster"),
+      mode: {
+        describe: chalk.cyan("Paymaster mode"),
         demandOption: false,
-        type: "boolean",
+        type: "string",
       },
     },
     (argv) => {
       console.log(chalk.magenta("Minting an NFT token to the SmartAccount..."));
-      mintNft(argv.withTokenPaymaster || false);
+      if(argv.mode === "TOKEN") {
+        mintNftPayERC20();
+      }
+      else if(argv.mode === "HYBRID") {
+        mintNftTrySponsorshipOtherwisePayERC20();
+      }
+      else {
+        mintNft();
+      }
     }
   )
   // Batch mint nft token to SmartAccount
@@ -134,49 +163,26 @@ yargs
     "batchMint",
     chalk.blue("Batch mint nft 2 times"),
     {
-      withTokenPaymaster: {
-        describe: chalk.cyan("enable token paymaster payment"),
+      mode: {
+        describe: chalk.cyan("Paymaster mode"),
         demandOption: false,
-        type: "boolean",
+        type: "string",
       },
     },
     (argv) => {
       console.log(
         chalk.magenta("Batch minting 2 NFT tokens to the SmartAccount...")
       );
-      batchMintNft(argv.withTokenPaymaster || false);
+      if(argv.mode === "TOKEN") {
+        batchMintNftPayERC20();
+      }
+      else if(argv.mode === "HYBRID") {
+        batchMintNftTrySponsorshipOtherwisePayERC20();
+      }
+      else {
+        batchMintNft();
+      }
     }
   )
   .help().argv;
 
-// --withSponsorshipPaymaster (// yarn run smartAccount mint --withSponsorshipPaymaster)
-
-// mintNFT = gasless + wallet deployed (index 0 from config)
-// mintNFT = gasless + wallet undeployed (get index from config)
-// batchMintNft = gasless + wallet deployed (index 0 from config)
-// batchMintNft = gasless + wallet undeployed (get index from config)
-// setQuote = setQuote gasless + wallet deployed (index 0 from config)
-// setQuote = setQuote gasless + walletundeployed (index from config)
-// erc20Transfer = gasless + wallet deployed (index 0 from config)
-// erc20Transfer = gasless + wallet undeployed (index from config)
-// transfer = gasless + wallet deployed (index 0 from config)
-// transfer = gasless + wallet undeployed (index from config)
-// batchNativeTransfer = gasless + wallet deployed (index 0 from config)
-// batchNativeTransfer = gasless + wallet undeployed (index from config)
-// batchErc20Transfer = gasless + wallet deployed (index 0 from config)
-// batchErc20Transfer = gasless + wallet undeployed (index from config)
-
-// --withSponsorshipPaymaster (// yarn run smartAccount mint --withTokenPaymaster)
-
-// mintNFT = gasless + wallet deployed (index 0 from config)
-// mintNFT = gasless + wallet undeployed (get index from config)
-// batchMintNft = gasless + wallet deployed (index 0 from config)
-// batchMintNft = gasless + wallet undeployed (get index from config)
-// setQuote = setQuote gasless + wallet deployed (index 0 from config)
-// setQuote = setQuote gasless + walletundeployed (index from config)
-// erc20Transfer = gasless + wallet deployed (index 0 from config)
-// erc20Transfer = gasless + wallet undeployed (index from config)
-// transfer = gasless + wallet deployed (index 0 from config)
-// transfer = gasless + wallet undeployed (index from config)
-// batchErc20Transfer = gasless + wallet deployed (index 0 from config)
-// batchErc20Transfer = gasless + wallet undeployed (index from config)

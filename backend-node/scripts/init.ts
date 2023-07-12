@@ -3,8 +3,8 @@ import path from "path";
 import prettier from "prettier";
 import { Wallet, utils } from "ethers";
 import chalk from "chalk";
-import { ChainId } from "@biconomy-devx/core-types";
-import { RPC_PROVIDER_URLS } from "@biconomy-devx/common";
+import { ChainId } from "@biconomy/core-types";
+import { RPC_PROVIDER_URLS } from "@biconomy/common";
 
 let index = 500000;
 const INIT_CONFIG: any = {
@@ -21,6 +21,10 @@ export const init = async (chainId: string) => {
   if (chainId === "mumbai") {
     INIT_CONFIG.chainId = ChainId.POLYGON_MUMBAI;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.POLYGON_MUMBAI];
+    INIT_CONFIG.bundlerUrl =
+    "https://bundler.biconomy.io/api/v2/80001/yUCjvLaWu.5dc34b05-4e94-442e-a9c7-829db5f9bea9";
+    INIT_CONFIG.biconomyPaymasterUrl =
+    "https://paymaster.biconomy.io/api/v1/80001/yUCjvLaWu.5dc34b05-4e94-442e-a9c7-829db5f9bea9";
   } else if (chainId === "ethereum") {
     INIT_CONFIG.chainId = ChainId.MAINNET;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.MAINNET];
@@ -56,9 +60,9 @@ export const init = async (chainId: string) => {
   }
   INIT_CONFIG.preferredToken = "";
   INIT_CONFIG.bundlerUrl =
-    "https://sdk-relayer.prod.biconomy.io/api/v1/bundler";
+    "https://bundler.biconomy.io/api/v2/<ChainId>/<KEY>";
   INIT_CONFIG.biconomyPaymasterUrl =
-    "https://paymaster-signing-service.prod.biconomy.io/api/v1/sign/user-op";
+    "https://paymaster.biconomy.io/api/v1/<ChainId>/<KEY>";
   fs.writeFile(
     CONFIG_PATH,
     prettier.format(JSON.stringify(INIT_CONFIG, null, 2), { parser: "json" })
