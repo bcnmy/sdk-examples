@@ -1,23 +1,21 @@
 {
-  "name": "node",
+  "name": "biconomy-sdk-cli",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Biconomy SDK SmartAccount",
+  "main": "scripts/index.js",
   "scripts": {
-    "start": "node scripts/init.js",
-    "init": "node scripts/init.js",
-    "getAddress": "node scripts/address.js",
-    "erc20TransferGasless": "node scripts/erc20TransferGasless.js",
-    "batchErc20TransferGasless": "node scripts/batchErc20TransferGasless.js"
+    "start": "node scripts/index.js",
+    "smartAccount": "node scripts/index.js"
   },
   "keywords": [],
-  "author": "",
   "license": "ISC",
   "dependencies": {
-    "@biconomy/core-types": "1.0.0",
-    "@biconomy/smart-account": "1.0.0",
+    "@biconomy/core-types": "2.0.0",
+    "@biconomy/smart-account": "2.0.0",
     "@truffle/hdwallet-provider": "^2.1.1",
+    "chalk": "^4.1.2",
     "ethers": "^5.7.2",
-    "prettier": "^2.8.1"
+    "prettier": "^2.8.1",
+    "yargs": "^17.7.1"
   }
 }
