@@ -4,18 +4,29 @@
   "description": "Biconomy SDK SmartAccount",
   "main": "scripts/index.js",
   "scripts": {
-    "start": "node scripts/index.js",
-    "smartAccount": "node scripts/index.js"
+    "start": "ts-node scripts/index.ts",
+    "smartAccount": "ts-node scripts/index.ts"
   },
   "keywords": [],
   "license": "ISC",
   "dependencies": {
-    "@biconomy/core-types": "2.0.0",
-    "@biconomy/smart-account": "2.0.0",
-    "@truffle/hdwallet-provider": "^2.1.1",
+    "@biconomy/account": "^3.0.0-alpha.0",
+    "@biconomy/bundler": "^3.0.0-alpha.0",
+    "@biconomy/common": "^3.0.0-alpha.0",
+    "@biconomy/core-types": "^3.0.0-alpha.0",
+    "@biconomy/paymaster": "^3.0.0-alpha.0",
     "chalk": "^4.1.2",
     "ethers": "^5.7.2",
+    "inquirer": "^8.0.0",
     "prettier": "^2.8.1",
     "yargs": "^17.7.1"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.3",
+    "@types/node": "^20.3.2",
+    "@types/prettier": "^2.7.3",
+    "@types/yargs": "^17.0.24",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
   }
 }

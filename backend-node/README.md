@@ -11,18 +11,35 @@ yarn install
 ## Run
 
 ```bash
+yarn run smartAccount --help
 yarn run smartAccount init --network=mumbai
+# get scw address
 
-yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=1
+# update the correct privateKey, biconomyPaymasterUrl, rpcUrl and bundlerUrl in config.json
+yarn run smartAccount address
 
-yarn run smartAccount mintErc20 --amount 100
 
-yarn run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount=0.01 --token=0x0987654321098765432109876543210987654321
-
-# batch transfer x amount to n addresses separated by comma
-yarn run smartAccount batchErc20Transfer --to 0x1234,0x1234,0x1234 --token 0x0987654321098765432109876543210987654321 --amount 0.01
+## Gasless - Sponsorship Paymaster
 
 yarn run smartAccount mint
-
 yarn run smartAccount batchMint
+
+# replace the receiver below
+yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=0.001
+
+# replace the token address and receiver below
+yarn run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount=0.1 --token=0xdA5289fCAAF71d52a80A254da614a192b693e977
+
+## ERC20 - Token Paymaster
+
+yarn run smartAccount mint --mode=TOKEN
+yarn run smartAccount batchMint --mode=TOKEN
+
+# replace the receiver below
+yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=0.001 --mode=TOKEN
+
+# replace the token address and receiver below
+yarn run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount=0.1 --token=0xdA5289fCAAF71d52a80A254da614a192b693e977 --mode=TOKEN
+
+
 ```
