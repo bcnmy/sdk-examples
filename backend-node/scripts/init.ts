@@ -16,6 +16,8 @@ const INIT_CONFIG: any = {
 
 const CONFIG_PATH = path.resolve(__dirname, "../config.json");
 
+INIT_CONFIG.accountIndex = 0;
+
 export const init = async (chainId: string) => {
   console.log("network is ------", chainId);
   if (chainId === "mumbai") {
@@ -59,10 +61,11 @@ export const init = async (chainId: string) => {
     throw new Error("Invalid network type");
   }
   INIT_CONFIG.preferredToken = "";
+  INIT_CONFIG.tokenList = [];
   INIT_CONFIG.bundlerUrl =
-    "https://bundler.biconomy.io/api/v2/<ChainId>/<KEY>";
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/cJPK7B3ru.dd7f7861-190d-45ic-af80-6877f74b8f44`;
   INIT_CONFIG.biconomyPaymasterUrl =
-    "https://paymaster.biconomy.io/api/v1/<ChainId>/<KEY>";
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
   fs.writeFile(
     CONFIG_PATH,
     prettier.format(JSON.stringify(INIT_CONFIG, null, 2), { parser: "json" })
