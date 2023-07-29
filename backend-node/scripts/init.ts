@@ -24,48 +24,84 @@ export const init = async (chainId: string) => {
     INIT_CONFIG.chainId = ChainId.POLYGON_MUMBAI;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.POLYGON_MUMBAI];
     INIT_CONFIG.bundlerUrl =
-    "https://bundler.biconomy.io/api/v2/80001/yUCjvLaWu.5dc34b05-4e94-442e-a9c7-829db5f9bea9";
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/cJPK7B3ru.dd7f7861-190d-45ic-af80-6877f74b8f44`;
     INIT_CONFIG.biconomyPaymasterUrl =
-    "https://paymaster.biconomy.io/api/v1/80001/yUCjvLaWu.5dc34b05-4e94-442e-a9c7-829db5f9bea9";
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
   } else if (chainId === "ethereum") {
     INIT_CONFIG.chainId = ChainId.MAINNET;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.MAINNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
   } else if (chainId === "goerli") {
     INIT_CONFIG.chainId = ChainId.GOERLI;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.GOERLI];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/cJPK7B3ru.dd7f7861-190d-45ic-af80-6877f74b8f44`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
   } else if (chainId === "polygon") {
     INIT_CONFIG.chainId = ChainId.POLYGON_MAINNET;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.POLYGON_MAINNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
   } else if (chainId === "bsc-testnet") {
     INIT_CONFIG.chainId = ChainId.BSC_TESTNET;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.BSC_TESTNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/cJPK7B3ru.dd7f7861-190d-45ic-af80-6877f74b8f44`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
   } else if (chainId === "bsc") {
     INIT_CONFIG.chainId = ChainId.BSC_MAINNET;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.BSC_MAINNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
   } else if (chainId === "polygon-zkevm-testnet") {
     INIT_CONFIG.chainId = ChainId.POLYGON_ZKEVM_TESTNET;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.POLYGON_ZKEVM_TESTNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/cJPK7B3ru.dd7f7861-190d-45ic-af80-6877f74b8f44`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
   } else if (chainId === "polygon-zkevm") {
     INIT_CONFIG.chainId = ChainId.POLYGON_ZKEVM_MAINNET;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.POLYGON_ZKEVM_MAINNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
   } else if (chainId === "arbitrum-goerli-testnet") {
     INIT_CONFIG.chainId = ChainId.ARBITRUM_GOERLI_TESTNET;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.ARBITRUM_GOERLI_TESTNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/cJPK7B3ru.dd7f7861-190d-45ic-af80-6877f74b8f44`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
   } else if (chainId === "arbitrum-one-mainnet") {
     INIT_CONFIG.chainId = ChainId.ARBITRUM_ONE_MAINNET;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.ARBITRUM_ONE_MAINNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
   } else if (chainId === "arbitrum-nova-mainnet") {
     INIT_CONFIG.chainId = ChainId.ARBITRUM_NOVA_MAINNET;
     INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.ARBITRUM_NOVA_MAINNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
   } else {
     throw new Error("Invalid network type");
   }
   INIT_CONFIG.preferredToken = "";
   INIT_CONFIG.tokenList = [];
-  INIT_CONFIG.bundlerUrl =
-    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/cJPK7B3ru.dd7f7861-190d-45ic-af80-6877f74b8f44`;
-  INIT_CONFIG.biconomyPaymasterUrl =
-    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
   fs.writeFile(
     CONFIG_PATH,
     prettier.format(JSON.stringify(INIT_CONFIG, null, 2), { parser: "json" })
