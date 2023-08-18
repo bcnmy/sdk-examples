@@ -1,7 +1,8 @@
 import { ethers } from "ethers";
 import chalk from "chalk";
+
 import {
-    BiconomySmartAccount,
+    BiconomySmartAccountV2,
     DEFAULT_ENTRYPOINT_ADDRESS,
   } from "@biconomy/account";
   import { Bundler } from "@biconomy/bundler";
@@ -12,6 +13,7 @@ import {
   SponsorUserOperationDto,
 } from "@biconomy/paymaster";
 import config from "../../config.json";
+import { ECDSAOwnershipValidationModule } from "@biconomy/modules";
 
 export const mintNft = async () => {
 
@@ -34,6 +36,12 @@ export const mintNft = async () => {
     paymasterUrl: config.biconomyPaymasterUrl
   });
 
+  const module = new ECDSAOwnershipValidationModule({
+    signer: signer,
+    chainId: config.chainId,
+    moduleAddress: '0xd9cf3caaa21db25f16ad6db43eb9932ab77c8e76'
+  })
+
   // Biconomy smart account config
   // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use 
   const biconomySmartAccountConfig = {
@@ -42,13 +50,18 @@ export const mintNft = async () => {
     rpcUrl: config.rpcUrl,
     paymaster: paymaster, 
     bundler: bundler, 
+    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+    defaultValidationModule: module,
+    activeValidationModule: module
   };
 
   // create biconomy smart account instance
-  const biconomyAccount = new BiconomySmartAccount(biconomySmartAccountConfig);
+  const biconomyAccount = new BiconomySmartAccountV2(biconomySmartAccountConfig);
 
   // passing accountIndex is optional, by default it will be 0. You may use different indexes for generating multiple counterfactual smart accounts for the same user
-  const biconomySmartAccount = await biconomyAccount.init( {accountIndex: config.accountIndex} );
+  const biconomySmartAccount = await biconomyAccount.init();
+  console.log("here =>>>>>>> ")
+  console.log(biconomySmartAccount)
 
 
   // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//
@@ -69,7 +82,7 @@ export const mintNft = async () => {
 
   // passing accountIndex is optional, by default it will be 0 
   // it should match with the index used to initialise the SDK Biconomy Smart Account instance 
-  const scwAddress = await biconomySmartAccount.getSmartAccountAddress(config.accountIndex);
+  const scwAddress = await biconomySmartAccount.getAccountAddress();
 
   // Here we are minting NFT to smart account address itself
   const data = nftInterface.encodeFunctionData("safeMint", [scwAddress]);

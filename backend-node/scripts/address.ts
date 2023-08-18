@@ -4,6 +4,6 @@ import config from "../config.json";
 
 export async function getAddress() {
   const biconomySmartAccount = await createBiconomyAccountInstance();
-  const scwAddress = await biconomySmartAccount.getSmartAccountAddress(config.accountIndex);
+  const scwAddress = await biconomySmartAccount.getAccountAddress();
   console.log(chalk.green(`SmartAccount address: ${scwAddress}`));
 }

@@ -1,12 +1,13 @@
 import { ethers } from "ethers";
 import chalk from "chalk";
 import {
-  BiconomySmartAccount,
+  BiconomySmartAccountV2,
   DEFAULT_ENTRYPOINT_ADDRESS,
 } from "@biconomy/account";
 import { Bundler } from "@biconomy/bundler";
 import { BiconomyPaymaster } from "@biconomy/paymaster";
 import { Transaction, UserOperation } from "@biconomy/core-types";
+import { ECDSAOwnershipValidationModule } from "@biconomy/modules";
 import config from "../config.json";
 
 async function createBiconomyAccountInstance() {
@@ -27,6 +28,12 @@ async function createBiconomyAccountInstance() {
     strictMode: false // by default is true. If set to false, then paymaster and data is still sent as 0x and account will pay in native
   });
 
+  const module = new ECDSAOwnershipValidationModule({
+    signer: signer,
+    chainId: config.chainId,
+    moduleAddress: '0xd9cf3caaa21db25f16ad6db43eb9932ab77c8e76'
+  })
+
   // create biconomy smart account instance
   const biconomySmartAccountConfig = {
     signer: signer,
@@ -35,14 +42,18 @@ async function createBiconomyAccountInstance() {
     paymaster: paymaster, // optional
     bundler: bundler, // optional
     // nodeClientUrl: config.nodeClientUrl, // if needed to override
+    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+    defaultValidationModule: module,
+    activeValidationModule: module
   };
-  const biconomyAccount = new BiconomySmartAccount(biconomySmartAccountConfig);
-  const biconomySmartAccount = await biconomyAccount.init( {accountIndex: config.accountIndex} );
+  console.log("ever here....?")
+  const biconomyAccount = new BiconomySmartAccountV2(biconomySmartAccountConfig);
+  const biconomySmartAccount = await biconomyAccount.init();
   return biconomySmartAccount;
 }
 
 async function sendUserOp(
-  biconomySmartAccount: BiconomySmartAccount,
+  biconomySmartAccount: BiconomySmartAccountV2,
   userOp: Partial<UserOperation>
 ) {
   console.log(chalk.blue(`userOp: ${JSON.stringify(userOp, null, "\t")}`));
