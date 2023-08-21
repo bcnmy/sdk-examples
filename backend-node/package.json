@@ -16,7 +16,7 @@
     "@biconomy/core-types": "file:../../biconomy-client-sdk/packages/core-types",
     "@biconomy/modules": "file:../../biconomy-client-sdk/packages/modules",
     "@biconomy/paymaster": "file:../../biconomy-client-sdk/packages/paymaster",
-    "chalk": "^5.3.0",
+    "chalk": "^4.1.2",
     "ethers": "^5.7.2",
     "inquirer": "^8.0.0",
     "prettier": "^2.8.1",

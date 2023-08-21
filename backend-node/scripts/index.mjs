@@ -1,19 +1,18 @@
 #!/usr/bin/env node
 import * as yargs from "yargs";
 const chalk = require('chalk')
-import { init } from "./init.ts";
-import { getAddress } from "./address";
-import { nativeTransfer } from "./gasless/nativeTransfer";
-import { nativeTransferPayERC20 } from "./erc20/nativeTransfer";
-import { erc20Transfer } from "./gasless/erc20Transfer";
-import { erc20TransferPayERC20 } from "./erc20/erc20Transfer";
-import { mintNft } from "./gasless/mintNFT";
-import { mintNftPayERC20 } from "./erc20/mintNFT";
-import { batchMintNft } from "./gasless/batchMintNFT";
-import { batchMintNftPayERC20 } from "./erc20/batchMintNFT";
-import { batchMintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/batchMintNFT";
-import { mintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/mintNFT";
-import { multiChainMint } from "./gasless/multiChainSend.ts";
+import { init } from "./init.js";
+import { getAddress } from "./address.js";
+import { nativeTransfer } from "./gasless/nativeTransfer.js";
+import { nativeTransferPayERC20 } from "./erc20/nativeTransfer.js";
+import { erc20Transfer } from "./gasless/erc20Transfer.js";
+import { erc20TransferPayERC20 } from "./erc20/erc20Transfer.js";
+import { mintNft } from "./gasless/mintNFT.js";
+import { mintNftPayERC20 } from "./erc20/mintNFT.js";
+import { batchMintNft } from "./gasless/batchMintNFT.js";
+import { batchMintNftPayERC20 } from "./erc20/batchMintNFT.js";
+import { batchMintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/batchMintNFT.js";
+import { mintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/mintNFT.js";
 
 yargs
   .scriptName(chalk.green("smartAccount"))
@@ -156,29 +155,6 @@ yargs
       }
       else {
         mintNft();
-      }
-    }
-  )
-  .command(
-    "multiChainMint",
-    chalk.blue("Mint nft token"),
-    {
-      mode: {
-        describe: chalk.cyan("Paymaster mode"),
-        demandOption: false,
-        type: "string",
-      },
-    },
-    (argv) => {
-      console.log(chalk.magenta("Minting an NFT token to the SmartAccount..."));
-      if(argv.mode === "TOKEN") {
-        mintNftPayERC20();
-      }
-      else if(argv.mode === "HYBRID") {
-        mintNftTrySponsorshipOtherwisePayERC20();
-      }
-      else {
-        multiChainMint();
       }
     }
   )

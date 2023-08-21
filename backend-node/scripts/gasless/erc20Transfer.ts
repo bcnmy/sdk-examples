@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 const { ERC20ABI } = require('../abi')
-import chalk from "chalk";
+const chalk = require('chalk')
 import {
     BiconomySmartAccount,
     DEFAULT_ENTRYPOINT_ADDRESS,

@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import chalk from "chalk";
+const chalk = require('chalk')
 import {
   BiconomySmartAccountV2,
   DEFAULT_ENTRYPOINT_ADDRESS,
@@ -31,7 +31,7 @@ async function createBiconomyAccountInstance() {
   const module = new ECDSAOwnershipValidationModule({
     signer: signer,
     chainId: config.chainId,
-    moduleAddress: '0xd9cf3caaa21db25f16ad6db43eb9932ab77c8e76'
+    moduleAddress: '0x000D19910aAd41540669EfBf720f5dE69fCAc2e4'
   })
 
   // create biconomy smart account instance
@@ -49,6 +49,8 @@ async function createBiconomyAccountInstance() {
   console.log("ever here....?")
   const biconomyAccount = new BiconomySmartAccountV2(biconomySmartAccountConfig);
   const biconomySmartAccount = await biconomyAccount.init();
+  console.log("init ke baad")
+  console.log(biconomyAccount.accountAddress)
   return biconomySmartAccount;
 }
 

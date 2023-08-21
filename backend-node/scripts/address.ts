@@ -1,4 +1,4 @@
-import chalk from "chalk";
+const chalk = require('chalk')
 import { createBiconomyAccountInstance } from "./helperFunctions";
 import config from "../config.json";
 

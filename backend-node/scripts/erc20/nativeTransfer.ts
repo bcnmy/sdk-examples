@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import chalk from "chalk";
+const chalk = require('chalk')
 import inquirer from "inquirer";
 import {
     BiconomySmartAccount,
