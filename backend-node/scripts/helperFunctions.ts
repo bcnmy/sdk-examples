@@ -3,11 +3,11 @@ const chalk = require('chalk')
 import {
   BiconomySmartAccountV2,
   DEFAULT_ENTRYPOINT_ADDRESS,
-} from "@biconomy/account";
-import { Bundler } from "@biconomy/bundler";
-import { BiconomyPaymaster } from "@biconomy/paymaster";
-import { Transaction, UserOperation } from "@biconomy/core-types";
-import { ECDSAOwnershipValidationModule } from "@biconomy/modules";
+} from "@biconomy-devx/account";
+import { Bundler } from "@biconomy-devx/bundler";
+import { BiconomyPaymaster } from "@biconomy-devx/paymaster";
+import { Transaction, UserOperation } from "@biconomy-devx/core-types";
+import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE } from "@biconomy-devx/modules";
 import config from "../config.json";
 
 async function createBiconomyAccountInstance() {
@@ -30,8 +30,12 @@ async function createBiconomyAccountInstance() {
 
   const module = new ECDSAOwnershipValidationModule({
     signer: signer,
-    chainId: config.chainId,
-    moduleAddress: '0x000D19910aAd41540669EfBf720f5dE69fCAc2e4'
+    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
+  })
+
+  const multiChainModule = new MultiChainValidationModule({
+    signer: signer,
+    moduleAddress: DEFAULT_MULTICHAIN_MODULE
   })
 
   // create biconomy smart account instance

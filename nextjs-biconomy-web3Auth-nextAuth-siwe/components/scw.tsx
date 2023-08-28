@@ -1,9 +1,9 @@
 import styles from "../styles/Home.module.css";
 import { useCallback, useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { ChainId } from "@biconomy/core-types";
-import SocialLogin from "@biconomy/web3-auth";
-import SmartAccount from "@biconomy/smart-account";
+import { ChainId } from "@biconomy-devx/core-types";
+import SocialLogin from "@biconomy-devx/web3-auth";
+import SmartAccount from "@biconomy-devx/smart-account";
 
 import { useSession, signIn, signOut, getCsrfToken } from "next-auth/react";
 import { SiweMessage } from "siwe";

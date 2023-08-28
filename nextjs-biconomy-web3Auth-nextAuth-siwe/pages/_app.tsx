@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import "@biconomy/web3-auth/dist/src/style.css";
+import "@biconomy-devx/web3-auth/dist/src/style.css";
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import {

@@ -4,17 +4,16 @@ const chalk = require('chalk')
 import {
     BiconomySmartAccountV2,
     DEFAULT_ENTRYPOINT_ADDRESS,
-  } from "@biconomy/account";
-  import { Bundler } from "@biconomy/bundler";
-  import { BiconomyPaymaster } from "@biconomy/paymaster";
+  } from "@biconomy-devx/account";
+  import { Bundler } from "@biconomy-devx/bundler";
+  import { BiconomyPaymaster } from "@biconomy-devx/paymaster";
 import {
   IHybridPaymaster,
   PaymasterMode,
   SponsorUserOperationDto,
-} from "@biconomy/paymaster";
+} from "@biconomy-devx/paymaster";
 import config from "../../config.json";
-import { ECDSAOwnershipValidationModule } from "@biconomy/modules";
-import { MultiChainValidationModule } from "@biconomy/modules";
+import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, DEFAULT_SESSION_KEY_MANAGER_MODULE  } from "@biconomy-devx/modules";
 
 export const mintNft = async () => {
 
@@ -39,14 +38,12 @@ export const mintNft = async () => {
 
   const module = new ECDSAOwnershipValidationModule({
     signer: signer,
-    chainId: config.chainId,
-    moduleAddress: '0x000D19910aAd41540669EfBf720f5dE69fCAc2e4'
+    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
   })
 
   const multiChainModule = new MultiChainValidationModule({
     signer: signer,
-    chainId: config.chainId, // to be removed
-    moduleAddress: '0x2E817fe3749B81dA801fc08B247E081ec20eB080'
+    moduleAddress: DEFAULT_MULTICHAIN_MODULE
   })
 
   // Biconomy smart account config
@@ -147,9 +144,8 @@ export const mintNft = async () => {
     console.log("error received ", e);
   }
 
-  /*const multiChainValidationModule = '0x2E817fe3749B81dA801fc08B247E081ec20eB080'
-  try {
-    const userOpResponse = await biconomySmartAccount.enableModule(multiChainValidationModule);
+  /*try {
+    const userOpResponse = await biconomySmartAccount.enableModule(DEFAULT_SESSION_KEY_MANAGER_MODULE);
     console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
     const transactionDetails = await userOpResponse.wait();
     console.log(

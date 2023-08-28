@@ -3,7 +3,7 @@ import {
   ParticleAuthModule,
   ParticleProvider,
   BiconomyAccountModule,
-} from "@biconomy/particle-auth";
+} from "@biconomy-devx/particle-auth";
 import { ethers } from "ethers";
 
 const particle = new ParticleAuthModule.ParticleNetwork({

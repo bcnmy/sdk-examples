@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@biconomy/smart-account": "^2.0.0",
+    "@biconomy-devx/smart-account": "^2.0.0",
     "@ethersproject/shims": "^5.7.0",
     "@tradle/react-native-http": "^2.0.1",
     "add": "^2.0.6",

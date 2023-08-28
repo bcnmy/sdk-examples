@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
-import SmartAccount from "@biconomy/smart-account";
-import { SmartAccountState, SmartAccountVersion } from "@biconomy/core-types";
+import SmartAccount from "@biconomy-devx/smart-account";
+import { SmartAccountState, SmartAccountVersion } from "@biconomy-devx/core-types";
 import { supportedChains, activeChainId } from "../utils/chainConfig";
 import { useWeb3AuthContext } from "./SocialLoginContext";
 

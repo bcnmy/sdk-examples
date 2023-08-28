@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Magic } from "magic-sdk";
-import SmartAccount from "@biconomy/smart-account";
+import SmartAccount from "@biconomy-devx/smart-account";
 import { ethers } from "ethers";
 
 const magic = new Magic("pk_live_3247E1E1BB785715", {
