@@ -80,6 +80,7 @@ export const nativeTransfer = async (
   let paymasterServiceData: SponsorUserOperationDto = {
         mode: PaymasterMode.SPONSORED,
         // optional params...
+        calculateGasLimits: true, // Always recommended when using paymaster
     };
 
   try {
@@ -89,6 +90,23 @@ export const nativeTransfer = async (
         paymasterServiceData
       );
       partialUserOp.paymasterAndData = paymasterAndDataResponse.paymasterAndData;
+
+      if (
+        paymasterAndDataResponse.callGasLimit &&
+        paymasterAndDataResponse.verificationGasLimit &&
+        paymasterAndDataResponse.preVerificationGas
+      ) {
+  
+        // Returned gas limits must be replaced in your op as you update paymasterAndData.
+        // Because these are the limits paymaster service signed on to generate paymasterAndData
+        // If you receive AA34 error check here..   
+  
+        partialUserOp.callGasLimit = paymasterAndDataResponse.callGasLimit;
+        partialUserOp.verificationGasLimit =
+        paymasterAndDataResponse.verificationGasLimit;
+        partialUserOp.preVerificationGas =
+        paymasterAndDataResponse.preVerificationGas;
+      }
   } catch (e) {
     console.log("error received ", e);
   }
