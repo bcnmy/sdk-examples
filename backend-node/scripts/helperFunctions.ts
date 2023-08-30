@@ -47,8 +47,8 @@ async function createBiconomyAccountInstance() {
     bundler: bundler, // optional
     // nodeClientUrl: config.nodeClientUrl, // if needed to override
     entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-    defaultValidationModule: module,
-    activeValidationModule: module
+    defaultValidationModule: multiChainModule,
+    activeValidationModule: multiChainModule
   };
   console.log("ever here....?")
   const biconomyAccount = new BiconomySmartAccountV2(biconomySmartAccountConfig);

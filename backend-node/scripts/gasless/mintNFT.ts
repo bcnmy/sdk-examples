@@ -109,16 +109,38 @@ export const mintNft = async () => {
   // Here it is meant to act as Sponsorship/Verifying paymaster hence we send mode: PaymasterMode.SPONSORED which is must  
   let paymasterServiceData: SponsorUserOperationDto = {
         mode: PaymasterMode.SPONSORED,
+        smartAccountInfo: {
+          name: 'BICONOMY',
+          version: '3.0.0'
+        },
         // optional params...
+        calculateGasLimits: true
     };
 
   try {
     const paymasterAndDataResponse =
       await biconomyPaymaster.getPaymasterAndData(
-        partialUserOp,
+        partialUserOp,                                                                                  
         paymasterServiceData
       );
       partialUserOp.paymasterAndData = paymasterAndDataResponse.paymasterAndData;
+
+      if (
+        paymasterAndDataResponse.callGasLimit &&
+        paymasterAndDataResponse.verificationGasLimit &&
+        paymasterAndDataResponse.preVerificationGas
+      ) {
+  
+        // Returned gas limits must be replaced in your op as you update paymasterAndData.
+        // Because these are the limits paymaster service signed on to generate paymasterAndData
+        // If you receive AA34 error check here..   
+  
+        partialUserOp.callGasLimit = paymasterAndDataResponse.callGasLimit;
+        partialUserOp.verificationGasLimit =
+        paymasterAndDataResponse.verificationGasLimit;
+        partialUserOp.preVerificationGas =
+        paymasterAndDataResponse.preVerificationGas;
+      }
   } catch (e) {
     console.log("error received ", e);
   }
