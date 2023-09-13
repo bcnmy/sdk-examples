@@ -50,10 +50,8 @@ async function createBiconomyAccountInstance() {
     defaultValidationModule: multiChainModule,
     activeValidationModule: multiChainModule
   };
-  console.log("ever here....?")
   const biconomyAccount = new BiconomySmartAccountV2(biconomySmartAccountConfig);
   const biconomySmartAccount = await biconomyAccount.init();
-  console.log("init ke baad")
   console.log(biconomyAccount.accountAddress)
   return biconomySmartAccount;
 }
