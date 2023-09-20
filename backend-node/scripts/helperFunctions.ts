@@ -50,9 +50,9 @@ async function createBiconomyAccountInstance() {
     defaultValidationModule: ecdsaModule,
     activeValidationModule: ecdsaModule
   };
-  const biconomyAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
-  const biconomySmartAccount = await biconomyAccount.init();
-  console.log(biconomyAccount.accountAddress)
+  const biconomySmartAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
+  
+  console.log(biconomySmartAccount.accountAddress)
   return biconomySmartAccount;
 }
 

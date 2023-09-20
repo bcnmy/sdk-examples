@@ -63,10 +63,10 @@ export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
   };
 
   // create biconomy smart account instance
-  const biconomyAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
+  const biconomySmartAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
 
   
-  const biconomySmartAccount = await biconomyAccount.init();
+  
 
 
 

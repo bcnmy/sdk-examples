@@ -2,7 +2,6 @@ import { ethers } from "ethers";
 const chalk = require('chalk')
 import inquirer from "inquirer";
 import {
-    BiconomySmartAccount,
     BiconomySmartAccountV2,
     DEFAULT_ENTRYPOINT_ADDRESS,
   } from "@biconomy-devx/account";
@@ -65,9 +64,9 @@ export const nativeTransferPayERC20 = async (
   };
 
   // create biconomy smart account instance
-  const biconomyAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
+  const biconomySmartAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
 
-  const biconomySmartAccount = await biconomyAccount.init();
+  
 
 
 

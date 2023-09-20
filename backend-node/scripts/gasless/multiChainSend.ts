@@ -58,12 +58,9 @@ export const multiChainMint = async () => {
   };
 
   // create biconomy smart account instance
-  const biconomyAccount1 = await BiconomySmartAccountV2.create(biconomySmartAccountConfig1);
+  const biconomySmartAccount1 = await BiconomySmartAccountV2.create(biconomySmartAccountConfig1);
 
   
-  const biconomySmartAccount1 = await biconomyAccount1.init();
-
-
   const bundler2 = new Bundler({
     bundlerUrl: "https://bundler.biconomy.io/api/v2/97/A5CBjLqSc.0dcbc53e-anPe-44c7-b22d-21071345f76a",
     chainId: 97,
@@ -83,13 +80,9 @@ export const multiChainMint = async () => {
 
 
   // create biconomy smart account instance
-  const biconomyAccount2 = await BiconomySmartAccountV2.create(biconomySmartAccountConfig2);
+  const biconomySmartAccount2 = await BiconomySmartAccountV2.create(biconomySmartAccountConfig2);
 
   
-  const biconomySmartAccount2 = await biconomyAccount2.init();
-
-
-
   // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//
 
   
