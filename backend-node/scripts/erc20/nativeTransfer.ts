@@ -153,7 +153,7 @@ export const nativeTransferPayERC20 = async (
   let paymasterServiceData = {
       mode: PaymasterMode.ERC20, // - mandatory // now we know chosen fee token and requesting paymaster and data for it
       feeTokenAddress: selectedFeeQuote.tokenAddress,
-      // calculateGasLimits: true, // - optional by default false
+      calculateGasLimits: true, // - optional by default false
     };
 
   try{
@@ -165,7 +165,7 @@ export const nativeTransferPayERC20 = async (
     finalUserOp.paymasterAndData = paymasterAndDataWithLimits.paymasterAndData;
 
     // below code is only needed if you sent the glaf calculateGasLimits = true
-    /*if (
+    if (
       paymasterAndDataWithLimits.callGasLimit &&
       paymasterAndDataWithLimits.verificationGasLimit &&
       paymasterAndDataWithLimits.preVerificationGas
@@ -180,7 +180,7 @@ export const nativeTransferPayERC20 = async (
         paymasterAndDataWithLimits.verificationGasLimit;
       finalUserOp.preVerificationGas =
         paymasterAndDataWithLimits.preVerificationGas;
-    }*/ 
+    } 
   } catch (e) {
     console.log("error received ", e);
   }
