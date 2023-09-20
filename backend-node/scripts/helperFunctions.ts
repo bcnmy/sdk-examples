@@ -28,12 +28,12 @@ async function createBiconomyAccountInstance() {
     strictMode: false // by default is true. If set to false, then paymaster and data is still sent as 0x and account will pay in native
   });
 
-  const module = new ECDSAOwnershipValidationModule({
+  const ecdsaModule = await ECDSAOwnershipValidationModule.create({
     signer: signer,
     moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
   })
 
-  const multiChainModule = new MultiChainValidationModule({
+  const multiChainModule = await MultiChainValidationModule.create({
     signer: signer,
     moduleAddress: DEFAULT_MULTICHAIN_MODULE
   })
@@ -47,10 +47,10 @@ async function createBiconomyAccountInstance() {
     bundler: bundler, // optional
     // nodeClientUrl: config.nodeClientUrl, // if needed to override
     entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-    defaultValidationModule: multiChainModule,
-    activeValidationModule: multiChainModule
+    defaultValidationModule: ecdsaModule,
+    activeValidationModule: ecdsaModule
   };
-  const biconomyAccount = new BiconomySmartAccountV2(biconomySmartAccountConfig);
+  const biconomyAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
   const biconomySmartAccount = await biconomyAccount.init();
   console.log(biconomyAccount.accountAddress)
   return biconomySmartAccount;

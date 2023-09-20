@@ -38,11 +38,11 @@ export const mintNftPayERC20 = async () => {
     paymasterUrl: config.biconomyPaymasterUrl
   });
 
-  const module = new ECDSAOwnershipValidationModule({
+  const ecdsaModule = await ECDSAOwnershipValidationModule.create({
     signer: signer,
     moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
   })
-  const multiChainModule = new MultiChainValidationModule({
+  const multiChainModule = await MultiChainValidationModule.create({
     signer: signer,
     moduleAddress: DEFAULT_MULTICHAIN_MODULE
   })
@@ -56,12 +56,12 @@ export const mintNftPayERC20 = async () => {
     paymaster: paymaster, 
     bundler: bundler, 
     entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-    defaultValidationModule: multiChainModule,
-    activeValidationModule: multiChainModule
+    defaultValidationModule: ecdsaModule,
+    activeValidationModule: ecdsaModule
   };
 
   // create biconomy smart account instance
-  const biconomyAccount = new BiconomySmartAccountV2(biconomySmartAccountConfig);
+  const biconomyAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
 
   // passing accountIndex is optional, by default it will be 0. You may use different indexes for generating multiple counterfactual smart accounts for the same user
   const biconomySmartAccount = await biconomyAccount.init();

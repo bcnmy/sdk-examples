@@ -36,17 +36,9 @@ export const multiChainMint = async () => {
     paymasterUrl: config.biconomyPaymasterUrl
   });
 
-  const module1 = new ECDSAOwnershipValidationModule({
-    signer: signer,
-    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
-  })
 
-  const module2 = new ECDSAOwnershipValidationModule({
-    signer: signer,
-    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
-  })
 
-  const multiChainModule = new MultiChainValidationModule({
+  const multiChainModule = await MultiChainValidationModule.create({
     signer: signer,
     moduleAddress: DEFAULT_MULTICHAIN_MODULE
   })
@@ -66,7 +58,7 @@ export const multiChainMint = async () => {
   };
 
   // create biconomy smart account instance
-  const biconomyAccount1 = new BiconomySmartAccountV2(biconomySmartAccountConfig1);
+  const biconomyAccount1 = await BiconomySmartAccountV2.create(biconomySmartAccountConfig1);
 
   // passing accountIndex is optional, by default it will be 0. You may use different indexes for generating multiple counterfactual smart accounts for the same user
   const biconomySmartAccount1 = await biconomyAccount1.init();
@@ -91,7 +83,7 @@ export const multiChainMint = async () => {
 
 
   // create biconomy smart account instance
-  const biconomyAccount2 = new BiconomySmartAccountV2(biconomySmartAccountConfig2);
+  const biconomyAccount2 = await BiconomySmartAccountV2.create(biconomySmartAccountConfig2);
 
   // passing accountIndex is optional, by default it will be 0. You may use different indexes for generating multiple counterfactual smart accounts for the same user
   const biconomySmartAccount2 = await biconomyAccount2.init();
@@ -114,8 +106,6 @@ export const multiChainMint = async () => {
     "function safeMint(address _to)",
   ]);
 
-  // passing accountIndex is optional, by default it will be 0 
-  // it should match with the index used to initialise the SDK Biconomy Smart Account instance 
   const scwAddress1 = await biconomySmartAccount1.getAccountAddress();
 
   // Here we are minting NFT to smart account address itself
