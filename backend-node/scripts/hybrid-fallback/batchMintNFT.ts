@@ -65,7 +65,7 @@ export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
   // create biconomy smart account instance
   const biconomyAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
 
-  // passing accountIndex is optional, by default it will be 0. You may use different indexes for generating multiple counterfactual smart accounts for the same user
+  
   const biconomySmartAccount = await biconomyAccount.init();
 
 

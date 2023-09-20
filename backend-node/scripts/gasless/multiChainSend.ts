@@ -60,7 +60,7 @@ export const multiChainMint = async () => {
   // create biconomy smart account instance
   const biconomyAccount1 = await BiconomySmartAccountV2.create(biconomySmartAccountConfig1);
 
-  // passing accountIndex is optional, by default it will be 0. You may use different indexes for generating multiple counterfactual smart accounts for the same user
+  
   const biconomySmartAccount1 = await biconomyAccount1.init();
 
 
@@ -85,7 +85,7 @@ export const multiChainMint = async () => {
   // create biconomy smart account instance
   const biconomyAccount2 = await BiconomySmartAccountV2.create(biconomySmartAccountConfig2);
 
-  // passing accountIndex is optional, by default it will be 0. You may use different indexes for generating multiple counterfactual smart accounts for the same user
+  
   const biconomySmartAccount2 = await biconomyAccount2.init();
 
 

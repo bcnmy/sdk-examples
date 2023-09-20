@@ -64,7 +64,7 @@ export const batchMintNftPayERC20 = async () => {
   // create biconomy smart account instance
   const biconomyAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
 
-  // passing accountIndex is optional, by default it will be 0. You may use different indexes for generating multiple counterfactual smart accounts for the same user
+  
   const biconomySmartAccount = await biconomyAccount.init();
 
 
@@ -79,8 +79,7 @@ export const batchMintNftPayERC20 = async () => {
     "function safeMint(address _to)",
   ]);
 
-  // passing accountIndex is optional, by default it will be 0 
-  // it should match with the index used to initialise the SDK Biconomy Smart Account instance 
+
   const scwAddress = await biconomySmartAccount.getAccountAddress();
 
   // Here we are minting NFT to smart account address itself
