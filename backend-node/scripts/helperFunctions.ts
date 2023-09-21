@@ -3,11 +3,11 @@ const chalk = require('chalk')
 import {
   BiconomySmartAccountV2,
   DEFAULT_ENTRYPOINT_ADDRESS,
-} from "@biconomy-devx/account";
-import { Bundler } from "@biconomy-devx/bundler";
-import { BiconomyPaymaster } from "@biconomy-devx/paymaster";
-import { Transaction, UserOperation } from "@biconomy-devx/core-types";
-import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE } from "@biconomy-devx/modules";
+} from "@biconomy/account";
+import { Bundler } from "@biconomy/bundler";
+import { BiconomyPaymaster } from "@biconomy/paymaster";
+import { Transaction, UserOperation } from "@biconomy/core-types";
+import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE } from "@biconomy/modules";
 import config from "../config.json";
 
 async function createBiconomyAccountInstance() {

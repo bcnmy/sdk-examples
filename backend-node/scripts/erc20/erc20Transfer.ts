@@ -5,17 +5,17 @@ import inquirer from "inquirer";
 import {
     BiconomySmartAccountV2,
     DEFAULT_ENTRYPOINT_ADDRESS,
-  } from "@biconomy-devx/account";
-  import { Bundler } from "@biconomy-devx/bundler";
-  import { BiconomyPaymaster } from "@biconomy-devx/paymaster";
+  } from "@biconomy/account";
+  import { Bundler } from "@biconomy/bundler";
+  import { BiconomyPaymaster } from "@biconomy/paymaster";
 import {
   IHybridPaymaster,
   PaymasterFeeQuote,
   PaymasterMode,
   SponsorUserOperationDto,
-} from "@biconomy-devx/paymaster";
+} from "@biconomy/paymaster";
 import config from "../../config.json";
-import { DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, ECDSAOwnershipValidationModule, MultiChainValidationModule } from "@biconomy-devx/modules";
+import { DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, ECDSAOwnershipValidationModule, MultiChainValidationModule } from "@biconomy/modules";
 
 export const erc20TransferPayERC20 = async (
     recipientAddress: string,

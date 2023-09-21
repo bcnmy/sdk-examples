@@ -3,8 +3,8 @@ import path from "path";
 import prettier from "prettier";
 import { Wallet, utils } from "ethers";
 const chalk = require('chalk')
-import { ChainId } from "@biconomy-devx/core-types";
-import { RPC_PROVIDER_URLS } from "@biconomy-devx/common";
+import { ChainId } from "@biconomy/core-types";
+import { RPC_PROVIDER_URLS } from "@biconomy/common";
 
 let index = 500000;
 const INIT_CONFIG: any = {
