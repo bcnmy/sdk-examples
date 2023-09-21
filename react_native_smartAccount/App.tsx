@@ -6,7 +6,7 @@
  */
 import React from 'react';
 import {ethers} from 'ethers';
-import SmartAccount from '@biconomy-devx/smart-account';
+import SmartAccount from '@biconomy/smart-account';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,

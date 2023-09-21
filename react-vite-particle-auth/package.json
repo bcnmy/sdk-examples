@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@biconomy-devx/particle-auth": "^2.0.0",
+    "@biconomy/particle-auth": "^2.0.0",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "buffer": "^6.0.3",
     "ethers": "^5.7.2",

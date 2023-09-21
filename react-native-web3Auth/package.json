@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@biconomy-devx/web3-auth-native": "2.0.0",
+    "@biconomy/web3-auth-native": "2.0.0",
     "@ethersproject/shims": "^5.7.0",
     "buffer": "^6.0.3",
     "ethers": "5.7.2",

@@ -2,8 +2,8 @@ import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
-import { ChainId } from "@biconomy-devx/core-types";
-import SmartAccount from "@biconomy-devx/smart-account";
+import { ChainId } from "@biconomy/core-types";
+import SmartAccount from "@biconomy/smart-account";
 import WalletConnect from "@walletconnect/web3-provider";
 
 export const providerOptions = {

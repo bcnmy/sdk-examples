@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { ethers } from "ethers";
-import SocialLogin from "@biconomy-devx/web3-auth";
-import "@biconomy-devx/web3-auth/dist/src/style.css";
+import SocialLogin from "@biconomy/web3-auth";
+import "@biconomy/web3-auth/dist/src/style.css";
 import HelloWorld from "./components/HelloWorld.vue";
 
 let socialLoginSDK: SocialLogin;

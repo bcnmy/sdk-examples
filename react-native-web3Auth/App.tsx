@@ -11,7 +11,7 @@ import "react-native-get-random-values";
 import "@ethersproject/shims";
 import { ethers } from "ethers";
 // for web3Auth
-import SocialLogin from "@biconomy-devx/web3-auth-native";
+import SocialLogin from "@biconomy/web3-auth-native";
 import * as WebBrowser from "expo-web-browser";
 import Constants, { AppOwnership } from "expo-constants";
 import * as Linking from "expo-linking";

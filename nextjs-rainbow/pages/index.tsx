@@ -2,8 +2,8 @@ import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ethers } from "ethers";
-import { ChainId } from "@biconomy-devx/core-types";
-import SmartAccount from "@biconomy-devx/smart-account";
+import { ChainId } from "@biconomy/core-types";
+import SmartAccount from "@biconomy/smart-account";
 import { useAccount, useSigner } from "wagmi";
 
 const Home = () => {
