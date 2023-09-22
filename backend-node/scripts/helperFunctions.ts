@@ -33,11 +33,6 @@ async function createBiconomyAccountInstance() {
     moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
   })
 
-  const multiChainModule = await MultiChainValidationModule.create({
-    signer: signer,
-    moduleAddress: DEFAULT_MULTICHAIN_MODULE
-  })
-
   // create biconomy smart account instance
   const biconomySmartAccountConfig = {
     signer: signer,

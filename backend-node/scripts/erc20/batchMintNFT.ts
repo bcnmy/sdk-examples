@@ -43,11 +43,6 @@ export const batchMintNftPayERC20 = async () => {
     moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
   })
 
-  const multiChainModule = await MultiChainValidationModule.create({
-    signer: signer,
-    moduleAddress: DEFAULT_MULTICHAIN_MODULE
-  })
-
   // Biconomy smart account config
   // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use 
   const biconomySmartAccountConfig = {
