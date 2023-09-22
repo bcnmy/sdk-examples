@@ -2,7 +2,7 @@ const fs = require("fs").promises;
 import path from "path";
 import prettier from "prettier";
 import { Wallet, utils } from "ethers";
-import chalk from "chalk";
+const chalk = require('chalk')
 import { ChainId } from "@biconomy/core-types";
 import { RPC_PROVIDER_URLS } from "@biconomy/common";
 

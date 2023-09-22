@@ -1,7 +1,8 @@
 import { ethers } from "ethers";
-import chalk from "chalk";
+const chalk = require('chalk')
+
 import {
-    BiconomySmartAccount,
+    BiconomySmartAccountV2,
     DEFAULT_ENTRYPOINT_ADDRESS,
   } from "@biconomy/account";
   import { Bundler } from "@biconomy/bundler";
@@ -12,6 +13,7 @@ import {
   SponsorUserOperationDto,
 } from "@biconomy/paymaster";
 import config from "../../config.json";
+import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, DEFAULT_SESSION_KEY_MANAGER_MODULE  } from "@biconomy/modules";
 
 export const mintNft = async () => {
 
@@ -34,6 +36,11 @@ export const mintNft = async () => {
     paymasterUrl: config.biconomyPaymasterUrl
   });
 
+  const ecdsaModule = await ECDSAOwnershipValidationModule.create({
+    signer: signer,
+    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
+  })
+
   // Biconomy smart account config
   // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use 
   const biconomySmartAccountConfig = {
@@ -42,13 +49,17 @@ export const mintNft = async () => {
     rpcUrl: config.rpcUrl,
     paymaster: paymaster, 
     bundler: bundler, 
+    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+    defaultValidationModule: ecdsaModule,
+    activeValidationModule: ecdsaModule
   };
 
   // create biconomy smart account instance
-  const biconomyAccount = new BiconomySmartAccount(biconomySmartAccountConfig);
+  const biconomySmartAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
 
-  // passing accountIndex is optional, by default it will be 0. You may use different indexes for generating multiple counterfactual smart accounts for the same user
-  const biconomySmartAccount = await biconomyAccount.init( {accountIndex: config.accountIndex} );
+  
+  
+
 
 
   // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//
@@ -67,9 +78,8 @@ export const mintNft = async () => {
     "function safeMint(address _to)",
   ]);
 
-  // passing accountIndex is optional, by default it will be 0 
-  // it should match with the index used to initialise the SDK Biconomy Smart Account instance 
-  const scwAddress = await biconomySmartAccount.getSmartAccountAddress(config.accountIndex);
+
+  const scwAddress = await biconomySmartAccount.getAccountAddress();
 
   // Here we are minting NFT to smart account address itself
   const data = nftInterface.encodeFunctionData("safeMint", [scwAddress]);
@@ -93,19 +103,21 @@ export const mintNft = async () => {
   // Here it is meant to act as Sponsorship/Verifying paymaster hence we send mode: PaymasterMode.SPONSORED which is must  
   let paymasterServiceData: SponsorUserOperationDto = {
         mode: PaymasterMode.SPONSORED,
+        smartAccountInfo: {
+          name: 'BICONOMY',
+          version: '2.0.0'
+        },
         // optional params...
-        calculateGasLimits: true, // Always recommended when using paymaster
-        expiryDuration: 500, // 500 seconds
+        calculateGasLimits: true
     };
 
   try {
     const paymasterAndDataResponse =
       await biconomyPaymaster.getPaymasterAndData(
-        partialUserOp,
+        partialUserOp,                                                                                  
         paymasterServiceData
       );
       partialUserOp.paymasterAndData = paymasterAndDataResponse.paymasterAndData;
-
 
       if (
         paymasterAndDataResponse.callGasLimit &&
@@ -147,4 +159,17 @@ export const mintNft = async () => {
   } catch (e) {
     console.log("error received ", e);
   }
+
+  /*try {
+    const userOpResponse = await biconomySmartAccount.enableModule(DEFAULT_SESSION_KEY_MANAGER_MODULE);
+    console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
+    const transactionDetails = await userOpResponse.wait();
+    console.log(
+      chalk.blue(
+        `transactionDetails: ${JSON.stringify(transactionDetails, null, "\t")}`
+      )
+    );
+    } catch (e) {
+      console.log("error received ", e);
+    }*/
 };

@@ -1,12 +1,13 @@
 import { ethers } from "ethers";
-import chalk from "chalk";
+const chalk = require('chalk')
 import {
-  BiconomySmartAccount,
+  BiconomySmartAccountV2,
   DEFAULT_ENTRYPOINT_ADDRESS,
 } from "@biconomy/account";
 import { Bundler } from "@biconomy/bundler";
 import { BiconomyPaymaster } from "@biconomy/paymaster";
 import { Transaction, UserOperation } from "@biconomy/core-types";
+import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE } from "@biconomy/modules";
 import config from "../config.json";
 
 async function createBiconomyAccountInstance() {
@@ -27,6 +28,11 @@ async function createBiconomyAccountInstance() {
     strictMode: false // by default is true. If set to false, then paymaster and data is still sent as 0x and account will pay in native
   });
 
+  const ecdsaModule = await ECDSAOwnershipValidationModule.create({
+    signer: signer,
+    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
+  })
+
   // create biconomy smart account instance
   const biconomySmartAccountConfig = {
     signer: signer,
@@ -35,14 +41,18 @@ async function createBiconomyAccountInstance() {
     paymaster: paymaster, // optional
     bundler: bundler, // optional
     // nodeClientUrl: config.nodeClientUrl, // if needed to override
+    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+    defaultValidationModule: ecdsaModule,
+    activeValidationModule: ecdsaModule
   };
-  const biconomyAccount = new BiconomySmartAccount(biconomySmartAccountConfig);
-  const biconomySmartAccount = await biconomyAccount.init( {accountIndex: config.accountIndex} );
+  const biconomySmartAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
+  
+  console.log(biconomySmartAccount.accountAddress)
   return biconomySmartAccount;
 }
 
 async function sendUserOp(
-  biconomySmartAccount: BiconomySmartAccount,
+  biconomySmartAccount: BiconomySmartAccountV2,
   userOp: Partial<UserOperation>
 ) {
   console.log(chalk.blue(`userOp: ${JSON.stringify(userOp, null, "\t")}`));

@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
 const { ERC20ABI } = require('../abi')
-import chalk from "chalk";
+const chalk = require('chalk')
 import {
-    BiconomySmartAccount,
+    BiconomySmartAccountV2,
     DEFAULT_ENTRYPOINT_ADDRESS,
   } from "@biconomy/account";
   import { Bundler } from "@biconomy/bundler";
@@ -13,6 +13,7 @@ import {
   SponsorUserOperationDto,
 } from "@biconomy/paymaster";
 import config from "../../config.json";
+import { DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, ECDSAOwnershipValidationModule, MultiChainValidationModule } from "@biconomy/modules";
 
 export const erc20Transfer = async (
     recipientAddress: string,
@@ -47,6 +48,11 @@ export const erc20Transfer = async (
     strictMode: false 
   });
 
+  const ecdsaModule = await ECDSAOwnershipValidationModule.create({
+    signer: signer,
+    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
+  })
+
   // Biconomy smart account config
   // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use 
   const biconomySmartAccountConfig = {
@@ -55,13 +61,15 @@ export const erc20Transfer = async (
     rpcUrl: config.rpcUrl,
     paymaster: paymaster, 
     bundler: bundler, 
+    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+    defaultValidationModule: ecdsaModule,
+    activeValidationModule: ecdsaModule
   };
 
   // create biconomy smart account instance
-  const biconomyAccount = new BiconomySmartAccount(biconomySmartAccountConfig);
+  const biconomySmartAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
 
-  // passing accountIndex is optional, by default it will be 0. You may use different indexes for generating multiple counterfactual smart accounts for the same user
-  const biconomySmartAccount = await biconomyAccount.init( {accountIndex: config.accountIndex} );
+  
 
 
   // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//

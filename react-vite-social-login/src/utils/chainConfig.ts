@@ -19,7 +19,7 @@ export const getRPCProvider = (chainId: number) => {
     case 5:
       return "https://eth-goerli.alchemyapi.io/v2/lmW2og_aq-OXWKYRoRu-X6Yl6wDQYt_2";
     case 80001:
-      return "https://polygon-mumbai.g.alchemy.com/v2/Q4WqQVxhEEmBYREX22xfsS2-s5EXWD31";
+      return "https://polygon-testnet.public.blastapi.io";
     case 137:
       return "https://polygon-mainnet.g.alchemy.com/v2/6Tn--QDkp1vRBXzRV3Cc8fLXayr5Yoij";
     default:

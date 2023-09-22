@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
-import chalk from "chalk";
+const chalk = require('chalk')
 import inquirer from "inquirer";
 import {
-    BiconomySmartAccount,
+    BiconomySmartAccountV2,
     DEFAULT_ENTRYPOINT_ADDRESS,
   } from "@biconomy/account";
   import { Bundler } from "@biconomy/bundler";
@@ -14,6 +14,7 @@ import {
   SponsorUserOperationDto,
 } from "@biconomy/paymaster";
 import config from "../../config.json";
+import { DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, ECDSAOwnershipValidationModule, MultiChainValidationModule } from "@biconomy/modules";
 
 export const nativeTransferPayERC20 = async (
     to: string,
@@ -40,6 +41,11 @@ export const nativeTransferPayERC20 = async (
     paymasterUrl: config.biconomyPaymasterUrl
   });
 
+  const ecdsaModule = await ECDSAOwnershipValidationModule.create({
+    signer: signer,
+    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
+  })
+
   // Biconomy smart account config
   // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use 
   const biconomySmartAccountConfig = {
@@ -48,13 +54,15 @@ export const nativeTransferPayERC20 = async (
     rpcUrl: config.rpcUrl,
     paymaster: paymaster, 
     bundler: bundler, 
+    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+    defaultValidationModule: ecdsaModule,
+    activeValidationModule: ecdsaModule
   };
 
   // create biconomy smart account instance
-  const biconomyAccount = new BiconomySmartAccount(biconomySmartAccountConfig);
+  const biconomySmartAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
 
-  // passing accountIndex is optional, by default it will be 0. You may use different indexes for generating multiple counterfactual smart accounts for the same user
-  const biconomySmartAccount = await biconomyAccount.init( {accountIndex: config.accountIndex} );
+  
 
 
 
@@ -141,8 +149,7 @@ export const nativeTransferPayERC20 = async (
   let paymasterServiceData = {
       mode: PaymasterMode.ERC20, // - mandatory // now we know chosen fee token and requesting paymaster and data for it
       feeTokenAddress: selectedFeeQuote.tokenAddress,
-      // optional params..
-      calculateGasLimits: true, // Always recommended and especially when using token paymaster
+      calculateGasLimits: true, // - optional by default false
     };
 
   try{
@@ -169,7 +176,7 @@ export const nativeTransferPayERC20 = async (
         paymasterAndDataWithLimits.verificationGasLimit;
       finalUserOp.preVerificationGas =
         paymasterAndDataWithLimits.preVerificationGas;
-    }
+    } 
   } catch (e) {
     console.log("error received ", e);
   }
