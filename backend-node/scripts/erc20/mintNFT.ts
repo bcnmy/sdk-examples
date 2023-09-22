@@ -157,7 +157,8 @@ export const mintNftPayERC20 = async () => {
   let paymasterServiceData = {
       mode: PaymasterMode.ERC20, // - mandatory // now we know chosen fee token and requesting paymaster and data for it
       feeTokenAddress: selectedFeeQuote.tokenAddress,
-      calculateGasLimits: true, // - optional by default false
+      // optional params..
+      calculateGasLimits: true, // Always recommended and especially when using token paymaster
     };
 
   try{

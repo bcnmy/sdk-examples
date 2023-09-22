@@ -147,7 +147,8 @@ export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
   let paymasterServiceData = {
     mode: PaymasterMode.ERC20, // - mandatory // now we know chosen fee token and requesting paymaster and data for it
     feeTokenAddress: selectedFeeQuote.tokenAddress,
-    // calculateGasLimits: true, // - optional by default false
+    // optional params...
+    calculateGasLimits: true, // Always recommended when using paymaster
   };
 
   try{
@@ -159,7 +160,7 @@ export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
     finalUserOp.paymasterAndData = paymasterAndDataWithLimits.paymasterAndData;
 
     // below code is only needed if you sent the glaf calculateGasLimits = true
-    /*if (
+    if (
       paymasterAndDataWithLimits.callGasLimit &&
       paymasterAndDataWithLimits.verificationGasLimit &&
       paymasterAndDataWithLimits.preVerificationGas
@@ -174,7 +175,7 @@ export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
         paymasterAndDataWithLimits.verificationGasLimit;
       finalUserOp.preVerificationGas =
         paymasterAndDataWithLimits.preVerificationGas;
-    }*/ 
+    }
 
     
   } catch (e) {

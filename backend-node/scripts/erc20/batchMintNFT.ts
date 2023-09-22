@@ -163,10 +163,13 @@ export const batchMintNftPayERC20 = async () => {
   let paymasterServiceData = {
       mode: PaymasterMode.ERC20, // - mandatory // now we know chosen fee token and requesting paymaster and data for it
       feeTokenAddress: selectedFeeQuote.tokenAddress,
+
+      // optional params..
+
       // - optional by default false
       // This flag tells the paymaster service to calculate gas limits for the userOp
       // since at this point callData is updated callGasLimit may change and based on paymaster to be used verification gas limit may change
-      calculateGasLimits: true, 
+      calculateGasLimits: true, // Always recommended and especially when using token paymaster
     };
 
   try{

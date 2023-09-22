@@ -119,7 +119,6 @@ export const batchMintNft = async () => {
       );
       partialUserOp.paymasterAndData = paymasterAndDataResponse.paymasterAndData;
 
-
       if (
         paymasterAndDataResponse.callGasLimit &&
         paymasterAndDataResponse.verificationGasLimit &&
