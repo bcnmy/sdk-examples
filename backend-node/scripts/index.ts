@@ -14,6 +14,7 @@ import { batchMintNftPayERC20 } from "./erc20/batchMintNFT";
 import { batchMintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/batchMintNFT";
 import { mintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/mintNFT";
 import { multiChainMint } from "./gasless/multiChainSend.ts";
+import { upgradeAndMintNft } from "./gasless/upgradeV1toV2.ts";
 
 yargs
   .scriptName(chalk.green("smartAccount"))
@@ -157,6 +158,22 @@ yargs
       else {
         mintNft();
       }
+    }
+  )
+  .command(
+    "upgradeScript",
+    chalk.blue("Upgrade V1 to V2"),
+    {
+      mode: {
+        describe: chalk.cyan("Paymaster mode"),
+        demandOption: false,
+        type: "string",
+      },
+    },
+    (argv) => {
+      console.log(chalk.magenta("Minting an NFT token to the SmartAccountV2 after upgrade..."));
+        upgradeAndMintNft();
+
     }
   )
   .command(
