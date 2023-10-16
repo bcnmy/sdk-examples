@@ -36,7 +36,7 @@ export const mintNft = async () => {
     paymasterUrl: config.biconomyPaymasterUrl
   });
 
-  const module = new ECDSAOwnershipValidationModule({
+  const module = await ECDSAOwnershipValidationModule.create({
     signer: signer,
     moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
   })
@@ -54,7 +54,7 @@ export const mintNft = async () => {
   };
 
   // create biconomy smart account instance
-  const biconomyAccount = new BiconomySmartAccountV2(biconomySmartAccountConfig);
+  const biconomyAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
 
   // passing accountIndex is optional, by default it will be 0. You may use different indexes for generating multiple counterfactual smart accounts for the same user
   const biconomySmartAccount = await biconomyAccount.init();
@@ -105,7 +105,7 @@ export const mintNft = async () => {
         mode: PaymasterMode.SPONSORED,
         smartAccountInfo: {
           name: 'BICONOMY',
-          version: '3.0.0'
+          version: '2.0.0'
         },
         // optional params...
         calculateGasLimits: true
