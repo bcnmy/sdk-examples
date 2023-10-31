@@ -17,7 +17,7 @@ import config from "../../config.json";
 import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, DEFAULT_SESSION_KEY_MANAGER_MODULE  } from "@biconomy/modules";
 import { UserOperation } from "@biconomy/core-types";
 
-const numOfParallelUserOps = 3;
+const numOfParallelUserOps = config.numOfParallelUserOps;
 
 export const parallelUserOpsMintNFTPayERC20 = async () => {
   // ------------------------STEP 1: Initialise Biconomy Smart Account SDK--------------------------------//  
