@@ -195,14 +195,19 @@ export const parallelUserOpsMintNFTPayERC20 = async () => {
   // and also send the full op to attached bundler instance
 
   try {
-    let userOpResponses = [];
+    let userOpResponsePromises = [];
+    /**
+     * Will shuffle userOps here based on a random logic and send them randomly
+     */
+    const shuffledPartialUserOps = partialUserOps.sort(() => Math.random() - 0.5);
     for (let index = 0; index < numOfParallelUserOps; index++) {
-      console.log(chalk.blue(`userOp: ${JSON.stringify(finalUserOps[index], null, "\t")}`));
-      console.log(chalk.blue(`userOp nonce being sent to bundler: ${JSON.stringify(Number(partialUserOps[index].nonce), null, "\t")}`))
-      const userOpResponse = await biconomySmartAccount.sendUserOp(finalUserOps[index]);
-      console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
-      userOpResponses.push(userOpResponse);
+      console.log(chalk.blue(`userOp: ${JSON.stringify(shuffledPartialUserOps[index], null, "\t")}`));
+      console.log(chalk.blue(`userOp nonce being sent to bundler: ${JSON.stringify(Number(shuffledPartialUserOps[index].nonce), null, "\t")}`))
+      const userOpResponsePromise = biconomySmartAccount.sendUserOp(shuffledPartialUserOps[index]);
+      userOpResponsePromises.push(userOpResponsePromise)
     }
+
+    const userOpResponses = await Promise.all(userOpResponsePromises);
 
     for (let index = 0; index < numOfParallelUserOps; index++) {
       const transactionDetails = await userOpResponses[index].wait();
