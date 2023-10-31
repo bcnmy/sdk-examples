@@ -8,7 +8,9 @@ import { nativeTransferPayERC20 } from "./erc20/nativeTransfer";
 import { erc20Transfer } from "./gasless/erc20Transfer";
 import { erc20TransferPayERC20 } from "./erc20/erc20Transfer";
 import { mintNft } from "./gasless/mintNFT";
+import { parallelUserOpsMintNft } from "./gasless/parallelUserOpsMintNFT.ts"
 import { mintNftPayERC20 } from "./erc20/mintNFT";
+import { parallelUserOpsMintNFTPayERC20 } from './erc20/parallelUserOpsMintNFT.ts';
 import { batchMintNft } from "./gasless/batchMintNFT";
 import { batchMintNftPayERC20 } from "./erc20/batchMintNFT";
 import { batchMintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/batchMintNFT";
@@ -153,6 +155,10 @@ yargs
       }
       else if(argv.mode === "HYBRID") {
         mintNftTrySponsorshipOtherwisePayERC20();
+      } else if (argv.mode === "TOKEN_PARALLEL_USER_OP") {
+        parallelUserOpsMintNFTPayERC20();
+      } else if (argv.mode === "PARALLEL_USER_OP") {
+        parallelUserOpsMintNft()
       }
       else {
         mintNft();
