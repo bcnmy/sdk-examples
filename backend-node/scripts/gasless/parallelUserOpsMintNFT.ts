@@ -15,7 +15,7 @@ import {
 import config from "../../config.json";
 import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, DEFAULT_SESSION_KEY_MANAGER_MODULE  } from "@biconomy/modules";
 
-const numOfParallelUserOps = 3;
+const numOfParallelUserOps = config.numOfParallelUserOps;
 
 export const parallelUserOpsMintNft = async () => {
 
