@@ -157,7 +157,7 @@ yargs
         mintNftTrySponsorshipOtherwisePayERC20();
       } else if (argv.mode === "TOKEN_PARALLEL_USER_OPS") {
         parallelUserOpsMintNFTPayERC20();
-      } else if (argv.mode === "PARALLEL_USER_OS") {
+      } else if (argv.mode === "PARALLEL_USER_OPS") {
         parallelUserOpsMintNft()
       }
       else {
