@@ -26,6 +26,9 @@ yarn run smartAccount address
 yarn run smartAccount mint
 yarn run smartAccount batchMint
 
+## Gasless - Sponsorship Paymaster to send parallel userOps
+yarn run smartAccount mint --mode=PARALLEL_USER_OPS
+
 # replace the receiver below
 yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=0.001
 
@@ -36,6 +39,10 @@ yarn run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567
 
 yarn run smartAccount mint --mode=TOKEN
 yarn run smartAccount batchMint --mode=TOKEN
+
+## ERC20 - Token Paymaster to send parallel userOps
+
+yarn run smartAccount mint --mode=PARALLEL_USER_OPS
 
 # replace the receiver below
 yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=0.001 --mode=TOKEN
