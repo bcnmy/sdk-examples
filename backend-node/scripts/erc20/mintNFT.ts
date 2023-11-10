@@ -53,7 +53,8 @@ export const mintNftPayERC20 = async () => {
     bundler: bundler, 
     entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
     defaultValidationModule: ecdsaModule,
-    activeValidationModule: ecdsaModule
+    activeValidationModule: ecdsaModule,
+    scanForUpgradedAccountsFromV1: true
   };
 
   // create biconomy smart account instance

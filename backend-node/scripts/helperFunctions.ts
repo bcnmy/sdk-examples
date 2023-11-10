@@ -43,11 +43,11 @@ async function createBiconomyAccountInstance() {
     // nodeClientUrl: config.nodeClientUrl, // if needed to override
     entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
     defaultValidationModule: ecdsaModule,
-    activeValidationModule: ecdsaModule
+    activeValidationModule: ecdsaModule,
+    scanForUpgradedAccountsFromV1: true,
+    maxIndexForScan: 5
   };
   const biconomySmartAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
-  
-  console.log(biconomySmartAccount.accountAddress)
   return biconomySmartAccount;
 }
 

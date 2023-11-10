@@ -53,7 +53,9 @@ export const mintNft = async () => {
     bundler: bundler, 
     entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
     defaultValidationModule: ecdsaModule,
-    activeValidationModule: ecdsaModule
+    activeValidationModule: ecdsaModule,
+    scanForUpgradedAccountsFromV1: true,
+    maxIndexForScan: 5
   };
 
   // create biconomy smart account instance
