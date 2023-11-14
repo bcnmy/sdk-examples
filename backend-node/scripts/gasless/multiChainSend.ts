@@ -4,16 +4,16 @@ const chalk = require('chalk')
 import {
     BiconomySmartAccountV2,
     DEFAULT_ENTRYPOINT_ADDRESS,
-  } from "@biconomy/account";
-  import { Bundler } from "@biconomy/bundler";
-  import { BiconomyPaymaster } from "@biconomy/paymaster";
+  } from "@biconomy-devx/account";
+  import { Bundler } from "@biconomy-devx/bundler";
+  import { BiconomyPaymaster } from "@biconomy-devx/paymaster";
 import {
   IHybridPaymaster,
   PaymasterMode,
   SponsorUserOperationDto,
-} from "@biconomy/paymaster";
+} from "@biconomy-devx/paymaster";
 import config from "../../config.json";
-import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE } from "@biconomy/modules";
+import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE } from "@biconomy-devx/modules";
 
 export const multiChainMint = async () => {
 

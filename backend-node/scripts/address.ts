@@ -1,10 +1,10 @@
 const chalk = require("chalk");
-import { BiconomySmartAccountV2, DEFAULT_ENTRYPOINT_ADDRESS } from "@biconomy/account";
+import { BiconomySmartAccountV2, DEFAULT_ENTRYPOINT_ADDRESS } from "@biconomy-devx/account";
 import config from "../config.json";
 import { ethers } from "ethers";
-import { Bundler } from "@biconomy/bundler";
-import { BiconomyPaymaster } from "@biconomy/paymaster";
-import { DEFAULT_ECDSA_OWNERSHIP_MODULE, ECDSAOwnershipValidationModule } from "@biconomy/modules";
+import { Bundler } from "@biconomy-devx/bundler";
+import { BiconomyPaymaster } from "@biconomy-devx/paymaster";
+import { DEFAULT_ECDSA_OWNERSHIP_MODULE, ECDSAOwnershipValidationModule } from "@biconomy-devx/modules";
 
 export async function getAddress() {
   // get EOA address from wallet provider

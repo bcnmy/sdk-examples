@@ -4,20 +4,20 @@ import inquirer from "inquirer";
 import {
   BiconomySmartAccountV2,
   DEFAULT_ENTRYPOINT_ADDRESS,
-} from "@biconomy/account";
-import { Bundler } from "@biconomy/bundler";
-import { BiconomyPaymaster } from "@biconomy/paymaster";
+} from "@biconomy-devx/account";
+import { Bundler } from "@biconomy-devx/bundler";
+import { BiconomyPaymaster } from "@biconomy-devx/paymaster";
 import {
   IHybridPaymaster,
   PaymasterFeeQuote,
   PaymasterMode,
   SponsorUserOperationDto,
-} from "@biconomy/paymaster";
+} from "@biconomy-devx/paymaster";
 import config from "../../config.json";
 import {
   ECDSAOwnershipValidationModule,
   DEFAULT_ECDSA_OWNERSHIP_MODULE,
-} from "@biconomy/modules";
+} from "@biconomy-devx/modules";
 
 export const mintNftPayERC20 = async () => {
   // ------------------------STEP 1: Initialise Biconomy Smart Account SDK--------------------------------//
@@ -77,7 +77,11 @@ export const mintNftPayERC20 = async () => {
   };
 
   // build partial userOp
-  let partialUserOp = await biconomySmartAccount.buildUserOp([transaction]);
+  let partialUserOp = await biconomySmartAccount.buildUserOp([transaction], {
+    paymasterServiceData: {
+      mode: PaymasterMode.ERC20,
+    },
+  });
   let finalUserOp = partialUserOp;
 
   // ------------------------STEP 3: Get Fee quotes (for ERC20 payment) from the paymaster and ask the user to select one--------------------------------//

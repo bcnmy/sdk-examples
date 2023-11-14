@@ -3,14 +3,14 @@ const chalk = require("chalk");
 import {
   BiconomySmartAccountV2,
   DEFAULT_ENTRYPOINT_ADDRESS,
-} from "@biconomy/account";
-import { Bundler, UserOpStatus } from "@biconomy/bundler";
-import { BiconomyPaymaster } from "@biconomy/paymaster";
-import { PaymasterMode } from "@biconomy/paymaster";
+} from "@biconomy-devx/account";
+import { Bundler, UserOpStatus } from "@biconomy-devx/bundler";
+import { BiconomyPaymaster } from "@biconomy-devx/paymaster";
+import { PaymasterMode } from "@biconomy-devx/paymaster";
 import {
   ECDSAOwnershipValidationModule,
   DEFAULT_ECDSA_OWNERSHIP_MODULE,
-} from "@biconomy/modules";
+} from "@biconomy-devx/modules";
 import config from "../../config.json";
 
 export const batchMintNft = async () => {

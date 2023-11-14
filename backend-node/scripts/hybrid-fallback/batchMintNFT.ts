@@ -5,17 +5,17 @@ import {
     BiconomySmartAccount,
     BiconomySmartAccountV2,
     DEFAULT_ENTRYPOINT_ADDRESS,
-  } from "@biconomy/account";
-  import { Bundler } from "@biconomy/bundler";
-  import { BiconomyPaymaster } from "@biconomy/paymaster";
+  } from "@biconomy-devx/account";
+  import { Bundler } from "@biconomy-devx/bundler";
+  import { BiconomyPaymaster } from "@biconomy-devx/paymaster";
 import {
   IHybridPaymaster,
   PaymasterFeeQuote,
   PaymasterMode,
   SponsorUserOperationDto,
-} from "@biconomy/paymaster";
+} from "@biconomy-devx/paymaster";
 import config from "../../config.json";
-import { DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, ECDSAOwnershipValidationModule, MultiChainValidationModule } from "@biconomy/modules";
+import { DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, ECDSAOwnershipValidationModule, MultiChainValidationModule } from "@biconomy-devx/modules";
 
 export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
   // ------------------------STEP 1: Initialise Biconomy Smart Account SDK--------------------------------//  
