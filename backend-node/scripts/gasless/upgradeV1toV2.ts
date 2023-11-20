@@ -160,7 +160,8 @@ export const upgradeAndMintNft = async () => {
     entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
     defaultValidationModule: ecdsaModule,
     activeValidationModule: ecdsaModule,
-    senderAddress: await biconomySmartAccount.getSmartAccountAddress(config.accountIndex)
+    // senderAddress: await biconomySmartAccount.getSmartAccountAddress(config.accountIndex) // since senderAddress is known from V1 instance!
+    scanForUpgradedAccountsFromV1: true,
   };
 
   // create biconomy smart account instance
