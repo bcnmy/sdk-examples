@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
-const { ERC20ABI } = require('../abi')
 const chalk = require('chalk')
+
 import {
     BiconomySmartAccountV2,
     DEFAULT_ENTRYPOINT_ADDRESS,
@@ -13,13 +13,9 @@ import {
   SponsorUserOperationDto,
 } from "@biconomy/paymaster";
 import config from "../../config.json";
-import { DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, ECDSAOwnershipValidationModule, MultiChainValidationModule } from "@biconomy/modules";
+import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, DEFAULT_SESSION_KEY_MANAGER_MODULE  } from "@biconomy/modules";
 
-export const erc20Transfer = async (
-    recipientAddress: string,
-    amount: number,
-    tokenAddress: string
-  ) => {
+export const mintNftNoPaymaster = async () => {
 
   // ------------------------STEP 1: Initialise Biconomy Smart Account SDK--------------------------------//  
 
@@ -36,16 +32,8 @@ export const erc20Transfer = async (
     entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
   });
 
-  // In this script we're going to make use of strictMode flag in the paymaster
-  
-  // by default is true. 
-  // If set to false, and if your policies fail (token address that is not registered on the dashboard in this case) 
-  // then paymaster and data is still sent as 0x and account will pay in native
-  // Note: that your smart account needs have some native token for this kind of fallback otherwise you will receive AA21 error
- 
   const paymaster = new BiconomyPaymaster({
-    paymasterUrl: config.biconomyPaymasterUrl,
-    strictMode: false 
+    paymasterUrl: config.biconomyPaymasterUrl
   });
 
   const ecdsaModule = await ECDSAOwnershipValidationModule.create({
@@ -70,34 +58,36 @@ export const erc20Transfer = async (
   const biconomySmartAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
 
   
+  
+
 
 
   // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//
 
   
-  // Transfer ERC20
+  // mint NFT
   // Please note that for sponsorship, policies have to be added on the Biconomy dashboard https://dashboard.biconomy.io/
-  // in this case it will be whitelisting token contract and method transfer()
+  // in this case it will be whitelisting NFT contract and method safeMint()
 
   // 1. for native token transfer no policy is required. you may add a webhook to have custom control over this
   // 2. If no policies are added every transaction will be sponsored by your paymaster
-  // 3. If you add policies, then only transactions that match the policy will be sponsored by your paymaster - (if optional strictMode is not false in paymaster config)
+  // 3. If you add policies, then only transactions that match the policy will be sponsored by your paymaster
 
-  // generate ERC20 transfer data
-  // Encode an ERC-20 token transfer to recipient of the specified amount
-  const readProvider = new ethers.providers.JsonRpcProvider(config.rpcUrl)
-  const tokenContract = new ethers.Contract(tokenAddress, ERC20ABI, readProvider)
-  let decimals = 18
-  try {
-    decimals = await tokenContract.decimals()
-  } catch (error) {
-    throw new Error('invalid token address supplied')
-  }
-  const amountGwei = ethers.utils.parseUnits(amount.toString(), decimals)
-  const data = (await tokenContract.populateTransaction.transfer(recipientAddress, amountGwei)).data
+  // generate mintNft data
+  const nftInterface = new ethers.utils.Interface([
+    "function safeMint(address _to)",
+  ]);
+
+
+  const scwAddress = await biconomySmartAccount.getAccountAddress();
+
+  // Here we are minting NFT to smart account address itself
+  const data = nftInterface.encodeFunctionData("safeMint", [scwAddress]);
+
+  const nftAddress = "0x1758f42Af7026fBbB559Dc60EcE0De3ef81f665e"; // Todo // use from config
   const transaction = {
-    to: tokenAddress,
-    data,
+    to: nftAddress,
+    data: data,
   };
 
   // build partial userOp
@@ -113,14 +103,18 @@ export const erc20Transfer = async (
   // Here it is meant to act as Sponsorship/Verifying paymaster hence we send mode: PaymasterMode.SPONSORED which is must  
   let paymasterServiceData: SponsorUserOperationDto = {
         mode: PaymasterMode.SPONSORED,
+        smartAccountInfo: {
+          name: 'BICONOMY',
+          version: '2.0.0'
+        },
         // optional params...
-        calculateGasLimits: true, // Always recommended when using paymaster
+        calculateGasLimits: true
     };
 
   try {
     const paymasterAndDataResponse =
       await biconomyPaymaster.getPaymasterAndData(
-        partialUserOp,
+        partialUserOp,                                                                                  
         paymasterServiceData
       );
       partialUserOp.paymasterAndData = paymasterAndDataResponse.paymasterAndData;
