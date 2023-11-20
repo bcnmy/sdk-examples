@@ -12,6 +12,7 @@ import {
   DEFAULT_ECDSA_OWNERSHIP_MODULE,
 } from "@biconomy/modules";
 import config from "../../config.json";
+import { getBasePaymasterAndData } from "./utils/basePaymaster";
 
 export const mintNft = async () => {
   // ------------------------STEP 1: Initialise Biconomy Smart Account SDK--------------------------------//
@@ -85,9 +86,10 @@ export const mintNft = async () => {
   console.time("before Build userOp to transaction mined:");
   console.time("buildUserOp:");
   let partialUserOp = await biconomySmartAccount.buildUserOp([transaction], {
-    paymasterServiceData: {
+    /*paymasterServiceData: {
       mode: PaymasterMode.SPONSORED,
-    },
+    }*/
+    skipBundlerGasEstimation: false
   });
   console.timeEnd("buildUserOp:");
 
@@ -102,7 +104,12 @@ export const mintNft = async () => {
   try {
     console.time("sendUserOp");
 
-    const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp);
+    // populate pnd
+
+    const pnd = await getBasePaymasterAndData(partialUserOp, config.chainId);
+    console.log('pnd', pnd);
+
+    const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp, {simulationType: 'validation_and_execution'});
     console.timeEnd("sendUserOp");
     console.time("wait1");
     // strict types
