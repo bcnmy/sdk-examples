@@ -84,17 +84,31 @@ export const mintNftPayERC20 = async () => {
     data: data,
   };
 
-  // build partial userOp 
-  let partialUserOp = await biconomySmartAccount.buildUserOp([transaction]);
+  // buildUserOperation
+  // transaction or list of transactions 
+  let partialUserOp = await biconomySmartAccount.buildUserOp([transaction], {skipBundlerGasEstimation: false});
 
   let finalUserOp = partialUserOp;
+
+  // Above step bundler would have already estimated gas using dummy signature. At this point paymaster is unknown
+
+  // using dummy signature and dummy pnd (if known) then gas could be estimated again
+
+  const dummySignature = await biconomySmartAccount.getDummySignature();
+  // to be returned by the snap/account
+  console.log('dummySignature', dummySignature)
+
+  const dummyPnd = await biconomySmartAccount.getDummyPaymasterData();
+  // Here it is expected to be returned by the snap
+  console.log('dummyPnd', dummyPnd)
+
+  // Step 8
+  // const estimated = await biconomySmartAccount.estimateUserOpGas({userOp: partialUserOp})
 
 
 
 
   // ------------------------STEP 3: Get Fee quotes (for ERC20 payment) from the paymaster and ask the user to select one--------------------------------//
-
-
 
 
   const biconomyPaymaster =
@@ -131,6 +145,8 @@ export const mintNftPayERC20 = async () => {
   const selectedFeeQuote = feeQuotes[selectedOption];
 
 
+  // updateUserOperation : A
+  // Adding the token approval transaction and updating the userop
 
 
   // ------------------------STEP 3: Once you have selected feeQuote (use has chosen token to pay with) get updated userOp which checks for paymaster approval and appends approval tx--------------------------------//
@@ -153,6 +169,7 @@ export const mintNftPayERC20 = async () => {
 
 
 
+  // updateUserOperation : B
 
   let paymasterServiceData = {
       mode: PaymasterMode.ERC20, // - mandatory // now we know chosen fee token and requesting paymaster and data for it
@@ -190,8 +207,10 @@ export const mintNftPayERC20 = async () => {
     console.log("error received ", e);
   }
 
+  // Notice above that the paymaster estimates gas values again! 
 
 
+  // signUserOperation
 
   // ------------------------STEP 5: Sign the UserOp and send to the Bundler--------------------------------//
 
@@ -204,7 +223,13 @@ export const mintNftPayERC20 = async () => {
   // and also send the full op to attached bundler instance
 
   try {
-  const userOpResponse = await biconomySmartAccount.sendUserOp(finalUserOp);
+  const signedUserOperation = await biconomySmartAccount.signUserOp(finalUserOp);
+
+  console.log(chalk.blue(`signedUserOperation: ${JSON.stringify(signedUserOperation, null, "\t")}`));
+  
+  // sendUserOperation
+
+  const userOpResponse = await biconomySmartAccount.sendSignedUserOp(signedUserOperation);
   console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
   const transactionDetails = await userOpResponse.wait();
   console.log(

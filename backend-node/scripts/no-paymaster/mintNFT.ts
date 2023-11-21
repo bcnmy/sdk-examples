@@ -90,56 +90,32 @@ export const mintNftNoPaymaster = async () => {
     data: data,
   };
 
-  // build partial userOp
-  let partialUserOp = await biconomySmartAccount.buildUserOp([transaction]);
+  // Build User Operation
+  // transaction or list of transactions 
+  let partialUserOp = await biconomySmartAccount.buildUserOp([transaction], {skipBundlerGasEstimation: false});
 
 
-  // ------------------------STEP 3: Get Paymaster and Data from Biconomy Paymaster --------------------------------//
+  // Above step bundler would have already estimated gas using dummy signature. At this point paymaster is unknown
+
+  // using dummy signature and dummy pnd (if known) then gas could be estimated again
+
+  const dummySignature = await biconomySmartAccount.getDummySignature();
+  // to be returned by the snap/account
+  console.log('dummySignature', dummySignature)
+
+  const dummyPnd = await biconomySmartAccount.getDummyPaymasterData();
+  // Here it is expected to be returned by the snap
+  console.log('dummyPnd', dummyPnd)
+
+  // Step 8
+  // const estimated = await biconomySmartAccount.estimateUserOpGas({userOp: partialUserOp})
 
 
-  const biconomyPaymaster =
-    biconomySmartAccount.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
 
-  // Here it is meant to act as Sponsorship/Verifying paymaster hence we send mode: PaymasterMode.SPONSORED which is must  
-  let paymasterServiceData: SponsorUserOperationDto = {
-        mode: PaymasterMode.SPONSORED,
-        smartAccountInfo: {
-          name: 'BICONOMY',
-          version: '2.0.0'
-        },
-        // optional params...
-        calculateGasLimits: true
-    };
+  // Notice above that the paymaster estimates gas values again! 
 
-  try {
-    const paymasterAndDataResponse =
-      await biconomyPaymaster.getPaymasterAndData(
-        partialUserOp,                                                                                  
-        paymasterServiceData
-      );
-      partialUserOp.paymasterAndData = paymasterAndDataResponse.paymasterAndData;
+  // signUserOperation
 
-      if (
-        paymasterAndDataResponse.callGasLimit &&
-        paymasterAndDataResponse.verificationGasLimit &&
-        paymasterAndDataResponse.preVerificationGas
-      ) {
-  
-        // Returned gas limits must be replaced in your op as you update paymasterAndData.
-        // Because these are the limits paymaster service signed on to generate paymasterAndData
-        // If you receive AA34 error check here..   
-  
-        partialUserOp.callGasLimit = paymasterAndDataResponse.callGasLimit;
-        partialUserOp.verificationGasLimit =
-        paymasterAndDataResponse.verificationGasLimit;
-        partialUserOp.preVerificationGas =
-        paymasterAndDataResponse.preVerificationGas;
-      }
-  } catch (e) {
-    console.log("error received ", e);
-  }
-
-  
   // ------------------------STEP 4: Sign the UserOp and send to the Bundler--------------------------------//
 
   console.log(chalk.blue(`userOp: ${JSON.stringify(partialUserOp, null, "\t")}`));
@@ -148,7 +124,14 @@ export const mintNftNoPaymaster = async () => {
   // and also send the full op to attached bundler instance
 
   try {
-  const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp);
+  const signedUserOperation = await biconomySmartAccount.signUserOp(partialUserOp);
+
+  console.log(chalk.blue(`signedUserOperation: ${JSON.stringify(signedUserOperation, null, "\t")}`));
+
+  // sendUserOperation
+
+  const userOpResponse = await biconomySmartAccount.sendSignedUserOp(signedUserOperation);
+
   console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
   const transactionDetails = await userOpResponse.wait();
   console.log(

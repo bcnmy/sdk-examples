@@ -90,10 +90,28 @@ export const mintNft = async () => {
     data: data,
   };
 
-  // build partial userOp
-  let partialUserOp = await biconomySmartAccount.buildUserOp([transaction]);
+  // Build User Operation
+  // transaction or list of transactions 
+  let partialUserOp = await biconomySmartAccount.buildUserOp([transaction], {skipBundlerGasEstimation: false});
 
 
+  // Above step bundler would have already estimated gas using dummy signature. At this point paymaster is unknown
+
+  // using dummy signature and dummy pnd (if known) then gas could be estimated again
+
+  const dummySignature = await biconomySmartAccount.getDummySignature();
+  // to be returned by the snap/account
+  console.log('dummySignature', dummySignature)
+
+  const dummyPnd = await biconomySmartAccount.getDummyPaymasterData();
+  // Here it is expected to be returned by the snap
+  console.log('dummyPnd', dummyPnd)
+
+  // Step 8
+  // const estimated = await biconomySmartAccount.estimateUserOpGas({userOp: partialUserOp})
+
+
+  // updateUserOperation()
   // ------------------------STEP 3: Get Paymaster and Data from Biconomy Paymaster --------------------------------//
 
 
@@ -139,7 +157,10 @@ export const mintNft = async () => {
     console.log("error received ", e);
   }
 
-  
+  // Notice above that the paymaster estimates gas values again! 
+
+  // signUserOperation
+
   // ------------------------STEP 4: Sign the UserOp and send to the Bundler--------------------------------//
 
   console.log(chalk.blue(`userOp: ${JSON.stringify(partialUserOp, null, "\t")}`));
@@ -148,7 +169,14 @@ export const mintNft = async () => {
   // and also send the full op to attached bundler instance
 
   try {
-  const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp);
+  const signedUserOperation = await biconomySmartAccount.signUserOp(partialUserOp);
+
+  console.log(chalk.blue(`signedUserOperation: ${JSON.stringify(signedUserOperation, null, "\t")}`));
+
+  // sendUserOperation
+
+  const userOpResponse = await biconomySmartAccount.sendSignedUserOp(signedUserOperation);
+
   console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
   const transactionDetails = await userOpResponse.wait();
   console.log(
@@ -159,17 +187,4 @@ export const mintNft = async () => {
   } catch (e) {
     console.log("error received ", e);
   }
-
-  /*try {
-    const userOpResponse = await biconomySmartAccount.enableModule(DEFAULT_SESSION_KEY_MANAGER_MODULE);
-    console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
-    const transactionDetails = await userOpResponse.wait();
-    console.log(
-      chalk.blue(
-        `transactionDetails: ${JSON.stringify(transactionDetails, null, "\t")}`
-      )
-    );
-    } catch (e) {
-      console.log("error received ", e);
-    }*/
 };
