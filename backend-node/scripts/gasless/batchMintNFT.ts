@@ -85,9 +85,11 @@ export const batchMintNft = async () => {
   console.time("before Build userOp to transaction mined:");
   console.time("buildUserOp:");
   let partialUserOp = await biconomySmartAccount.buildUserOp([transaction, transaction], {
+    // If we are sure to use sponsorship paymaster and for Biconomy Account V2 then pass mode like this below.
     paymasterServiceData: {
       mode: PaymasterMode.SPONSORED,
     },
+    // skipBundlerGasEstimation: false, // true by default as if the paymaster is present gas estimations are done on the paymaster
   });
   console.timeEnd("buildUserOp:");
 

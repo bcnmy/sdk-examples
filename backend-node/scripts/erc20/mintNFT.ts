@@ -77,7 +77,9 @@ export const mintNftPayERC20 = async () => {
   };
 
   // build partial userOp
-  let partialUserOp = await biconomySmartAccount.buildUserOp([transaction]);
+  let partialUserOp = await biconomySmartAccount.buildUserOp([transaction], {
+    // skipBundlerGasEstimation: false // Estimates userop using bundler
+  });
   let finalUserOp = partialUserOp;
 
   // ------------------------STEP 3: Get Fee quotes (for ERC20 payment) from the paymaster and ask the user to select one--------------------------------//

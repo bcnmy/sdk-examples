@@ -105,6 +105,8 @@ export const erc20TransferPayERC20 = async (
   const biconomyPaymaster =
     biconomySmartAccount.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
 
+  // Here paymaster will ignore userop gas values, simulate the transaction and return fee quotes for all tokens supported by the paymaster  
+
   const feeQuotesResponse = await biconomyPaymaster.getPaymasterFeeQuotesOrData(
     partialUserOp,
     {

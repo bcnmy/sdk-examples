@@ -167,7 +167,9 @@ export const nativeTransferPayERC20 = async (to: string, amount: number) => {
   // and also send the full op to attached bundler instance
 
   try {
-    const userOpResponse = await biconomySmartAccount.sendUserOp(finalUserOp);
+    // simulationType by default is 'validation' which means the bundler will only check for validations
+    // one can pass 'validation_and_execution' which takes longer time on bundler but performs for checks for the execution failures.
+    const userOpResponse = await biconomySmartAccount.sendUserOp(finalUserOp, {simulationType: 'validation_and_execution'});
     console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
     const transactionDetails = await userOpResponse.wait();
     console.log(

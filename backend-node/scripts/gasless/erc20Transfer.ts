@@ -103,9 +103,11 @@ export const erc20Transfer = async (
 
   // build partial userOp
   let partialUserOp = await biconomySmartAccount.buildUserOp([transaction], {
+    // If we are sure to use sponsorship paymaster and for Biconomy Account V2 then pass mode like this below.
     paymasterServiceData: {
       mode: PaymasterMode.SPONSORED,
     },
+    // skipBundlerGasEstimation: false, // true by default as if the paymaster is present gas estimations are done on the paymaster
   });
 
   // ------------------------STEP 3: Sign the UserOp and send to the Bundler--------------------------------//
