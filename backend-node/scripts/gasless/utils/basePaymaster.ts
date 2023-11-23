@@ -3,6 +3,11 @@ import { resolveProperties } from "ethers/lib/utils";
 import { ethers } from "ethers";
 import { UserOperation } from "@biconomy/core-types";
 
+  function correctHexString(payloadValue: string): string {
+    if(payloadValue.indexOf('0x0') > -1 && payloadValue.length > 3) payloadValue = payloadValue.replace('0x0','0x')
+    return payloadValue
+  }
+
   // Define the PaymasterDataMiddlewareOverrideFunction
   export const getBasePaymasterAndData = async (uoStruct: Partial<UserOperation>, chainId: number) => {
     // Return at minimum {paymasterAndData: "0x..."}, can also return gas estimates
@@ -17,16 +22,16 @@ import { UserOperation } from "@biconomy/core-types";
       params: [
         {
           ...params1,
-          nonce: ethers.BigNumber.from(params1.nonce).toHexString(),
+          nonce: correctHexString(ethers.BigNumber.from(params1.nonce).toHexString()),
           sender: uoStruct.sender,
-          callGasLimit: ethers.BigNumber.from(params1.callGasLimit).toHexString(),
-          preVerificationGas: ethers.BigNumber.from(params1.preVerificationGas).toHexString(),
-          verificationGasLimit: ethers.BigNumber.from(params1.verificationGasLimit).toHexString(),
-          maxFeePerGas: ethers.BigNumber.from(params1.maxFeePerGas).toHexString(),
-          maxPriorityFeePerGas: ethers.BigNumber.from(params1.maxPriorityFeePerGas).toHexString(),
+          callGasLimit: correctHexString(ethers.BigNumber.from(params1.callGasLimit).toHexString()),
+          preVerificationGas: correctHexString(ethers.BigNumber.from(params1.preVerificationGas).toHexString()),
+          verificationGasLimit: correctHexString(ethers.BigNumber.from(params1.verificationGasLimit).toHexString()),
+          maxFeePerGas: correctHexString(ethers.BigNumber.from(params1.maxFeePerGas).toHexString()),
+          maxPriorityFeePerGas: correctHexString(ethers.BigNumber.from(params1.maxPriorityFeePerGas).toHexString()),
         },
         DEFAULT_ENTRYPOINT_ADDRESS,
-        ethers.BigNumber.from(chainId).toHexString(),
+        correctHexString(ethers.BigNumber.from(chainId).toHexString()),
       ],
     };
 
