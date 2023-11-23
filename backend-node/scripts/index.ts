@@ -13,7 +13,7 @@ import { batchMintNft } from "./gasless/batchMintNFT";
 import { batchMintNftPayERC20 } from "./erc20/batchMintNFT";
 import { batchMintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/batchMintNFT";
 import { mintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/mintNFT";
-import { multiChainMint } from "./gasless/multiChainSend.ts";
+import { multiChainMint } from "./gasless/multiChainMint.ts";
 
 yargs
   .scriptName(chalk.green("smartAccount"))
