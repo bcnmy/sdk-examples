@@ -108,7 +108,10 @@ export const multiChainMint = async () => {
   };
 
   // build partial userOp
-  let partialUserOp1 = await biconomySmartAccount1.buildUserOp([transaction1]);
+  let partialUserOp1 = await biconomySmartAccount1.buildUserOp([transaction1], { 
+    paymasterServiceData: {
+    mode: PaymasterMode.SPONSORED,
+  }});
 
   const scwAddress2 = await biconomySmartAccount2.getAccountAddress();
 
@@ -120,7 +123,10 @@ export const multiChainMint = async () => {
     data: data2,
   };
 
-  let partialUserOp2 = await biconomySmartAccount2.buildUserOp([transaction2]);
+  let partialUserOp2 = await biconomySmartAccount2.buildUserOp([transaction2], { 
+    paymasterServiceData: {
+    mode: PaymasterMode.SPONSORED,
+  }});
 
 
   const returnedOps = await multiChainModule.signUserOps([{userOp: partialUserOp1, chainId: 80001}, {userOp: partialUserOp2, chainId: 97}]);
