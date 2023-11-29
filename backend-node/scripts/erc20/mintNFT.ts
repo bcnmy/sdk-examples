@@ -1,12 +1,12 @@
 import { ethers } from "ethers";
-const chalk = require('chalk')
+const chalk = require("chalk");
 import inquirer from "inquirer";
 import {
   BiconomySmartAccountV2,
   DEFAULT_ENTRYPOINT_ADDRESS,
 } from "@biconomy/account";
-  import { Bundler } from "@biconomy/bundler";
-  import { BiconomyPaymaster } from "@biconomy/paymaster";
+import { Bundler } from "@biconomy/bundler";
+import { BiconomyPaymaster } from "@biconomy/paymaster";
 import {
   IHybridPaymaster,
   PaymasterFeeQuote,
@@ -14,12 +14,13 @@ import {
   SponsorUserOperationDto,
 } from "@biconomy/paymaster";
 import config from "../../config.json";
-import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, DEFAULT_SESSION_KEY_MANAGER_MODULE  } from "@biconomy/modules";
+import {
+  ECDSAOwnershipValidationModule,
+  DEFAULT_ECDSA_OWNERSHIP_MODULE,
+} from "@biconomy/modules";
 
 export const mintNftPayERC20 = async () => {
-  // ------------------------STEP 1: Initialise Biconomy Smart Account SDK--------------------------------//  
-
-
+  // ------------------------STEP 1: Initialise Biconomy Smart Account SDK--------------------------------//
 
   // get EOA address from wallet provider
   let provider = new ethers.providers.JsonRpcProvider(config.rpcUrl);
@@ -35,35 +36,33 @@ export const mintNftPayERC20 = async () => {
   });
 
   const paymaster = new BiconomyPaymaster({
-    paymasterUrl: config.biconomyPaymasterUrl
+    paymasterUrl: config.biconomyPaymasterUrl,
   });
 
   const ecdsaModule = await ECDSAOwnershipValidationModule.create({
     signer: signer,
-    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
-  })
+    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE,
+  });
 
   // Biconomy smart account config
-  // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use 
+  // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use
   const biconomySmartAccountConfig = {
     signer: signer,
     chainId: config.chainId,
     rpcUrl: config.rpcUrl,
-    paymaster: paymaster, 
-    bundler: bundler, 
+    paymaster: paymaster,
+    bundler: bundler,
     entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
     defaultValidationModule: ecdsaModule,
-    activeValidationModule: ecdsaModule
+    activeValidationModule: ecdsaModule,
   };
 
+  console.time("create");
   // create biconomy smart account instance
-  const biconomySmartAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
-
-  
-  
-
-
-
+  const biconomySmartAccount = await BiconomySmartAccountV2.create(
+    biconomySmartAccountConfig
+  );
+  console.timeEnd("create");
 
   // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//
 
@@ -72,8 +71,9 @@ export const mintNftPayERC20 = async () => {
     "function safeMint(address _to)",
   ]);
 
- 
+  console.time("getAccountAddress");
   const scwAddress = await biconomySmartAccount.getAccountAddress();
+  console.timeEnd("getAccountAddress");
 
   // Here we are minting NFT to smart account address itself
   const data = nftInterface.encodeFunctionData("safeMint", [scwAddress]);
@@ -84,84 +84,74 @@ export const mintNftPayERC20 = async () => {
     data: data,
   };
 
-  // build partial userOp 
+  // build partial userOp
+  console.time("before Build userOp to transaction dispatched:");
+  console.time("before Build userOp to transaction mined:");
+  console.time("buildUserOp:");
   let partialUserOp = await biconomySmartAccount.buildUserOp([transaction]);
+  console.timeEnd("buildUserOp:");
 
   let finalUserOp = partialUserOp;
 
-
-
-
   // ------------------------STEP 3: Get Fee quotes (for ERC20 payment) from the paymaster and ask the user to select one--------------------------------//
-
-
-
 
   const biconomyPaymaster =
     biconomySmartAccount.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
-
-  const feeQuotesResponse =
-      await biconomyPaymaster.getPaymasterFeeQuotesOrData(partialUserOp, {
-        // here we are explicitly telling by mode ERC20 that we want to pay in ERC20 tokens and expect fee quotes
-        mode: PaymasterMode.ERC20,
-        // one can pass tokenList empty array. and it would return fee quotes for all tokens supported by the Biconomy paymaster
-        tokenList: config.tokenList ? config.tokenList : [],
-        // preferredToken is optional. If you want to pay in a specific token, you can pass its address here and get fee quotes for that token only
-        preferredToken: config.preferredToken,
-      });
+  console.time("getPaymasterFeeQuotesOrData");
+  const feeQuotesResponse = await biconomyPaymaster.getPaymasterFeeQuotesOrData(
+    partialUserOp,
+    {
+      // here we are explicitly telling by mode ERC20 that we want to pay in ERC20 tokens and expect fee quotes
+      mode: PaymasterMode.ERC20,
+      // one can pass tokenList empty array. and it would return fee quotes for all tokens supported by the Biconomy paymaster
+      tokenList: config.tokenList ? config.tokenList : [],
+      // preferredToken is optional. If you want to pay in a specific token, you can pass its address here and get fee quotes for that token only
+      preferredToken: config.preferredToken,
+    }
+  );
+  console.timeEnd("getPaymasterFeeQuotesOrData");
 
   const feeQuotes = feeQuotesResponse.feeQuotes as PaymasterFeeQuote[];
   const spender = feeQuotesResponse.tokenPaymasterAddress || "";
 
-  
   // Generate list of options for the user to select
   const choices = feeQuotes?.map((quote: any, index: number) => ({
-      name: `Option ${index + 1}: ${quote.maxGasFee}: ${quote.symbol} `,
-      value: index,
-    }));
+    name: `Option ${index + 1}: ${quote.maxGasFee}: ${quote.symbol} `,
+    value: index,
+  }));
   // Use inquirer to prompt user to select an option
   const { selectedOption } = await inquirer.prompt([
-      {
-        type: "list",
-        name: "selectedOption",
-        message: "Select a fee quote:",
-        choices,
-      },
-    ]);
+    {
+      type: "list",
+      name: "selectedOption",
+      message: "Select a fee quote:",
+      choices,
+    },
+  ]);
   const selectedFeeQuote = feeQuotes[selectedOption];
 
-
-
-
   // ------------------------STEP 3: Once you have selected feeQuote (use has chosen token to pay with) get updated userOp which checks for paymaster approval and appends approval tx--------------------------------//
-    
-
-
 
   finalUserOp = await biconomySmartAccount.buildTokenPaymasterUserOp(
-      partialUserOp,
-      {
-        feeQuote: selectedFeeQuote,
-        spender: spender,
-        maxApproval: false,
-      }
-    );
+    partialUserOp,
+    {
+      feeQuote: selectedFeeQuote,
+      spender: spender,
+      maxApproval: false,
+    }
+  );
 
-  
-
-  // ------------------------STEP 4: Get Paymaster and Data from Biconomy Paymaster --------------------------------//  
-
-
-
+  // ------------------------STEP 4: Get Paymaster and Data from Biconomy Paymaster --------------------------------//
 
   let paymasterServiceData = {
-      mode: PaymasterMode.ERC20, // - mandatory // now we know chosen fee token and requesting paymaster and data for it
-      feeTokenAddress: selectedFeeQuote.tokenAddress,
-      // optional params..
-      calculateGasLimits: true, // Always recommended and especially when using token paymaster
-    };
+    mode: PaymasterMode.ERC20, // - mandatory // now we know chosen fee token and requesting paymaster and data for it
+    feeTokenAddress: selectedFeeQuote.tokenAddress,
+    // optional params..
+    calculateGasLimits: true, // Always recommended and especially when using token paymaster
+  };
 
-  try{
+  console.time("getPaymasterAndData");
+  try {
     const paymasterAndDataWithLimits =
       await biconomyPaymaster.getPaymasterAndData(
         finalUserOp,
@@ -175,10 +165,9 @@ export const mintNftPayERC20 = async () => {
       paymasterAndDataWithLimits.verificationGasLimit &&
       paymasterAndDataWithLimits.preVerificationGas
     ) {
-
       // Returned gas limits must be replaced in your op as you update paymasterAndData.
       // Because these are the limits paymaster service signed on to generate paymasterAndData
-      // If you receive AA34 error check here..   
+      // If you receive AA34 error check here..
 
       finalUserOp.callGasLimit = paymasterAndDataWithLimits.callGasLimit;
       finalUserOp.verificationGasLimit =
@@ -189,29 +178,30 @@ export const mintNftPayERC20 = async () => {
   } catch (e) {
     console.log("error received ", e);
   }
-
-
-
+  console.timeEnd("getPaymasterAndData");
 
   // ------------------------STEP 5: Sign the UserOp and send to the Bundler--------------------------------//
 
-
-
-
   console.log(chalk.blue(`userOp: ${JSON.stringify(finalUserOp, null, "\t")}`));
 
-  // Below function gets the signature from the user (signer provided in Biconomy Smart Account) 
+  // Below function gets the signature from the user (signer provided in Biconomy Smart Account)
   // and also send the full op to attached bundler instance
 
   try {
-  const userOpResponse = await biconomySmartAccount.sendUserOp(finalUserOp);
-  console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
-  const transactionDetails = await userOpResponse.wait();
-  console.log(
-    chalk.blue(
-      `transactionDetails: ${JSON.stringify(transactionDetails, null, "\t")}`
-    )
-  );
+    console.time("sendUserOp");
+    const userOpResponse = await biconomySmartAccount.sendUserOp(finalUserOp);
+    console.timeEnd("sendUserOp");
+    console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
+    console.time("wait");
+    const transactionDetails = await userOpResponse.wait();
+    console.timeEnd("wait");
+    console.timeEnd("before Build userOp to transaction dispatched:");
+    console.timeEnd("before Build userOp to transaction mined:");
+    console.log(
+      chalk.blue(
+        `transactionDetails: ${JSON.stringify(transactionDetails, null, "\t")}`
+      )
+    );
   } catch (e) {
     console.log("error received ", e);
   }

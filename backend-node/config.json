@@ -1,11 +1,11 @@
 {
-  "privateKey": "<PRIVATE_KEY>",
+  "privateKey": "da65c1d3d306e2107130c516e528ddffb491243e133723e978de8b96fcf8e986",
   "accountIndex": 0,
   "chainId": 80001,
-  "rpcUrl": "https://polygon-testnet.public.blastapi.io",
+  "rpcUrl": "https://polygon-mumbai.g.alchemy.com/v2/zX14dLXhTQqeK4LG2pNUsk7Gcet8iPXJ",
   "bundlerUrl": "https://bundler.biconomy.io/api/v2/80001/A5CBjLqSc.0dcbc53e-anPe-44c7-b22d-21071345f76a",
-  "biconomyPaymasterUrl": "https://paymaster.biconomy.io/api/v1/80001/tf47vamuW.3c55594d-14f8-4451-b5dd-39f46abe272a",
+  "biconomyPaymasterUrl": "https://paymaster.biconomy.io/api/v1/80001/WEX9LXdFW.13107308-4631-4ba5-9e23-2a8bf8270948",
   "preferredToken": "",
-  "numOfParallelUserOps": 1,
-  "tokenList": []
+  "tokenList": [],
+  "numOfParallelUserOps": 5
 }

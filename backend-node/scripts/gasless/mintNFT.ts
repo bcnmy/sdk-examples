@@ -1,23 +1,25 @@
 import { ethers } from "ethers";
-const chalk = require('chalk')
+const chalk = require("chalk");
 
 import {
-    BiconomySmartAccountV2,
-    DEFAULT_ENTRYPOINT_ADDRESS,
-  } from "@biconomy/account";
-  import { Bundler } from "@biconomy/bundler";
-  import { BiconomyPaymaster } from "@biconomy/paymaster";
+  BiconomySmartAccountV2,
+  DEFAULT_ENTRYPOINT_ADDRESS,
+} from "@biconomy/account";
+import { Bundler } from "@biconomy/bundler";
+import { BiconomyPaymaster } from "@biconomy/paymaster";
 import {
   IHybridPaymaster,
   PaymasterMode,
   SponsorUserOperationDto,
 } from "@biconomy/paymaster";
 import config from "../../config.json";
-import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE, DEFAULT_SESSION_KEY_MANAGER_MODULE  } from "@biconomy/modules";
+import {
+  ECDSAOwnershipValidationModule,
+  DEFAULT_ECDSA_OWNERSHIP_MODULE,
+} from "@biconomy/modules";
 
 export const mintNft = async () => {
-
-  // ------------------------STEP 1: Initialise Biconomy Smart Account SDK--------------------------------//  
+  // ------------------------STEP 1: Initialise Biconomy Smart Account SDK--------------------------------//
 
   // get EOA address from wallet provider
   let provider = new ethers.providers.JsonRpcProvider(config.rpcUrl);
@@ -33,38 +35,36 @@ export const mintNft = async () => {
   });
 
   const paymaster = new BiconomyPaymaster({
-    paymasterUrl: config.biconomyPaymasterUrl
+    paymasterUrl: config.biconomyPaymasterUrl,
   });
 
   const ecdsaModule = await ECDSAOwnershipValidationModule.create({
     signer: signer,
-    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE
-  })
+    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE,
+  });
 
   // Biconomy smart account config
-  // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use 
+  // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use
   const biconomySmartAccountConfig = {
     signer: signer,
     chainId: config.chainId,
     rpcUrl: config.rpcUrl,
-    paymaster: paymaster, 
-    bundler: bundler, 
+    paymaster: paymaster,
+    bundler: bundler,
     entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
     defaultValidationModule: ecdsaModule,
-    activeValidationModule: ecdsaModule
+    activeValidationModule: ecdsaModule,
   };
 
+  console.time("create");
   // create biconomy smart account instance
-  const biconomySmartAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
-
-  
-  
-
-
+  const biconomySmartAccount = await BiconomySmartAccountV2.create(
+    biconomySmartAccountConfig
+  );
+  console.timeEnd("create");
 
   // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//
 
-  
   // mint NFT
   // Please note that for sponsorship, policies have to be added on the Biconomy dashboard https://dashboard.biconomy.io/
   // in this case it will be whitelisting NFT contract and method safeMint()
@@ -77,9 +77,9 @@ export const mintNft = async () => {
   const nftInterface = new ethers.utils.Interface([
     "function safeMint(address _to)",
   ]);
-
-
+  console.time("getAccountAddress");
   const scwAddress = await biconomySmartAccount.getAccountAddress();
+  console.timeEnd("getAccountAddress");
 
   // Here we are minting NFT to smart account address itself
   const data = nftInterface.encodeFunctionData("safeMint", [scwAddress]);
@@ -91,85 +91,82 @@ export const mintNft = async () => {
   };
 
   // build partial userOp
+  console.time("before Build userOp to transaction dispatched:");
+  console.time("before Build userOp to transaction mined:");
+  console.time("buildUserOp:");
   let partialUserOp = await biconomySmartAccount.buildUserOp([transaction]);
-
+  console.timeEnd("buildUserOp:");
 
   // ------------------------STEP 3: Get Paymaster and Data from Biconomy Paymaster --------------------------------//
-
 
   const biconomyPaymaster =
     biconomySmartAccount.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
 
-  // Here it is meant to act as Sponsorship/Verifying paymaster hence we send mode: PaymasterMode.SPONSORED which is must  
+  // Here it is meant to act as Sponsorship/Verifying paymaster hence we send mode: PaymasterMode.SPONSORED which is must
   let paymasterServiceData: SponsorUserOperationDto = {
-        mode: PaymasterMode.SPONSORED,
-        smartAccountInfo: {
-          name: 'BICONOMY',
-          version: '2.0.0'
-        },
-        // optional params...
-        calculateGasLimits: true
-    };
+    mode: PaymasterMode.SPONSORED,
+    smartAccountInfo: {
+      name: "BICONOMY",
+      version: "2.0.0",
+    },
+    // optional params...
+    calculateGasLimits: true,
+  };
 
+  console.time("getPaymasterAndData");
   try {
     const paymasterAndDataResponse =
       await biconomyPaymaster.getPaymasterAndData(
-        partialUserOp,                                                                                  
+        partialUserOp,
         paymasterServiceData
       );
-      partialUserOp.paymasterAndData = paymasterAndDataResponse.paymasterAndData;
+    partialUserOp.paymasterAndData = paymasterAndDataResponse.paymasterAndData;
 
-      if (
-        paymasterAndDataResponse.callGasLimit &&
-        paymasterAndDataResponse.verificationGasLimit &&
-        paymasterAndDataResponse.preVerificationGas
-      ) {
-  
-        // Returned gas limits must be replaced in your op as you update paymasterAndData.
-        // Because these are the limits paymaster service signed on to generate paymasterAndData
-        // If you receive AA34 error check here..   
-  
-        partialUserOp.callGasLimit = paymasterAndDataResponse.callGasLimit;
-        partialUserOp.verificationGasLimit =
+    if (
+      paymasterAndDataResponse.callGasLimit &&
+      paymasterAndDataResponse.verificationGasLimit &&
+      paymasterAndDataResponse.preVerificationGas
+    ) {
+      // Returned gas limits must be replaced in your op as you update paymasterAndData.
+      // Because these are the limits paymaster service signed on to generate paymasterAndData
+      // If you receive AA34 error check here..
+
+      partialUserOp.callGasLimit = paymasterAndDataResponse.callGasLimit;
+      partialUserOp.verificationGasLimit =
         paymasterAndDataResponse.verificationGasLimit;
-        partialUserOp.preVerificationGas =
+      partialUserOp.preVerificationGas =
         paymasterAndDataResponse.preVerificationGas;
-      }
+    }
   } catch (e) {
     console.log("error received ", e);
   }
+  console.timeEnd("getPaymasterAndData");
 
-  
   // ------------------------STEP 4: Sign the UserOp and send to the Bundler--------------------------------//
 
-  console.log(chalk.blue(`userOp: ${JSON.stringify(partialUserOp, null, "\t")}`));
+  console.log(
+    chalk.blue(`userOp: ${JSON.stringify(partialUserOp, null, "\t")}`)
+  );
 
-  // Below function gets the signature from the user (signer provided in Biconomy Smart Account) 
+  // Below function gets the signature from the user (signer provided in Biconomy Smart Account)
   // and also send the full op to attached bundler instance
 
   try {
-  const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp);
-  console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
-  const transactionDetails = await userOpResponse.wait();
-  console.log(
-    chalk.blue(
-      `transactionDetails: ${JSON.stringify(transactionDetails, null, "\t")}`
-    )
-  );
-  } catch (e) {
-    console.log("error received ", e);
-  }
-
-  /*try {
-    const userOpResponse = await biconomySmartAccount.enableModule(DEFAULT_SESSION_KEY_MANAGER_MODULE);
+    console.time("sendUserOp");
+    const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp);
+    console.timeEnd("sendUserOp");
     console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
+    console.time("wait");
     const transactionDetails = await userOpResponse.wait();
+    console.timeEnd("wait");
+    console.timeEnd("before Build userOp to transaction dispatched:");
+    console.timeEnd("before Build userOp to transaction mined:");
     console.log(
       chalk.blue(
         `transactionDetails: ${JSON.stringify(transactionDetails, null, "\t")}`
       )
     );
-    } catch (e) {
-      console.log("error received ", e);
-    }*/
+  } catch (e) {
+    console.log("error received ", e);
+  }
 };
