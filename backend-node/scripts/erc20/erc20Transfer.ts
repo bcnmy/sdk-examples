@@ -196,11 +196,9 @@ export const erc20TransferPayERC20 = async (
   try {
     const userOpResponse = await biconomySmartAccount.sendUserOp(finalUserOp);
     console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
-    const transactionDetails = await userOpResponse.wait();
+    const txHash = await userOpResponse.waitForTxHash();
     console.log(
-      chalk.blue(
-        `transactionDetails: ${JSON.stringify(transactionDetails, null, "\t")}`
-      )
+      chalk.blue(`transactionDetails: ${JSON.stringify(txHash, null, "\t")}`)
     );
   } catch (e) {
     console.log("error received ", e);
