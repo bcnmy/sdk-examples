@@ -17,6 +17,7 @@ const INIT_CONFIG: any = {
 const CONFIG_PATH = path.resolve(__dirname, "../config.json");
 
 INIT_CONFIG.accountIndex = 0;
+INIT_CONFIG.numOfParallelUserOps = 1;
 
 export const init = async (chainId: string) => {
   console.log("network is ------", chainId);

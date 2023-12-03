@@ -16,6 +16,7 @@ import { batchMintNftPayERC20 } from "./erc20/batchMintNFT";
 import { batchMintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/batchMintNFT";
 import { mintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/mintNFT";
 import { multiChainMint } from "./gasless/multiChainMint.ts";
+import { deployAccountOnly } from "./gasless/deployAccount.ts";
 
 yargs
   .scriptName(chalk.green("smartAccount"))
@@ -44,6 +45,10 @@ yargs
   // Get SmartAccount address
   .command("address", chalk.blue("Get counterfactual address"), {}, () => {
     getAddress();
+  })
+  // Deploy Account 
+  .command("deploy", chalk.blue("Deploy Smart Account Only"), {}, () => {
+    deployAccountOnly();
   })
   // Transfer native assets (ether/matic)
   .command(
