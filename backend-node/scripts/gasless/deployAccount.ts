@@ -68,9 +68,9 @@ export const deployAccountOnly = async () => {
     throw new Error("Account already deployed");
   }
 
-  // Here we are minting NFT to smart account address itself
   console.time("getAccountAddress");
   console.timeEnd("getAccountAddress");
+  // Here we are providing 0 address and 0 data transaction so that the sdk knows not to send a transaction.
   const transaction = {
     to: ethers.constants.AddressZero,
     data: '0x',
@@ -79,6 +79,7 @@ export const deployAccountOnly = async () => {
   console.time("before Build userOp to transaction dispatched:");
   console.time("before Build userOp to transaction mined:");
   console.time("buildUserOp:");
+  // If you're not using a paymaster, then you can skip the paymasterServiceData, but the account address (counterfactual) should have enough native tokens for self payment
   let partialUserOp = await biconomySmartAccount.buildUserOp([transaction], {
     // If we are sure to use sponsorship paymaster and for Biconomy Account V2 then pass mode like this below.
     paymasterServiceData: {
