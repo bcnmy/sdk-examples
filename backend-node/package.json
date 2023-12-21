@@ -10,16 +10,16 @@
   "keywords": [],
   "license": "ISC",
   "dependencies": {
-    "@biconomy/account": "^3.1.1",
-    "@biconomy/bundler": "^3.1.1",
-    "@biconomy/common": "^3.1.1",
-    "@biconomy/core-types": "^3.1.1",
-    "@biconomy/modules": "^3.1.1",
-    "@biconomy/paymaster": "^3.1.1",
+    "@alchemy/aa-core": "^1.2.2",
+    "@biconomy-devx/account": "2.0.50",
+    "@biconomy-devx/bundler": "2.0.50",
+    "@biconomy-devx/modules": "2.0.50",
+    "@biconomy-devx/paymaster": "2.0.50",
     "chalk": "^4.1.2",
     "ethers": "^5.7.2",
     "inquirer": "^8.0.0",
     "prettier": "^2.8.1",
+    "viem": "^1.20.3",
     "yargs": "^17.7.1"
   },
   "devDependencies": {
