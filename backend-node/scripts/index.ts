@@ -16,6 +16,7 @@ import { batchMintNftPayERC20 } from "./erc20/batchMintNFT";
 import { batchMintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/batchMintNFT";
 import { mintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/mintNFT";
 import { multiChainMint } from "./gasless/multiChainMint.ts";
+import { mintNftViem } from "./gasless/mintNFTViem.ts";
 
 yargs
   .scriptName(chalk.green("smartAccount"))
@@ -159,6 +160,9 @@ yargs
         parallelUserOpsMintNFTPayERC20();
       } else if (argv.mode === "PARALLEL_USER_OPS") {
         parallelUserOpsMintNft()
+      }
+      else if(argv.mode === "VIEM_CLIENT") {
+        mintNftViem();
       }
       else {
         mintNft();
