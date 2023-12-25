@@ -15,130 +15,89 @@ import {
 import config from "../../config.json";
 import { ECDSAOwnershipValidationModule, MultiChainValidationModule, DEFAULT_ECDSA_OWNERSHIP_MODULE, DEFAULT_MULTICHAIN_MODULE } from "@biconomy/modules";
 
+const bundlerUrlChain1 = config.bundlerUrl
+const bundlerUrlChain2 = "https://bundler.biconomy.io/api/v2/84531/nJPK7B3ru.dd7f7861-190d-41bd-af80-6877f74b8f44"
+
+const rpcUrlChain1 = config.rpcUrl
+const rpcUrlChain2 = "https://goerli.base.org"
+
+const paymasterUrlChain1 = config.biconomyPaymasterUrl
+const paymasterUrlChain2 = "https://paymaster.biconomy.io/api/v1/84531/ZmJnk8RoQ.74fa6f0e-e8da-4ca4-a8c7-a234b76d1dcf"
+
+const chainId1 = config.chainId
+const chainId2 = 84531
+
+
+// 1. Create instance of Multichain Module
+// 2. Create smart account instances on all chains with activeValidationModule as multichain module
+// 3. enable multichain module on-chain if not already enabled
+// 4. build userOp on all chains
+// 5. sign userOps on all chains at once with help of multichain module instance
+// 6. send returned user operations on different chains
+
+
 export const multiChainMint = async () => {
-
-  // ------------------------STEP 1: Initialise Biconomy Smart Account SDK--------------------------------//  
-
-  // get EOA address from wallet provider
   let provider = new ethers.providers.JsonRpcProvider(config.rpcUrl);
   let signer = new ethers.Wallet(config.privateKey, provider);
-  const eoa = await signer.getAddress();
-  console.log(chalk.blue(`EOA address: ${eoa}`));
 
-  // create bundler and paymaster instances
-  const bundler1 = new Bundler({
-    bundlerUrl: config.bundlerUrl,
-    chainId: config.chainId,
-    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-  });
-
-  const paymaster = new BiconomyPaymaster({
-    paymasterUrl: config.biconomyPaymasterUrl
-  });
-
+  // create multichain validation module instance
   const multiChainModule = await MultiChainValidationModule.create({
     signer: signer,
     moduleAddress: DEFAULT_MULTICHAIN_MODULE
   })
 
-  // Biconomy smart account config
-  // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use 
-  const biconomySmartAccountConfig1 = {
-    signer: signer,
-    chainId: config.chainId,
-    rpcUrl: config.rpcUrl,
-    paymaster: paymaster, 
-    bundler: bundler1, 
-    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-    defaultValidationModule: multiChainModule,
-    activeValidationModule: multiChainModule
-  };
+  // get smart account instance for chain1
+  const smartAccountChain1 = await getInstanceChain1(multiChainModule);
 
-  // create biconomy smart account instance
-  const biconomySmartAccount1 = await BiconomySmartAccountV2.create(biconomySmartAccountConfig1);
+  // get smart account instance for chain2
+  const smartAccountChain2 = await getInstanceChain2(multiChainModule);
 
-  
-  const bundler2 = new Bundler({
-    bundlerUrl: "https://bundler.biconomy.io/api/v2/97/A5CBjLqSc.0dcbc53e-anPe-44c7-b22d-21071345f76a",
-    chainId: 97,
-    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-  });
-
-  const biconomySmartAccountConfig2 = {
-    signer: signer,
-    chainId: 97,
-    rpcUrl: 'https://data-seed-prebsc-1-s2.binance.org:8545',
-    // paymaster: paymaster, 
-    bundler: bundler2, 
-    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-    defaultValidationModule: multiChainModule,
-    activeValidationModule: multiChainModule
-  };
-
-
-  // create biconomy smart account instance
-  const biconomySmartAccount2 = await BiconomySmartAccountV2.create(biconomySmartAccountConfig2);
-
-  
-  // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//
-
-  
-  // mint NFT
-  // Please note that for sponsorship, policies have to be added on the Biconomy dashboard https://dashboard.biconomy.io/
-  // in this case it will be whitelisting NFT contract and method safeMint()
-
-  // 1. for native token transfer no policy is required. you may add a webhook to have custom control over this
-  // 2. If no policies are added every transaction will be sponsored by your paymaster
-  // 3. If you add policies, then only transactions that match the policy will be sponsored by your paymaster
-
-  // generate mintNft data
   const nftInterface = new ethers.utils.Interface([
     "function safeMint(address _to)",
   ]);
 
-  const scwAddress1 = await biconomySmartAccount1.getAccountAddress();
+  // Assuming smart account address is same on multiple chains
+  const scwAddress = await smartAccountChain1.getAccountAddress();
 
   // Here we are minting NFT to smart account address itself
-  const data1 = nftInterface.encodeFunctionData("safeMint", [scwAddress1]);
+  const data1 = nftInterface.encodeFunctionData("safeMint", [scwAddress]);
 
-  const nftAddress = "0x1758f42Af7026fBbB559Dc60EcE0De3ef81f665e"; // Todo // use from config
-  const transaction1 = {
+  // Assuming NFT address is same on multiple chains
+  const nftAddress = "0x1758f42Af7026fBbB559Dc60EcE0De3ef81f665e"; 
+  const transaction = {
     to: nftAddress,
     data: data1,
   };
 
-  // build partial userOp
-  let partialUserOp1 = await biconomySmartAccount1.buildUserOp([transaction1], { 
+  // build partial userOp for chain1
+  let partialUserOp1 = await smartAccountChain1.buildUserOp([transaction], { 
     paymasterServiceData: {
     mode: PaymasterMode.SPONSORED,
   }});
 
-  const scwAddress2 = await biconomySmartAccount2.getAccountAddress();
-
-  // Here we are minting NFT to smart account address itself
-  const data2 = nftInterface.encodeFunctionData("safeMint", [scwAddress2]);
-
-  const transaction2 = {
-    to: nftAddress,
-    data: data2,
-  };
-
-  let partialUserOp2 = await biconomySmartAccount2.buildUserOp([transaction2], { 
+  // build partial userOp for chain2
+  let partialUserOp2 = await smartAccountChain2.buildUserOp([transaction], { 
     paymasterServiceData: {
     mode: PaymasterMode.SPONSORED,
   }});
 
-
-  const returnedOps = await multiChainModule.signUserOps([{userOp: partialUserOp1, chainId: 80001}, {userOp: partialUserOp2, chainId: 97}]);
+  const returnedOps = await multiChainModule.signUserOps([{userOp: partialUserOp1, chainId: chainId1}, {userOp: partialUserOp2, chainId: chainId2}]);
 
   console.log("both returned ops")
   console.log(returnedOps)
 
 
-
-
   try{
-  const userOpResponse1 = await biconomySmartAccount1.sendSignedUserOp(returnedOps[0] as any);
+  // Here we already have multichain signature so we will use sendSignedTransaction on individual instances  
+  // Make sure multiChainModule is provided as active validation module, if not set it as active validation module
+  // If a different defaultValidationModule is used then multichain module must be enabled on the smart account
+
+
+  // If multichain module is not enabled on your smart account first enable the module
+
+  smartAccountChain1.setActiveValidationModule(multiChainModule);
+
+  const userOpResponse1 = await smartAccountChain1.sendSignedUserOp(returnedOps[0] as any);
   console.log(chalk.green(`userOp Hash: ${userOpResponse1.userOpHash}`));
   const transactionDetails1 = await userOpResponse1.wait();
   console.log(
@@ -152,7 +111,10 @@ export const multiChainMint = async () => {
 
 
   try{
-  const userOpResponse2 = await biconomySmartAccount2.sendSignedUserOp(returnedOps[1] as any);
+
+  smartAccountChain2.setActiveValidationModule(multiChainModule);  
+
+  const userOpResponse2 = await smartAccountChain2.sendSignedUserOp(returnedOps[1] as any);
   console.log(chalk.green(`userOp Hash: ${userOpResponse2.userOpHash}`));
   const transactionDetails2 = await userOpResponse2.wait();
   console.log(
@@ -164,3 +126,64 @@ export const multiChainMint = async () => {
     console.log("error received ", e);
   }
 };
+
+// Helpers to create smart account instances
+
+export const getInstanceChain1 = async (multiChainModule: MultiChainValidationModule): Promise<BiconomySmartAccountV2> => {
+
+  // create bundler and paymaster instances
+  const bundler = new Bundler({
+    bundlerUrl: bundlerUrlChain1,
+    chainId: chainId1,
+    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+  });
+
+  const paymaster = new BiconomyPaymaster({
+    paymasterUrl: paymasterUrlChain1
+  });
+
+  // Biconomy smart account config
+  // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use 
+  const biconomySmartAccountConfig = {
+    chainId: chainId1,
+    rpcUrl: rpcUrlChain1,
+    paymaster: paymaster, 
+    bundler: bundler, 
+    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+    defaultValidationModule: multiChainModule,
+    activeValidationModule: multiChainModule
+  };
+
+  // create biconomy smart account instance
+  const biconomySmartAccount1 = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
+
+  return biconomySmartAccount1;
+}
+
+export const getInstanceChain2 = async (multiChainModule: MultiChainValidationModule) : Promise<BiconomySmartAccountV2> => {
+  const bundler = new Bundler({
+    bundlerUrl: bundlerUrlChain2,
+    chainId: chainId2,
+    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+  });
+
+  const paymaster = new BiconomyPaymaster({
+    paymasterUrl: paymasterUrlChain2
+  });
+
+  const biconomySmartAccountConfig = {
+    chainId: chainId2,
+    rpcUrl: rpcUrlChain2,
+    paymaster: paymaster, 
+    bundler: bundler, 
+    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+    defaultValidationModule: multiChainModule,
+    activeValidationModule: multiChainModule
+  };
+
+
+  // create biconomy smart account instance
+  const biconomySmartAccount2 = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
+
+  return biconomySmartAccount2;
+}
