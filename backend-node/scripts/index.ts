@@ -3,6 +3,7 @@ import * as yargs from "yargs";
 const chalk = require("chalk");
 // import { getAddress } from "./address";
 import { mintNft } from "./gasless/mintNFT";
+import { mintNftPayERC20 } from "./erc20/mintNFT";
 yargs
   .scriptName(chalk.green("smartAccount"))
   .usage("$0 <command> [options]")
@@ -26,6 +27,10 @@ yargs
     (argv) => {
       console.log(chalk.magenta("Minting an NFT token to the SmartAccount..."));
       mintNft();
+      if (argv.mode === "TOKEN") {
+        console.log(chalk.magenta(`Paymaster mode: ${argv.mode}`));
+        mintNftPayERC20();
+      }
     }
   )
   .help().argv;

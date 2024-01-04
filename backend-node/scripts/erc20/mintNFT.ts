@@ -1,92 +1,74 @@
 import { ethers } from "ethers";
+import { Hex, createWalletClient, http } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
-import inquirer from "inquirer";
+import { polygonMumbai } from "viem/chains";
+import { WalletClientSigner } from "@alchemy/aa-core";
+import { BiconomySmartAccountV2 } from "@biconomy-devx/account";
+import { Bundler } from "@biconomy-devx/bundler";
 import {
-  BiconomySmartAccountV2,
-  DEFAULT_ENTRYPOINT_ADDRESS,
-} from "@biconomy/account";
-import { Bundler } from "@biconomy/bundler";
-import { BiconomyPaymaster } from "@biconomy/paymaster";
-import {
+  BiconomyPaymaster,
   IHybridPaymaster,
   PaymasterFeeQuote,
   PaymasterMode,
   SponsorUserOperationDto,
-} from "@biconomy/paymaster";
+} from "@biconomy-devx/paymaster";
 import config from "../../config.json";
-import {
-  ECDSAOwnershipValidationModule,
-  DEFAULT_ECDSA_OWNERSHIP_MODULE,
-} from "@biconomy/modules";
+import inquirer from "inquirer";
 
 export const mintNftPayERC20 = async () => {
-  // ------------------------STEP 1: Initialise Biconomy Smart Account SDK--------------------------------//
-  // get EOA address from wallet provider
-  let provider = new ethers.providers.JsonRpcProvider(config.rpcUrl);
-  let signer = new ethers.Wallet(config.privateKey, provider);
-  const eoa = await signer.getAddress();
+  const account = privateKeyToAccount(config.privateKey as Hex);
+  const client = createWalletClient({
+    account,
+    chain: polygonMumbai,
+    transport: http(),
+  });
+
+  const eoa = client.account.address;
   console.log(chalk.blue(`EOA address: ${eoa}`));
-  // create bundler and paymaster instances
+
   const bundler = new Bundler({
     bundlerUrl: config.bundlerUrl,
     chainId: config.chainId,
-    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
   });
   const paymaster = new BiconomyPaymaster({
     paymasterUrl: config.biconomyPaymasterUrl,
   });
 
-  const ecdsaModule = await ECDSAOwnershipValidationModule.create({
-    signer: signer,
-    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE,
-  });
-  // Biconomy smart account config
-  // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use
-  const biconomySmartAccountConfig = {
-    signer: signer,
+  // create biconomy smart account instance
+  const biconomySmartAccount = await BiconomySmartAccountV2.create({
     chainId: config.chainId,
     rpcUrl: config.rpcUrl,
-    paymaster: paymaster,
     bundler: bundler,
-    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-    defaultValidationModule: ecdsaModule,
-    activeValidationModule: ecdsaModule,
-  };
-
-  // create biconomy smart account instance
-  const biconomySmartAccount = await BiconomySmartAccountV2.create(
-    biconomySmartAccountConfig
-  );
-
-  // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//
+    signer: new WalletClientSigner(client as any, "viem"),
+    biconomyPaymasterApiKey: "tf47vamuW.3c55594d-14f8-4451-b5dd-39f46abe272a",
+  });
+  const scwAddress = await biconomySmartAccount.getAccountAddress();
+  console.log("SCW Address", scwAddress);
 
   // generate mintNft data
   const nftInterface = new ethers.utils.Interface([
     "function safeMint(address _to)",
   ]);
-
-  const scwAddress = await biconomySmartAccount.getAccountAddress();
-
   // Here we are minting NFT to smart account address itself
   const data = nftInterface.encodeFunctionData("safeMint", [scwAddress]);
+  const nftAddress = "0x1758f42Af7026fBbB559Dc60EcE0De3ef81f665e";
 
-  const nftAddress = "0x1758f42Af7026fBbB559Dc60EcE0De3ef81f665e"; // Todo // use from config
-  const transaction = {
-    to: nftAddress,
-    data: data,
-  };
-
-  // build partial userOp
-  let partialUserOp = await biconomySmartAccount.buildUserOp([transaction], {
-    // skipBundlerGasEstimation: false // Estimates userop using bundler
-  });
-  let finalUserOp = partialUserOp;
+  const userOp = await biconomySmartAccount.buildUserOp([
+    {
+      to: nftAddress,
+      data: data,
+      value: 0,
+    },
+  ]);
+  console.log("userOp", userOp);
+  let finalUserOp = userOp;
 
   // ------------------------STEP 3: Get Fee quotes (for ERC20 payment) from the paymaster and ask the user to select one--------------------------------//
   const biconomyPaymaster =
     biconomySmartAccount.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
   const feeQuotesResponse = await biconomyPaymaster.getPaymasterFeeQuotesOrData(
-    partialUserOp,
+    userOp,
     {
       // here we are explicitly telling by mode ERC20 that we want to pay in ERC20 tokens and expect fee quotes
       mode: PaymasterMode.ERC20,
@@ -115,16 +97,13 @@ export const mintNftPayERC20 = async () => {
   const selectedFeeQuote = feeQuotes[selectedOption];
 
   // ------------------------STEP 3: Once you have selected feeQuote (use has chosen token to pay with) get updated userOp which checks for paymaster approval and appends approval tx--------------------------------//
-  finalUserOp = await biconomySmartAccount.buildTokenPaymasterUserOp(
-    partialUserOp,
-    {
-      feeQuote: selectedFeeQuote,
-      spender: spender,
-      maxApproval: false,
-    }
-  );
+  finalUserOp = await biconomySmartAccount.buildTokenPaymasterUserOp(userOp, {
+    feeQuote: selectedFeeQuote,
+    spender: spender as Hex,
+    maxApproval: false,
+  });
 
-  // ------------------------STEP 4: Get Paymaster and Data from Biconomy Paymaster --------------------------------//
+  // ------------------------Get Paymaster and Data from Biconomy Paymaster --------------------------------//
 
   let paymasterServiceData = {
     mode: PaymasterMode.ERC20, // - mandatory // now we know chosen fee token and requesting paymaster and data for it
@@ -168,16 +147,12 @@ export const mintNftPayERC20 = async () => {
   // and also send the full op to attached bundler instance
 
   try {
-    const userOpResponse = await biconomySmartAccount.sendUserOp(finalUserOp);
-    console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
-    const transactionDetails = await userOpResponse.wait();
+    const tx = await biconomySmartAccount.sendUserOp(userOp);
+    const { transactionHash } = await tx.waitForTxHash();
+    console.log("transactionHash", transactionHash);
     console.log(
       chalk.blue(
-        `transactionDetails: ${JSON.stringify(
-          transactionDetails.receipt.transactionHash,
-          null,
-          "\t"
-        )}`
+        `transactionDetails: ${JSON.stringify(transactionHash, null, "\t")}`
       )
     );
   } catch (e) {
