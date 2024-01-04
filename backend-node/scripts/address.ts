@@ -1,49 +1,30 @@
+import { Hex, createWalletClient, http } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
-import { BiconomySmartAccountV2, DEFAULT_ENTRYPOINT_ADDRESS } from "@biconomy/account";
+import { polygonMumbai } from "viem/chains";
+import { WalletClientSigner } from "@alchemy/aa-core";
+import { BiconomySmartAccountV2 } from "@biconomy-devx/account";
 import config from "../config.json";
-import { ethers } from "ethers";
-import { Bundler } from "@biconomy/bundler";
-import { BiconomyPaymaster } from "@biconomy/paymaster";
-import { DEFAULT_ECDSA_OWNERSHIP_MODULE, ECDSAOwnershipValidationModule } from "@biconomy/modules";
 
-export async function getAddress() {
-  // get EOA address from wallet provider
-  let provider = new ethers.providers.JsonRpcProvider(config.rpcUrl);
-  let signer = new ethers.Wallet(config.privateKey, provider);
-  const eoa = await signer.getAddress();
+export const getAddress = async () => {
+  // ----- 1. Generate EOA from private key
+  const account = privateKeyToAccount(config.privateKey as Hex);
+  const client = createWalletClient({
+    account,
+    chain: polygonMumbai,
+    transport: http(),
+  });
+  const eoa = client.account.address;
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
-  // create bundler and paymaster instances
-  const bundler = new Bundler({
-    bundlerUrl: config.bundlerUrl,
-    chainId: config.chainId,
-    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-  });
-  const paymaster = new BiconomyPaymaster({
-    paymasterUrl: config.biconomyPaymasterUrl,
-    strictMode: false, // by default is true. If set to false, then paymaster and data is still sent as 0x and account will pay in native
-  });
-
-  const ecdsaModule = await ECDSAOwnershipValidationModule.create({
-    signer: signer,
-    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE,
-  });
-
-  // create biconomy smart account instance
-  const biconomySmartAccountConfig = {
-    signer: signer,
+  // ------ 2. Create biconomy smart account instance
+  const biconomySmartAccount = await BiconomySmartAccountV2.create({
     chainId: config.chainId,
     rpcUrl: config.rpcUrl,
-    paymaster: paymaster, // optional
-    bundler: bundler, // optional
-    // nodeClientUrl: config.nodeClientUrl, // if needed to override
-    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-    defaultValidationModule: ecdsaModule,
-    activeValidationModule: ecdsaModule,
-  };
-  const biconomySmartAccount = await BiconomySmartAccountV2.create(
-    biconomySmartAccountConfig
-  );
-
-  console.log("SCW Address", await biconomySmartAccount.getAccountAddress());
-}
+    signer: new WalletClientSigner(client as any, "viem"),
+    bundlerUrl: config.bundlerUrl,
+    biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
+  });
+  const scwAddress = await biconomySmartAccount.getAccountAddress();
+  console.log("SCW Address", scwAddress);
+};
