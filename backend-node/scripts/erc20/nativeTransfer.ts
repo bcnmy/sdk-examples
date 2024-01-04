@@ -1,9 +1,4 @@
-import {
-  Hex,
-  createWalletClient,
-  http,
-  parseEther,
-} from "viem";
+import { Hex, createWalletClient, http, parseEther } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
