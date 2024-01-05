@@ -8,6 +8,7 @@ import { nativeTransferPayERC20 } from "./erc20/nativeTransfer";
 import { erc20Transfer } from "./gasless/erc20Transfer";
 import { erc20TransferPayERC20 } from "./erc20/erc20Transfer";
 import { mintNft } from "./gasless/mintNFT";
+import { mintNFTProvider } from "./gasless/mintNFTProvider";
 import { parallelUserOpsMintNft } from "./gasless/parallelUserOpsMintNFT.ts";
 import { mintNftPayERC20 } from "./erc20/mintNFT";
 import { parallelUserOpsMintNFTPayERC20 } from "./erc20/parallelUserOpsMintNFT.ts";
@@ -137,6 +138,8 @@ yargs
       console.log(chalk.magenta("Minting an NFT token to the SmartAccount..."));
       if (argv.mode === "TOKEN") {
         mintNftPayERC20();
+      } else if (argv.mode === "PROVIDER") {
+        mintNFTProvider();
       } else if (argv.mode === "HYBRID") {
         // mintNftTrySponsorshipOtherwisePayERC20();
       } else if (argv.mode === "TOKEN_PARALLEL_USER_OPS") {
