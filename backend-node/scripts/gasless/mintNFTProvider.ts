@@ -37,7 +37,7 @@ export const mintNFTProvider = async () => {
   const provider = new BiconomyAccountProvider({
     chain: polygonMumbai,
     rpcProvider: config.rpcUrl,
-  }).connect((rpcClient) => biconomySmartAccount);
+  }).connect((_rpcClient) => biconomySmartAccount);
 
   const scwAddress = await provider.getAddress();
   console.log("SCW Address", scwAddress);
