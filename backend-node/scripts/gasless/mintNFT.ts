@@ -5,7 +5,7 @@ import {
   DEFAULT_ENTRYPOINT_ADDRESS,
 } from "@biconomy/account";
 import { Bundler, UserOpStatus } from "@biconomy/bundler";
-import { BiconomyPaymaster } from "@biconomy/paymaster";
+import { BiconomyPaymaster, IHybridPaymaster, SponsorUserOperationDto } from "@biconomy/paymaster";
 import { PaymasterMode } from "@biconomy/paymaster";
 import {
   ECDSAOwnershipValidationModule,
@@ -86,17 +86,59 @@ export const mintNft = async () => {
   console.time("buildUserOp:");
   let partialUserOp = await biconomySmartAccount.buildUserOp([transaction], {
     // If we are sure to use sponsorship paymaster and for Biconomy Account V2 then pass mode like this below.
-    paymasterServiceData: {
+    /*paymasterServiceData: {
       mode: PaymasterMode.SPONSORED,
-    },
-    // skipBundlerGasEstimation: false, // true by default as if the paymaster is present gas estimations are done on the paymaster
+    },*/
+    skipBundlerGasEstimation: false, // true by default as if the paymaster is present gas estimations are done on the paymaster
   });
   console.timeEnd("buildUserOp:");
+
+  const biconomyPaymaster =
+    biconomySmartAccount.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
+
+  const paymasterServiceData = { 
+  smartAccountInfo: {version: '2.0.0', name: 'BICONOMY'},
+  calculateGasLimits: true,
+  mode: PaymasterMode.SPONSORED
+  }
+
+  const finalUserOp = partialUserOp;
+
+  try {
+    const paymasterAndDataWithLimits =
+      await biconomyPaymaster.getPaymasterAndData(
+        partialUserOp,
+        paymasterServiceData
+      );
+    finalUserOp.paymasterAndData = paymasterAndDataWithLimits.paymasterAndData;
+
+    // below code is only needed if you sent the flag calculateGasLimits = true
+    if (
+      paymasterAndDataWithLimits.callGasLimit &&
+      paymasterAndDataWithLimits.verificationGasLimit &&
+      paymasterAndDataWithLimits.preVerificationGas
+    ) {
+      // Returned gas limits must be replaced in your op as you update paymasterAndData.
+      // Because these are the limits paymaster service signed on to generate paymasterAndData
+      // If you receive AA34 error check here..
+
+      finalUserOp.callGasLimit = paymasterAndDataWithLimits.callGasLimit;
+      finalUserOp.verificationGasLimit =
+        paymasterAndDataWithLimits.verificationGasLimit;
+      finalUserOp.preVerificationGas =
+        paymasterAndDataWithLimits.preVerificationGas;
+    }
+  } catch (e) {
+    console.log("error received ", e);
+  }
+
+
+
 
   // ------------------------STEP 3: Sign the UserOp and send to the Bundler--------------------------------//
 
   console.log(
-    chalk.blue(`userOp: ${JSON.stringify(partialUserOp, null, "\t")}`)
+    chalk.blue(`userOp: ${JSON.stringify(finalUserOp, null, "\t")}`)
   );
 
   // Below function gets the signature from the user (signer provided in Biconomy Smart Account)
@@ -104,7 +146,7 @@ export const mintNft = async () => {
   try {
     console.time("sendUserOp");
 
-    const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp);
+    const userOpResponse = await biconomySmartAccount.sendUserOp(finalUserOp);
     console.timeEnd("sendUserOp");
     console.time("wait1");
     // strict types
