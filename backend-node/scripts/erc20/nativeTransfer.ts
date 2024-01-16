@@ -1,15 +1,17 @@
+/** @format */
+
 import { Hex, createWalletClient, http, parseEther } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
 import { WalletClientSigner } from "@alchemy/aa-core";
-import { BiconomySmartAccountV2 } from "@biconomy-devx/account";
+import { BiconomySmartAccountV2 } from "@biconomy/account";
 import {
   IHybridPaymaster,
   PaymasterFeeQuote,
   PaymasterMode,
   SponsorUserOperationDto,
-} from "@biconomy-devx/paymaster";
+} from "@biconomy/paymaster";
 import config from "../../config.json";
 import inquirer from "inquirer";
 

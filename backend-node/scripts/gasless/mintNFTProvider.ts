@@ -1,3 +1,5 @@
+/** @format */
+
 import {
   Hex,
   createWalletClient,
@@ -12,7 +14,7 @@ import { WalletClientSigner } from "@alchemy/aa-core";
 import {
   BiconomySmartAccountV2,
   BiconomyAccountProvider,
-} from "@biconomy-devx/account";
+} from "@biconomy/account";
 import config from "../../config.json";
 
 export const mintNFTProvider = async () => {

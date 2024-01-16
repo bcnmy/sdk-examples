@@ -1,3 +1,5 @@
+/** @format */
+
 import {
   Hex,
   createWalletClient,
@@ -9,11 +11,11 @@ import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
 import { WalletClientSigner } from "@alchemy/aa-core";
-import { BiconomySmartAccountV2 } from "@biconomy-devx/account";
+import { BiconomySmartAccountV2 } from "@biconomy/account";
 import {
   DEFAULT_MULTICHAIN_MODULE,
   MultiChainValidationModule,
-} from "@biconomy-devx/modules";
+} from "@biconomy/modules";
 import config from "../../config.json";
 
 export const multiChainMint = async () => {

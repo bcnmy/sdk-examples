@@ -1,13 +1,11 @@
-import {
-  Hex,
-  encodeFunctionData,
-  parseAbi,
-} from "viem";
+/** @format */
+
+import { Hex, encodeFunctionData, parseAbi } from "viem";
 import { ethers } from "ethers";
 const chalk = require("chalk");
 import { LocalAccountSigner } from "@alchemy/aa-core";
-import { BiconomySmartAccountV2 } from "@biconomy-devx/account";
-import { BiconomyPaymaster, PaymasterMode } from "@biconomy-devx/paymaster";
+import { BiconomySmartAccountV2 } from "@biconomy/account";
+import { BiconomyPaymaster, PaymasterMode } from "@biconomy/paymaster";
 import config from "../../config.json";
 
 export const mintNftEthers = async () => {

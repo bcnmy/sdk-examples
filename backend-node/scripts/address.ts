@@ -1,9 +1,11 @@
+/** @format */
+
 import { Hex, createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
 import { WalletClientSigner } from "@alchemy/aa-core";
-import { BiconomySmartAccountV2 } from "@biconomy-devx/account";
+import { BiconomySmartAccountV2 } from "@biconomy/account";
 import config from "../config.json";
 
 export const getAddress = async () => {
