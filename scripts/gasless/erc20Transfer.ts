@@ -33,7 +33,7 @@ export const erc20Transfer = async (
   const biconomySmartAccount = await BiconomySmartAccountV2.create({
     chainId: config.chainId,
     rpcUrl: config.rpcUrl,
-    signer: new WalletClientSigner(client as any, "viem"),
+    signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });

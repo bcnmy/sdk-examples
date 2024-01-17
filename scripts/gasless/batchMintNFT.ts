@@ -8,7 +8,6 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { WalletClientSigner } from "@alchemy/aa-core";
 import { BiconomySmartAccountV2 } from "@biconomy/account";
 import { BiconomyPaymaster, PaymasterMode } from "@biconomy/paymaster";
 import config from "../../config.json";
@@ -28,7 +27,7 @@ export const batchMintNft = async () => {
   const biconomySmartAccount = await BiconomySmartAccountV2.create({
     chainId: config.chainId,
     rpcUrl: config.rpcUrl,
-    signer: new WalletClientSigner(client as any, "viem"),
+    signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
