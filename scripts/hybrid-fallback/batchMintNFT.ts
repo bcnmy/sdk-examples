@@ -18,7 +18,7 @@ import {
   DEFAULT_ECDSA_OWNERSHIP_MODULE,
   ECDSAOwnershipValidationModule,
 } from "@biconomy/modules";
-import { EthersSigner } from "@biconomy/account";
+import { EthersSigner, createSmartWalletClient } from "@biconomy/account";
 import { Hex } from "viem";
 
 export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
@@ -61,7 +61,7 @@ export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
   };
 
   // create biconomy smart account instance
-  const biconomySmartAccount = await BiconomySmartAccountV2.create(
+  const biconomySmartAccount = await createSmartWalletClient(
     biconomySmartAccountConfig
   );
 

@@ -2,9 +2,9 @@ import { BytesLike, ethers } from "ethers";
 const chalk = require("chalk");
 import inquirer from "inquirer";
 import {
-  BiconomySmartAccountV2,
   DEFAULT_ENTRYPOINT_ADDRESS,
   EthersSigner,
+  createSmartWalletClient,
 } from "@biconomy/account";
 import { Bundler } from "@biconomy/bundler";
 import { BiconomyPaymaster } from "@biconomy/paymaster";
@@ -61,7 +61,7 @@ export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
   };
 
   // create biconomy smart account instance
-  const biconomySmartAccount = await BiconomySmartAccountV2.create(
+  const biconomySmartAccount = await createSmartWalletClient(
     biconomySmartAccountConfig
   );
 

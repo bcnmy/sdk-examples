@@ -27,10 +27,10 @@ export const mintNFTProvider = async () => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart provider instance
-  const biconomySmartAccount = await BiconomySmartAccountV2.create({
+  const biconomySmartAccount = await createSmartWalletClient({
     chainId: config.chainId,
     rpcUrl: config.rpcUrl,
-    signer: new WalletClientSigner(client as any, "viem"),
+    signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
