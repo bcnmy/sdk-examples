@@ -5,13 +5,12 @@
   "main": "scripts/index.js",
   "scripts": {
     "start": "ts-node scripts/index.ts",
-    "smartAccount": "ts-node scripts/index.ts",
+    "smartAccount": "tsc --noEmit && ts-node scripts/index.ts",
     "link:local": "yarn link '@biconomy/account' '@biconomy/bundler' '@biconomy/modules' '@biconomy/paymaster'"
   },
   "keywords": [],
   "license": "ISC",
   "dependencies": {
-    "@alchemy/aa-core": "^1.2.2",
     "@biconomy/account": "3.1.2",
     "@biconomy/bundler": "3.1.2",
     "@biconomy/modules": "3.1.2",

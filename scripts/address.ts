@@ -2,8 +2,7 @@ import { Hex, createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { WalletClientSigner } from "@alchemy/aa-core";
-import { BiconomySmartAccountV2 } from "@biconomy/account";
+import { createSmartWalletClient } from "@biconomy/account";
 import config from "../config.json";
 
 export const getAddress = async () => {
@@ -18,10 +17,10 @@ export const getAddress = async () => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const biconomySmartAccount = await BiconomySmartAccountV2.create({
+  const biconomySmartAccount = await createSmartWalletClient({
     chainId: config.chainId,
     rpcUrl: config.rpcUrl,
-    signer: new WalletClientSigner(client as any, "viem"),
+    signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
