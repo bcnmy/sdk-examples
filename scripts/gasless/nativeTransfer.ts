@@ -3,7 +3,7 @@ import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
 import {
-  WalletClientSigner
+  WalletClientSigner,
   createSmartWalletClient,
   Paymaster,
   PaymasterMode,

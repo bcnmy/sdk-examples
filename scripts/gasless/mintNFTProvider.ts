@@ -8,10 +8,9 @@ import {
 import { polygonMumbai } from "viem/chains";
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
-import { WalletClientSigner } from "@alchemy/aa-core";
 import {
-  BiconomySmartAccountV2,
   BiconomyAccountProvider,
+  createSmartWalletClient,
 } from "@biconomy/account";
 import config from "../../config.json";
 
@@ -35,7 +34,7 @@ export const mintNFTProvider = async () => {
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
   const provider = new BiconomyAccountProvider({
-    chain: polygonMumbai,
+    chain: polygonMumbai as any,
     rpcProvider: config.rpcUrl,
   }).connect((_rpcClient) => biconomySmartAccount);
 
