@@ -35,14 +35,12 @@ export const erc20TransferPayERC20 = async (
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const biconomySmartAccount = await createSmartWalletClient({
-    chainId: config.chainId,
-    rpcUrl: config.rpcUrl,
+  const smartWallet = await createSmartWalletClient({
     signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
-  const scwAddress = await biconomySmartAccount.getAccountAddress();
+  const scwAddress = await smartWallet.getAccountAddress();
   console.log("SCW Address", scwAddress);
 
   // ------ 3. Generate transaction data
@@ -54,18 +52,17 @@ export const erc20TransferPayERC20 = async (
   });
 
   // ------ 4. Build partial user operation
-  const userOp = await biconomySmartAccount.buildUserOp([
+  const userOp = await smartWallet.buildUserOp([
     {
       to: tokenAddress,
       data: data,
-      value: 0,
     },
   ]);
   console.log("userOp", userOp);
 
   // ------ 5. Get Fee quotes (for ERC20 payment)
   const biconomyPaymaster =
-    biconomySmartAccount.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
+    smartWallet.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
   const feeQuotesResponse = await biconomyPaymaster.getPaymasterFeeQuotesOrData(
     userOp,
     {
@@ -97,14 +94,11 @@ export const erc20TransferPayERC20 = async (
 
   // Once you have selected feeQuote (use has chosen token to pay with) get updated userOp which checks for paymaster approval and appends approval tx
   // ------ 5. Build user operation
-  const finalUserOp = await biconomySmartAccount.buildTokenPaymasterUserOp(
-    userOp,
-    {
-      feeQuote: selectedFeeQuote,
-      spender: spender as Hex,
-      maxApproval: false,
-    }
-  );
+  const finalUserOp = await smartWallet.buildTokenPaymasterUserOp(userOp, {
+    feeQuote: selectedFeeQuote,
+    spender: spender as Hex,
+    maxApproval: false,
+  });
 
   // ------ 6. Get paymaster and data for erc20 payment
   let paymasterServiceData = {
@@ -127,7 +121,7 @@ export const erc20TransferPayERC20 = async (
   }
 
   // ------ 7. Send user operation and get tx hash
-  const tx = await biconomySmartAccount.sendUserOp(finalUserOp);
+  const tx = await smartWallet.sendUserOp(finalUserOp);
   const { transactionHash } = await tx.waitForTxHash();
   console.log("transactionHash", transactionHash);
 };

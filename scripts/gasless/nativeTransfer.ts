@@ -22,25 +22,22 @@ export const nativeTransfer = async (to: string, amount: number) => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const biconomySmartAccount = await createSmartWalletClient({
-    chainId: config.chainId,
-    rpcUrl: config.rpcUrl,
-    signer: new WalletClientSigner(client as any, "viem"),
+  const smartWallet = await createSmartWalletClient({
+    signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
-  const scwAddress = await biconomySmartAccount.getAccountAddress();
+  const scwAddress = await smartWallet.getAccountAddress();
   console.log("SCW Address", scwAddress);
 
   // ------ 3. Generate transaction data
   const txData = {
     to,
     value: parseEther(amount.toString()),
-    data: "0x",
   };
 
   // ------ 4. Build user operation
-  const userOp = await biconomySmartAccount.buildUserOp([txData]);
+  const userOp = await smartWallet.buildUserOp([txData]);
   console.log("userOp", userOp);
 
   // ------ 5. Get paymaster and data for gaslesss transaction
@@ -57,7 +54,7 @@ export const nativeTransfer = async (to: string, amount: number) => {
   userOp.preVerificationGas = paymasterData.preVerificationGas;
 
   // ------ 6. Send user operation and get tx hash
-  const tx = await biconomySmartAccount.sendUserOp(userOp);
+  const tx = await smartWallet.sendUserOp(userOp);
   const { transactionHash } = await tx.waitForTxHash();
   console.log("transactionHash", transactionHash);
 };
