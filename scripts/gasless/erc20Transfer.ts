@@ -8,8 +8,11 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { createSmartWalletClient } from "@biconomy/account";
-import { BiconomyPaymaster, PaymasterMode } from "@biconomy/paymaster";
+import {
+  createSmartWalletClient,
+  Paymaster,
+  PaymasterMode,
+} from "@biconomy/account";
 import config from "../../config.json";
 import { ERC20ABI } from "../utils/abi";
 
@@ -29,14 +32,12 @@ export const erc20Transfer = async (
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const biconomySmartAccount = await createSmartWalletClient({
-    chainId: config.chainId,
-    rpcUrl: config.rpcUrl,
+  const smartWallet = await createSmartWalletClient({
     signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
-  const scwAddress = await biconomySmartAccount.getAccountAddress();
+  const scwAddress = await smartWallet.getAccountAddress();
   console.log("SCW Address", scwAddress);
 
   // ------ 3. Generate transaction data
@@ -48,18 +49,17 @@ export const erc20Transfer = async (
   });
 
   // ------ 4. Build user operation
-  const userOp = await biconomySmartAccount.buildUserOp([
+  const userOp = await smartWallet.buildUserOp([
     {
       to: tokenAddress,
       data: data,
-      value: 0,
     },
   ]);
   console.log("userOp", userOp);
 
   // ------ 5. Get paymaster and data for gaslesss transaction
-  const paymaster = new BiconomyPaymaster({
-    paymasterUrl: config.biconomyPaymasterUrl,
+  const paymaster = new Paymaster({
+    paymasterUrl: config.biconomyPaymasterApiKey,
   });
   const paymasterData = await paymaster.getPaymasterAndData(userOp, {
     mode: PaymasterMode.SPONSORED,
@@ -71,7 +71,7 @@ export const erc20Transfer = async (
   userOp.preVerificationGas = paymasterData.preVerificationGas;
 
   // ------ 6. Send user operation and get tx hash
-  const tx = await biconomySmartAccount.sendUserOp(userOp);
+  const tx = await smartWallet.sendUserOp(userOp);
   const { transactionHash } = await tx.waitForTxHash();
   console.log("transactionHash", transactionHash);
 };

@@ -8,11 +8,8 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { createSmartWalletClient, WalletClientSigner } from "@biconomy/account";
-import {
-  DEFAULT_MULTICHAIN_MODULE,
-  MultiChainValidationModule,
-} from "@biconomy/modules";
+import { createSmartWalletClient } from "@biconomy/account";
+import { createMultiChainValidationModule } from "@biconomy/modules";
 import config from "../../config.json";
 
 export const multiChainMint = async () => {
@@ -27,34 +24,27 @@ export const multiChainMint = async () => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create module and biconomy smart account instance
-  const signer = new WalletClientSigner(client as any, "viem");
-  const multiChainModule = await MultiChainValidationModule.create({
-    signer: signer,
-    moduleAddress: DEFAULT_MULTICHAIN_MODULE,
+  const multiChainModule = await createMultiChainValidationModule({
+    signer: client,
   });
-  const biconomySmartAccount1 = await createSmartWalletClient({
-    chainId: config.chainId,
-    rpcUrl: config.rpcUrl,
-    signer: signer,
+  const smartWallet1 = await createSmartWalletClient({
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
     defaultValidationModule: multiChainModule,
-    activeValidationModule: multiChainModule,
   });
-  const scwAddress1 = await biconomySmartAccount1.getAccountAddress();
+  const scwAddress1 = await smartWallet1.getAccountAddress();
   console.log("SCW Address 1", scwAddress1);
 
-  const biconomySmartAccount2 = await createSmartWalletClient({
+  const smartWallet2 = await createSmartWalletClient({
     chainId: 97,
     rpcUrl: "https://data-seed-prebsc-1-s2.binance.org:8545",
-    signer: signer,
+    signer: client,
     bundlerUrl:
       "https://bundler.biconomy.io/api/v2/97/A5CBjLqSc.0dcbc53e-anPe-44c7-b22d-21071345f76a",
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
     defaultValidationModule: multiChainModule,
-    activeValidationModule: multiChainModule,
   });
-  const scwAddress2 = await biconomySmartAccount2.getAccountAddress();
+  const scwAddress2 = await smartWallet2.getAccountAddress();
   console.log("SCW Address 1", scwAddress2);
 
   // ------ 3. Generate transaction data
@@ -72,18 +62,16 @@ export const multiChainMint = async () => {
   });
 
   // ------ 4. Build user operation
-  let userOp1 = await biconomySmartAccount1.buildUserOp([
+  let userOp1 = await smartWallet1.buildUserOp([
     {
       to: nftAddress,
       data: nftData1,
-      value: 0,
     },
   ]);
-  let userOp2 = await biconomySmartAccount1.buildUserOp([
+  let userOp2 = await smartWallet1.buildUserOp([
     {
       to: nftAddress,
       data: nftData2,
-      value: 0,
     },
   ]);
   const returnedOps = await multiChainModule.signUserOps([
@@ -93,7 +81,7 @@ export const multiChainMint = async () => {
   console.log("both returned ops", returnedOps);
 
   try {
-    const tx = await biconomySmartAccount1.sendSignedUserOp(returnedOps[0]);
+    const tx = await smartWallet1.sendSignedUserOp(returnedOps[0]);
     const { transactionHash } = await tx.waitForTxHash();
     console.log("transactionHash1", transactionHash);
   } catch (e) {
@@ -101,7 +89,7 @@ export const multiChainMint = async () => {
   }
 
   try {
-    const tx = await biconomySmartAccount2.sendSignedUserOp(returnedOps[1]);
+    const tx = await smartWallet2.sendSignedUserOp(returnedOps[1]);
     const { transactionHash } = await tx.waitForTxHash();
     console.log("transactionHash2", transactionHash);
   } catch (e) {

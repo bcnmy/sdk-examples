@@ -32,14 +32,12 @@ export const parallelUserOpsMintNFTPayERC20 = async () => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const biconomySmartAccount = await createSmartWalletClient({
-    chainId: config.chainId,
-    rpcUrl: config.rpcUrl,
-    signer: new WalletClientSigner(client as any, "viem"),
+  const smartWallet = await createSmartWalletClient({
+    signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
-  const scwAddress = await biconomySmartAccount.getAccountAddress();
+  const scwAddress = await smartWallet.getAccountAddress();
   console.log("SCW Address", scwAddress);
 
   // ------ 3. Generate transaction data
@@ -55,12 +53,11 @@ export const parallelUserOpsMintNFTPayERC20 = async () => {
   let partialUserOps = [];
   // Use a nonceKey that is unique, easy way is to increment the nonceKey
   for (let nonceKey = 0; nonceKey < numOfParallelUserOps; nonceKey++) {
-    let partialUserOp = await biconomySmartAccount.buildUserOp(
+    let partialUserOp = await smartWallet.buildUserOp(
       [
         {
           to: nftAddress,
           data: nftData,
-          value: 0,
         },
       ],
       { nonceOptions: { nonceKey } }
@@ -71,7 +68,7 @@ export const parallelUserOpsMintNFTPayERC20 = async () => {
   const finalUserOps = [];
   // ------ 5. Get Fee quotes (for ERC20 payment)
   const biconomyPaymaster =
-    biconomySmartAccount.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
+    smartWallet.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
   for (let index = 0; index < numOfParallelUserOps; index++) {
     const feeQuotesResponse =
       await biconomyPaymaster.getPaymasterFeeQuotesOrData(
@@ -106,7 +103,7 @@ export const parallelUserOpsMintNFTPayERC20 = async () => {
 
     // Once you have selected feeQuote (use has chosen token to pay with) get updated userOp which checks for paymaster approval and appends approval tx
     // ------ 5. Build user operation
-    let finalUserOp = await biconomySmartAccount.buildTokenPaymasterUserOp(
+    let finalUserOp = await smartWallet.buildTokenPaymasterUserOp(
       partialUserOps[index],
       {
         feeQuote: selectedFeeQuote,
@@ -160,7 +157,7 @@ export const parallelUserOpsMintNFTPayERC20 = async () => {
           )}`
         )
       );
-      const userOpResponsePromise = biconomySmartAccount.sendUserOp(
+      const userOpResponsePromise = smartWallet.sendUserOp(
         shuffledPartialUserOps[index]
       );
       userOpResponsePromises.push(userOpResponsePromise);

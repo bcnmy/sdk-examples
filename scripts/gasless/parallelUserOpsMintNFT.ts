@@ -8,8 +8,11 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { createSmartWalletClient, WalletClientSigner } from "@biconomy/account";
-import { BiconomyPaymaster, PaymasterMode } from "@biconomy/paymaster";
+import {
+  createSmartWalletClient,
+  Paymaster,
+  PaymasterMode,
+} from "@biconomy/account";
 import config from "../../config.json";
 
 const numOfParallelUserOps = config.numOfParallelUserOps;
@@ -26,14 +29,12 @@ export const parallelUserOpsMintNft = async () => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const biconomySmartAccount = await createSmartWalletClient({
-    chainId: config.chainId,
-    rpcUrl: config.rpcUrl,
-    signer: new WalletClientSigner(client as any, "viem"),
+  const smartWallet = await createSmartWalletClient({
+    signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
-  const scwAddress = await biconomySmartAccount.getAccountAddress();
+  const scwAddress = await smartWallet.getAccountAddress();
   console.log("SCW Address", scwAddress);
 
   // ------ 3. Generate transaction data
@@ -49,12 +50,11 @@ export const parallelUserOpsMintNft = async () => {
   let partialUserOps = [];
   // Use a nonceKey that is unique, easy way is to increment the nonceKey
   for (let nonceKey = 0; nonceKey < numOfParallelUserOps; nonceKey++) {
-    let partialUserOp = await biconomySmartAccount.buildUserOp(
+    let partialUserOp = await smartWallet.buildUserOp(
       [
         {
           to: nftAddress,
           data: nftData,
-          value: 0,
         },
       ],
       { nonceOptions: { nonceKey } }
@@ -63,7 +63,7 @@ export const parallelUserOpsMintNft = async () => {
   }
 
   // ------ 5. Get paymaster and data for gaslesss transaction
-  const paymaster = new BiconomyPaymaster({
+  const paymaster = new Paymaster({
     paymasterUrl: config.biconomyPaymasterUrl,
   });
   try {
@@ -104,7 +104,7 @@ export const parallelUserOpsMintNft = async () => {
           )}`
         )
       );
-      const userOpResponsePromise = biconomySmartAccount.sendUserOp(
+      const userOpResponsePromise = smartWallet.sendUserOp(
         shuffledPartialUserOps[index]
       );
       userOpResponsePromises.push(userOpResponsePromise);

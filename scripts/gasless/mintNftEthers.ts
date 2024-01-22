@@ -1,8 +1,11 @@
 import { Hex, encodeFunctionData, parseAbi } from "viem";
 import { ethers } from "ethers";
 const chalk = require("chalk");
-import { createSmartWalletClient } from "@biconomy/account";
-import { BiconomyPaymaster, PaymasterMode } from "@biconomy/paymaster";
+import {
+  createSmartWalletClient,
+  Paymaster,
+  PaymasterMode,
+} from "@biconomy/account";
 import config from "../../config.json";
 
 export const mintNftEthers = async () => {
@@ -13,15 +16,13 @@ export const mintNftEthers = async () => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const biconomySmartAccount = await createSmartWalletClient({
-    chainId: config.chainId,
-    rpcUrl: config.rpcUrl,
-    signer: signer,
+  const smartWallet = await createSmartWalletClient({
+    signer,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
   console.log("here");
-  const scwAddress = await biconomySmartAccount.getAccountAddress();
+  const scwAddress = await smartWallet.getAccountAddress();
   console.log("SCW Address", scwAddress);
 
   // ------ 3. Generate transaction data
@@ -34,17 +35,16 @@ export const mintNftEthers = async () => {
   });
 
   // ------ 4. Build user operation
-  const userOp = await biconomySmartAccount.buildUserOp([
+  const userOp = await smartWallet.buildUserOp([
     {
       to: nftAddress,
       data: nftData,
-      value: 0,
     },
   ]);
   console.log("userOp", userOp);
 
   // ------ 5. Get paymaster and data for gaslesss transaction
-  const paymaster = new BiconomyPaymaster({
+  const paymaster = new Paymaster({
     paymasterUrl: config.biconomyPaymasterUrl,
   });
   const paymasterData = await paymaster.getPaymasterAndData(userOp, {
@@ -57,7 +57,7 @@ export const mintNftEthers = async () => {
   userOp.preVerificationGas = paymasterData.preVerificationGas;
 
   // ------ 6. Send user operation and get tx hash
-  const tx = await biconomySmartAccount.sendUserOp(userOp);
+  const tx = await smartWallet.sendUserOp(userOp);
   const { transactionHash } = await tx.waitForTxHash();
   console.log("transactionHash", transactionHash);
 };
