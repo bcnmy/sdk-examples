@@ -3,7 +3,6 @@ import { ethers } from "ethers";
 const chalk = require("chalk");
 import {
   createSmartWalletClient,
-  Paymaster,
   PaymasterMode,
 } from "@biconomy/account";
 import config from "../../config.json";
@@ -35,29 +34,13 @@ export const mintNftEthers = async () => {
   });
 
   // ------ 4. Build user operation
-  const userOp = await smartWallet.buildUserOp([
-    {
-      to: nftAddress,
-      data: nftData,
-    },
-  ]);
-  console.log("userOp", userOp);
+  const tx = {
+    to: nftAddress,
+    data: nftData,
+  };
 
-  // ------ 5. Get paymaster and data for gaslesss transaction
-  const paymaster = new Paymaster({
-    paymasterUrl: config.biconomyPaymasterUrl,
-  });
-  const paymasterData = await paymaster.getPaymasterAndData(userOp, {
-    mode: PaymasterMode.SPONSORED,
-  });
-  console.log("paymasterData", paymasterData);
-  userOp.paymasterAndData = paymasterData.paymasterAndData;
-  userOp.callGasLimit = paymasterData.callGasLimit;
-  userOp.verificationGasLimit = paymasterData.verificationGasLimit;
-  userOp.preVerificationGas = paymasterData.preVerificationGas;
-
-  // ------ 6. Send user operation and get tx hash
-  const tx = await smartWallet.sendUserOp(userOp);
-  const { transactionHash } = await tx.waitForTxHash();
+  // ------ 5. Send user operation and get tx hash
+  const userOpResponse = await smartWallet.sendTransaction(tx, {paymasterServiceData: {mode: PaymasterMode.SPONSORED}});
+  const { transactionHash } = await userOpResponse.waitForTxHash();
   console.log("transactionHash", transactionHash);
 };

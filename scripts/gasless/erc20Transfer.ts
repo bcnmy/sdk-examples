@@ -48,30 +48,15 @@ export const erc20Transfer = async (
     args: [recipientAddress, parseEther(amount.toString())], // parsing token value with base 18
   });
 
-  // ------ 4. Build user operation
-  const userOp = await smartWallet.buildUserOp([
-    {
-      to: tokenAddress,
-      data: data,
-    },
-  ]);
-  console.log("userOp", userOp);
+  const transferTx = {
+    to: tokenAddress,
+    data: data,
+  };
 
-  // ------ 5. Get paymaster and data for gaslesss transaction
-  const paymaster = new Paymaster({
-    paymasterUrl: config.biconomyPaymasterApiKey,
-  });
-  const paymasterData = await paymaster.getPaymasterAndData(userOp, {
-    mode: PaymasterMode.SPONSORED,
-  });
-  console.log("paymasterData", paymasterData);
-  userOp.paymasterAndData = paymasterData.paymasterAndData;
-  userOp.callGasLimit = paymasterData.callGasLimit;
-  userOp.verificationGasLimit = paymasterData.verificationGasLimit;
-  userOp.preVerificationGas = paymasterData.preVerificationGas;
-
-  // ------ 6. Send user operation and get tx hash
-  const tx = await smartWallet.sendUserOp(userOp);
+  // ------ 4. Send user operation and get tx hash
+  const tx = await smartWallet.sendTransaction(transferTx, {paymasterServiceData: {
+    mode: PaymasterMode.SPONSORED
+  }});
   const { transactionHash } = await tx.waitForTxHash();
   console.log("transactionHash", transactionHash);
 };
