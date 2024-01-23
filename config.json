@@ -1,11 +1,12 @@
 {
-  "privateKey": "0x7e156cb7f33ce7e7eda3cb0b6188e9639a3bb3d0d0dd194096ae21017677866d",
+  "privateKey": "",
   "accountIndex": 0,
   "chainId": 80001,
   "rpcUrl": "https://rpc.ankr.com/polygon_mumbai",
   "bundlerUrl": "https://bundler.biconomy.io/api/v2/80001/A5CBjLqSc.0dcbc53e-anPe-44c7-b22d-21071345f76a",
-  "biconomyPaymasterUrl": "https://paymaster.biconomy.io/api/v1/80001/tf47vamuW.3c55594d-14f8-4451-b5dd-39f46abe272a",
-  "biconomyPaymasterApiKey": "tf47vamuW.3c55594d-14f8-4451-b5dd-39f46abe272a",
+  "biconomyPaymasterUrl": "",
+  "biconomyPaymasterApiKey": "",
+  "biconomyPaymasterApiKeyBase": "",
   "preferredToken": "",
   "numOfParallelUserOps": 2,
   "tokenList": []

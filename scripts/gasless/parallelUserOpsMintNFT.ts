@@ -10,7 +10,6 @@ const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
 import {
   createSmartWalletClient,
-  Paymaster,
   PaymasterMode,
 } from "@biconomy/account";
 import config from "../../config.json";
@@ -57,30 +56,19 @@ export const parallelUserOpsMintNft = async () => {
           data: nftData,
         },
       ],
-      { nonceOptions: { nonceKey } }
+      {
+        paymasterServiceData: {
+          mode: PaymasterMode.SPONSORED,
+        },
+        nonceOptions: {
+          nonceKey
+        }
+      },
     );
     partialUserOps.push(partialUserOp);
   }
 
-  // ------ 5. Get paymaster and data for gaslesss transaction
-  const paymaster = new Paymaster({
-    paymasterUrl: config.biconomyPaymasterUrl,
-  });
-  try {
-    for (let index = 0; index < numOfParallelUserOps; index++) {
-      const pData = await paymaster.getPaymasterAndData(partialUserOps[index], {
-        mode: PaymasterMode.SPONSORED,
-      });
-      partialUserOps[index].paymasterAndData = pData.paymasterAndData;
-      partialUserOps[index].callGasLimit = pData.callGasLimit;
-      partialUserOps[index].verificationGasLimit = pData.verificationGasLimit;
-      partialUserOps[index].preVerificationGas = pData.preVerificationGas;
-    }
-  } catch (e) {
-    console.log("error received ", e);
-  }
-
-  // ------ 6. Send user operation and get tx hash
+  // ------ 5. Send user operation and get tx hash
   try {
     let userOpResponsePromises = [];
     /**

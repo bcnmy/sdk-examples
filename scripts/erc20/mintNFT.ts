@@ -71,7 +71,7 @@ export const mintNftPayERC20 = async () => {
     }
   );
   const feeQuotes = feeQuotesResponse.feeQuotes as PaymasterFeeQuote[];
-  const spender = feeQuotesResponse.tokenPaymasterAddress || "";
+  const spender = feeQuotesResponse.tokenPaymasterAddress;
   // Generate list of options for the user to select
   const choices = feeQuotes?.map((quote: any, index: number) => ({
     name: `Option ${index + 1}: ${quote.maxGasFee}: ${quote.symbol} `,
@@ -88,35 +88,13 @@ export const mintNftPayERC20 = async () => {
   ]);
   const selectedFeeQuote = feeQuotes[selectedOption];
 
-  // Once you have selected feeQuote (use has chosen token to pay with) get updated userOp which checks for paymaster approval and appends approval tx
-  // ------ 5. Build user operation
-  const finalUserOp = await smartWallet.buildTokenPaymasterUserOp(userOp, {
+  const finalUserOp = await smartWallet.setPaymasterUserOp(userOp, {
+    mode: PaymasterMode.ERC20,
     feeQuote: selectedFeeQuote,
-    spender: spender as Hex,
-    maxApproval: false,
-  });
+    spender,
+  })
 
-  // ------ 6. Get paymaster and data for erc20 payment
-  let paymasterServiceData = {
-    mode: PaymasterMode.ERC20, // - mandatory // now we know chosen fee token and requesting paymaster and data for it
-    feeTokenAddress: selectedFeeQuote.tokenAddress,
-  };
-  try {
-    const pData = await biconomyPaymaster.getPaymasterAndData(
-      finalUserOp,
-      paymasterServiceData
-    );
-    finalUserOp.paymasterAndData = pData.paymasterAndData;
-    // below code is only needed if you sent the flag calculateGasLimits = true
-    // default value of calculateGasLimits is true
-    finalUserOp.callGasLimit = pData.callGasLimit;
-    finalUserOp.verificationGasLimit = pData.verificationGasLimit;
-    finalUserOp.preVerificationGas = pData.preVerificationGas;
-  } catch (e) {
-    console.log("error received ", e);
-  }
-
-  // ------ 7. Send user operation and get tx hash
+  // ------ 6. Send user operation and get tx hash
   const tx = await smartWallet.sendUserOp(finalUserOp);
   const { transactionHash } = await tx.waitForTxHash();
   console.log("transactionHash", transactionHash);

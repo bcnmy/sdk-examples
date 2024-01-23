@@ -149,6 +149,21 @@ yargs
       }
     }
   )
+  .command(
+    "mintNftEthers",
+    chalk.blue("Mint nft with ethers signer"),
+    {
+      mode: {
+        describe: chalk.cyan("Paymaster mode"),
+        demandOption: false,
+        type: "string",
+      },
+    },
+    (argv) => {
+      console.log(chalk.magenta("Minting an NFT token to the SmartAccount..."));
+        mintNftEthers();
+    }
+  )
   // Batch mint nft token to SmartAccount
   .command(
     "batchMint",

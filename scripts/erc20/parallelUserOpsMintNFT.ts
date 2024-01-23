@@ -8,7 +8,7 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { createSmartWalletClient, WalletClientSigner } from "@biconomy/account";
+import { createSmartWalletClient } from "@biconomy/account";
 import {
   IHybridPaymaster,
   PaymasterFeeQuote,
@@ -83,7 +83,7 @@ export const parallelUserOpsMintNFTPayERC20 = async () => {
         }
       );
     const feeQuotes = feeQuotesResponse.feeQuotes as PaymasterFeeQuote[];
-    const spender = feeQuotesResponse.tokenPaymasterAddress || "";
+    const spender = feeQuotesResponse.tokenPaymasterAddress;
 
     // Generate list of options for the user to select
     const choices = feeQuotes?.map((quote: any, index: number) => ({
@@ -101,36 +101,13 @@ export const parallelUserOpsMintNFTPayERC20 = async () => {
     ]);
     const selectedFeeQuote = feeQuotes[selectedOption];
 
-    // Once you have selected feeQuote (use has chosen token to pay with) get updated userOp which checks for paymaster approval and appends approval tx
-    // ------ 5. Build user operation
-    let finalUserOp = await smartWallet.buildTokenPaymasterUserOp(
-      partialUserOps[index],
-      {
-        feeQuote: selectedFeeQuote,
-        spender: spender as Hex,
-        maxApproval: false,
-      }
-    );
+    const finalUserOp = await smartWallet.setPaymasterUserOp(partialUserOps[index], {
+      mode: PaymasterMode.ERC20,
+      feeQuote: selectedFeeQuote,
+      spender,
+    })
 
-    // ------ 6. Get paymaster and data for erc20 payment
-    let paymasterServiceData = {
-      mode: PaymasterMode.ERC20, // - mandatory // now we know chosen fee token and requesting paymaster and data for it
-      feeTokenAddress: selectedFeeQuote.tokenAddress,
-    };
-
-    try {
-      const pData = await biconomyPaymaster.getPaymasterAndData(
-        finalUserOp,
-        paymasterServiceData
-      );
-      finalUserOp.paymasterAndData = pData.paymasterAndData;
-      finalUserOp.callGasLimit = pData.callGasLimit;
-      finalUserOp.verificationGasLimit = pData.verificationGasLimit;
-      finalUserOp.preVerificationGas = pData.preVerificationGas;
-      finalUserOps.push(finalUserOp);
-    } catch (e) {
-      console.log("error received ", e);
-    }
+    finalUserOps.push(finalUserOp);
   }
 
   // ------ 7. Send user operation and get tx hash

@@ -6,46 +6,52 @@ import {
   parseAbi,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-const chalk = require("chalk");
-import { polygonMumbai } from "viem/chains";
-import { createSmartWalletClient } from "@biconomy/account";
-import { createMultiChainValidationModule } from "@biconomy/modules";
+import { baseGoerli, polygonMumbai } from "viem/chains";
+import { PaymasterMode, createSmartWalletClient } from "@biconomy/account";
+import { DEFAULT_MULTICHAIN_MODULE, createMultiChainValidationModule } from "@biconomy/modules";
 import config from "../../config.json";
 
 export const multiChainMint = async () => {
   // ----- 1. Generate EOA from private key
   const account = privateKeyToAccount(config.privateKey as Hex);
-  const client = createWalletClient({
+  const mumbaiClient = createWalletClient({
     account,
     chain: polygonMumbai,
     transport: http(),
   });
-  const eoa = client.account.address;
-  console.log(chalk.blue(`EOA address: ${eoa}`));
+  const baseClient = createWalletClient({
+    account,
+    chain: baseGoerli,
+    transport: http(),
+  });
 
   // ------ 2. Create module and biconomy smart account instance
   const multiChainModule = await createMultiChainValidationModule({
-    signer: client,
+    signer: mumbaiClient,
+    moduleAddress: DEFAULT_MULTICHAIN_MODULE
   });
   const smartWallet1 = await createSmartWalletClient({
+    signer: mumbaiClient,
+    chainId: 80001,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
     defaultValidationModule: multiChainModule,
+    activeValidationModule: multiChainModule
   });
   const scwAddress1 = await smartWallet1.getAccountAddress();
   console.log("SCW Address 1", scwAddress1);
 
   const smartWallet2 = await createSmartWalletClient({
-    chainId: 97,
-    rpcUrl: "https://data-seed-prebsc-1-s2.binance.org:8545",
-    signer: client,
+    signer: baseClient,
+    chainId: 84531,
     bundlerUrl:
-      "https://bundler.biconomy.io/api/v2/97/A5CBjLqSc.0dcbc53e-anPe-44c7-b22d-21071345f76a",
-    biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
+      "https://bundler.biconomy.io/api/v2/84531/nJPK7B3ru.dd7f7861-190d-41bd-af80-6877f74b8f44",
+    biconomyPaymasterApiKey: config.biconomyPaymasterApiKeyBase,
     defaultValidationModule: multiChainModule,
+    activeValidationModule: multiChainModule
   });
   const scwAddress2 = await smartWallet2.getAccountAddress();
-  console.log("SCW Address 1", scwAddress2);
+  console.log("SCW Address 2", scwAddress2);
 
   // ------ 3. Generate transaction data
   const nftAddress = "0x1758f42Af7026fBbB559Dc60EcE0De3ef81f665e";
@@ -67,18 +73,18 @@ export const multiChainMint = async () => {
       to: nftAddress,
       data: nftData1,
     },
-  ]);
-  let userOp2 = await smartWallet1.buildUserOp([
+  ], {paymasterServiceData: {mode: PaymasterMode.SPONSORED}});
+  let userOp2 = await smartWallet2.buildUserOp([
     {
       to: nftAddress,
       data: nftData2,
     },
-  ]);
+  ], {paymasterServiceData: {mode: PaymasterMode.SPONSORED}});
+
   const returnedOps = await multiChainModule.signUserOps([
     { userOp: userOp1, chainId: 80001 },
-    { userOp: userOp2, chainId: 97 },
+    { userOp: userOp2, chainId: 84531 },
   ]);
-  console.log("both returned ops", returnedOps);
 
   try {
     const tx = await smartWallet1.sendSignedUserOp(returnedOps[0]);

@@ -2,16 +2,13 @@ import { ethers } from "ethers";
 const chalk = require("chalk");
 import inquirer from "inquirer";
 import {
-  Bundler,
   createSmartWalletClient,
-  Paymaster as PaymasterLib,
   PaymasterMode,
   IHybridPaymaster,
   PaymasterFeeQuote,
   SponsorUserOperationDto,
 } from "@biconomy/account";
 import config from "../../config.json";
-import { createECDSAOwnershipValidationModule } from "@biconomy/modules";
 import { Hex } from "viem";
 
 export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
@@ -23,25 +20,11 @@ export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
   const eoa = await signer.getAddress();
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
-  // create bundler and paymaster instances
-  const bundler = new Bundler({
-    bundlerUrl: config.bundlerUrl,
-  });
-
-  const paymaster = new PaymasterLib({
-    paymasterUrl: config.biconomyPaymasterUrl,
-  });
-
-  const ecdsaModule = await createECDSAOwnershipValidationModule({ signer });
-
-  // Biconomy smart account config
-  // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use
-
   // create biconomy smart account instance
   const smartWallet = await createSmartWalletClient({
-    paymaster,
-    bundler,
-    defaultValidationModule: ecdsaModule,
+    signer,
+    biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
+    bundlerUrl: config.bundlerUrl,
   });
 
   // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//
@@ -109,71 +92,18 @@ export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
     ]);
     const selectedFeeQuote = feeQuotes[selectedOption];
 
-    finalUserOp = await smartWallet.buildTokenPaymasterUserOp(partialUserOp, {
+    finalUserOp = await smartWallet.setPaymasterUserOp(finalUserOp, {
+      mode: PaymasterMode.ERC20,
       feeQuote: selectedFeeQuote,
-      spender: spender,
+      spender,
       maxApproval: false,
-    });
-
-    let paymasterServiceData = {
-      mode: PaymasterMode.ERC20, // - mandatory // now we know chosen fee token and requesting paymaster and data for it
-      feeTokenAddress: selectedFeeQuote.tokenAddress,
-      // optional params...
-      calculateGasLimits: true, // Always recommended when using paymaster
-    };
-
-    try {
-      const paymasterAndDataWithLimits = await Paymaster.getPaymasterAndData(
-        finalUserOp,
-        paymasterServiceData
-      );
-      finalUserOp.paymasterAndData =
-        paymasterAndDataWithLimits.paymasterAndData;
-
-      // below code is only needed if you sent the glaf calculateGasLimits = true
-      if (
-        paymasterAndDataWithLimits.callGasLimit &&
-        paymasterAndDataWithLimits.verificationGasLimit &&
-        paymasterAndDataWithLimits.preVerificationGas
-      ) {
-        // Returned gas limits must be replaced in your op as you update paymasterAndData.
-        // Because these are the limits paymaster service signed on to generate paymasterAndData
-        // If you receive AA34 error check here..
-
-        finalUserOp.callGasLimit = paymasterAndDataWithLimits.callGasLimit;
-        finalUserOp.verificationGasLimit =
-          paymasterAndDataWithLimits.verificationGasLimit;
-        finalUserOp.preVerificationGas =
-          paymasterAndDataWithLimits.preVerificationGas;
-      }
-    } catch (e) {
-      console.log("error received ", e);
-    }
+    })
   } else if (feeQuotesOrDataResponse.paymasterAndData) {
     // this means sponsorship is successful
-
-    finalUserOp.paymasterAndData = feeQuotesOrDataResponse?.paymasterAndData;
-
-    // below code is only needed if you sent the glaf calculateGasLimits = true
-    /*if (
-      feeQuotesOrDataResponse.callGasLimit &&
-      feeQuotesOrDataResponse.verificationGasLimit &&
-      feeQuotesOrDataResponse.preVerificationGas
-    ) {
-
-      // Returned gas limits must be replaced in your op as you update paymasterAndData.
-      // Because these are the limits paymaster service signed on to generate paymasterAndData
-      // If you receive AA34 error check here..   
-
-      finalUserOp.callGasLimit = feeQuotesOrDataResponse.callGasLimit;
-      finalUserOp.verificationGasLimit =
-        feeQuotesOrDataResponse.verificationGasLimit;
-      finalUserOp.preVerificationGas =
-        feeQuotesOrDataResponse.preVerificationGas;
-    }*/
+    finalUserOp = await smartWallet.setPaymasterUserOp(finalUserOp, {mode: PaymasterMode.SPONSORED})
   }
 
-  // ------------------------STEP 5: Sign the UserOp and send to the Bundler--------------------------------//
+  // ------------------------STEP 4: Sign the UserOp and send to the Bundler--------------------------------//
 
   console.log(chalk.blue(`userOp: ${JSON.stringify(finalUserOp, null, "\t")}`));
 
