@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 const chalk = require("chalk");
 import inquirer from "inquirer";
 import {
-  createSmartWalletClient,
+  createSmartAccountClient,
   PaymasterMode,
   IHybridPaymaster,
   PaymasterFeeQuote,
@@ -21,7 +21,7 @@ export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // create biconomy smart account instance
-  const smartWallet = await createSmartWalletClient({
+  const smartWallet = await createSmartAccountClient({
     signer,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
     bundlerUrl: config.bundlerUrl,

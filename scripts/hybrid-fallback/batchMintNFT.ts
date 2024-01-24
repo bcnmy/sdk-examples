@@ -9,7 +9,7 @@ import {
   BiconomySmartAccountV2Config,
 } from "@biconomy/account";
 import config from "../../config.json";
-import { createSmartWalletClient } from "@biconomy/account";
+import { createSmartAccountClient } from "@biconomy/account";
 
 export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
   // ------------------------STEP 1: Initialise Biconomy Smart Account SDK--------------------------------//
@@ -29,7 +29,7 @@ export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
   };
 
   // create biconomy smart account instance
-  const smartWallet = await createSmartWalletClient(smartWalletConfig);
+  const smartWallet = await createSmartAccountClient(smartWalletConfig);
 
   // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//
 
