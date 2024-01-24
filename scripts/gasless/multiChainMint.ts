@@ -7,7 +7,7 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { baseGoerli, polygonMumbai } from "viem/chains";
-import { PaymasterMode, createSmartWalletClient } from "@biconomy/account";
+import { PaymasterMode, createSmartAccountClient } from "@biconomy/account";
 import { DEFAULT_MULTICHAIN_MODULE, createMultiChainValidationModule } from "@biconomy/modules";
 import config from "../../config.json";
 
@@ -30,7 +30,7 @@ export const multiChainMint = async () => {
     signer: mumbaiClient,
     moduleAddress: DEFAULT_MULTICHAIN_MODULE
   });
-  const smartWallet1 = await createSmartWalletClient({
+  const smartWallet1 = await createSmartAccountClient({
     signer: mumbaiClient,
     chainId: 80001,
     bundlerUrl: config.bundlerUrl,
@@ -41,7 +41,7 @@ export const multiChainMint = async () => {
   const scwAddress1 = await smartWallet1.getAccountAddress();
   console.log("SCW Address 1", scwAddress1);
 
-  const smartWallet2 = await createSmartWalletClient({
+  const smartWallet2 = await createSmartAccountClient({
     signer: baseClient,
     chainId: 84531,
     bundlerUrl:
