@@ -8,10 +8,10 @@ import {
   PaymasterMode,
   SponsorUserOperationDto,
   Bundler,
-} from "@biconomy/account";
+} from "@biconomy-devx/account";
 import config from "../../config.json";
-import { createECDSAOwnershipValidationModule } from "@biconomy/modules";
-import { EthersSigner, createSmartWalletClient } from "@biconomy/account";
+import { createECDSAOwnershipValidationModule } from "@biconomy-devx/modules";
+import { EthersSigner, createSmartAccountClient } from "@biconomy-devx/account";
 import { Hex } from "viem";
 
 export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
@@ -44,7 +44,7 @@ export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
   };
 
   // create biconomy smart account instance
-  const smartWallet = await createSmartWalletClient(smartWalletConfig);
+  const smartWallet = await createSmartAccountClient(smartWalletConfig);
 
   // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//
 

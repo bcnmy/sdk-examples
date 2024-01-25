@@ -4,10 +4,10 @@ const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
 import {
   WalletClientSigner,
-  createSmartWalletClient,
+  createSmartAccountClient,
   Paymaster,
   PaymasterMode,
-} from "@biconomy/account";
+} from "@biconomy-devx/account";
 import config from "../../config.json";
 
 export const nativeTransfer = async (to: string, amount: number) => {
@@ -22,7 +22,7 @@ export const nativeTransfer = async (to: string, amount: number) => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const smartWallet = await createSmartWalletClient({
+  const smartWallet = await createSmartAccountClient({
     signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,

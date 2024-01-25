@@ -8,8 +8,8 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { createSmartWalletClient } from "@biconomy/account";
-import { createMultiChainValidationModule } from "@biconomy/modules";
+import { createSmartAccountClient } from "@biconomy-devx/account";
+import { createMultiChainValidationModule } from "@biconomy-devx/modules";
 import config from "../../config.json";
 
 export const multiChainMint = async () => {
@@ -27,7 +27,7 @@ export const multiChainMint = async () => {
   const multiChainModule = await createMultiChainValidationModule({
     signer: client,
   });
-  const smartWallet1 = await createSmartWalletClient({
+  const smartWallet1 = await createSmartAccountClient({
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
     defaultValidationModule: multiChainModule,
@@ -35,7 +35,7 @@ export const multiChainMint = async () => {
   const scwAddress1 = await smartWallet1.getAccountAddress();
   console.log("SCW Address 1", scwAddress1);
 
-  const smartWallet2 = await createSmartWalletClient({
+  const smartWallet2 = await createSmartAccountClient({
     chainId: 97,
     rpcUrl: "https://data-seed-prebsc-1-s2.binance.org:8545",
     signer: client,
