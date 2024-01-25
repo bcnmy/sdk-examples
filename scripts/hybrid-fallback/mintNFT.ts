@@ -3,7 +3,7 @@ const chalk = require("chalk");
 import inquirer from "inquirer";
 import {
   Bundler,
-  createSmartAccountClient,
+  createSmartWalletClient,
   Paymaster as PaymasterLib,
   PaymasterMode,
   IHybridPaymaster,
@@ -38,7 +38,7 @@ export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
   // Note that paymaster and bundler are optional. You can choose to create new instances of this later and make account API use
 
   // create biconomy smart account instance
-  const smartWallet = await createSmartAccountClient({
+  const smartWallet = await createSmartWalletClient({
     paymaster,
     bundler,
     defaultValidationModule: ecdsaModule,

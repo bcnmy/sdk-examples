@@ -3,7 +3,7 @@ import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
 import {
-  createSmartAccountClient,
+  createSmartWalletClient,
   IHybridPaymaster,
   PaymasterFeeQuote,
   PaymasterMode,
@@ -24,7 +24,7 @@ export const nativeTransferPayERC20 = async (to: string, amount: number) => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const smartWallet = await createSmartAccountClient({
+  const smartWallet = await createSmartWalletClient({
     signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,

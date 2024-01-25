@@ -17,30 +17,19 @@
     viem "^1.21.4"
     zod "^3.22.4"
 
-"@alchemy/aa-core@^2.0.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@alchemy/aa-core/-/aa-core-2.3.0.tgz#07e4e77a895cd18153f71b6531cbac5202c740d9"
-  integrity sha512-GIQEVG4tO4qh4YzTUaqKSB39v1Oyg1SmXFZNWCWnt+Qsqov+8OHs6YrcbqDJ/0tFAf3ZcSFMmagJPfn4SAxeOg==
+"@biconomy-devx/account@2.0.63":
+  version "2.0.63"
+  resolved "https://registry.yarnpkg.com/@biconomy-devx/account/-/account-2.0.63.tgz#c3c8067b5884e49d0c2106a170277f388156abcc"
+  integrity sha512-xAdNLrdX+SDM85sJ1KD37u+GDIMKHhcP2zMBTCvRcLvclYUsNwWRt4KnR8v/kgMAzWOge23hHnQbnrGfFiNpjQ==
   dependencies:
-    abitype "^0.8.3"
-    eventemitter3 "^5.0.1"
-    viem "^1.21.4"
-    zod "^3.22.4"
-
-"@biconomy-devx/account@2.0.64":
-  version "2.0.64"
-  resolved "https://registry.yarnpkg.com/@biconomy-devx/account/-/account-2.0.64.tgz#82f637ce4657aa91980c52b65162c02ee651c386"
-  integrity sha512-KBLOXsNMs7028ZgXlXgUpRUyzlSnmwC9Kel9oDE66n94Q2+KZNvnm6TcW3mi438Vq1E6BKRH8/Y11wCUpRRASw==
-  dependencies:
-    "@alchemy/aa-core" "^2.0.0"
-    "@biconomy-devx/bundler" "^2.0.64"
-    "@biconomy-devx/common" "^2.0.64"
-    "@biconomy-devx/modules" "^2.0.64"
-    "@biconomy-devx/paymaster" "^2.0.64"
+    "@biconomy-devx/bundler" "^2.0.63"
+    "@biconomy-devx/common" "^2.0.63"
+    "@biconomy-devx/modules" "^2.0.63"
+    "@biconomy-devx/paymaster" "^2.0.63"
     lru-cache "^10.0.1"
-    viem "^1.20.3"
+    viem "^2.5.0"
 
-"@biconomy-devx/bundler@^2.0.64":
+"@biconomy-devx/bundler@^2.0.63":
   version "2.0.64"
   resolved "https://registry.yarnpkg.com/@biconomy-devx/bundler/-/bundler-2.0.64.tgz#7b4a8b9e4161a72213f2114d2ca3edb1ef0236f7"
   integrity sha512-M3KAQkRYkJBlO8crGla2z85jkUGobdkMynLaY1Rh/DgEn2tqwKg16xDZaQVD/tQRjNE20+t5/ZLoMouUxCg1Dg==
@@ -49,7 +38,7 @@
     "@biconomy-devx/common" "^2.0.64"
     viem "^1.20.3"
 
-"@biconomy-devx/common@^2.0.64":
+"@biconomy-devx/common@^2.0.63", "@biconomy-devx/common@^2.0.64":
   version "2.0.64"
   resolved "https://registry.yarnpkg.com/@biconomy-devx/common/-/common-2.0.64.tgz#4643b4e0f3427c77683e271e06d04e76324f1be5"
   integrity sha512-ViFQ2zH+A/uZinhOWZlfvJhy2gH8tMkbkzf+dNKY3wchEyVOYcGmZqBsW10meryIMhcWefv05s5Nw+yunYsoEw==
@@ -58,7 +47,16 @@
     "@ethersproject/abstract-signer" "^5.7.0"
     viem "^1.20.3"
 
-"@biconomy-devx/modules@2.0.64", "@biconomy-devx/modules@^2.0.64":
+"@biconomy-devx/modules@2.0.63":
+  version "2.0.63"
+  resolved "https://registry.yarnpkg.com/@biconomy-devx/modules/-/modules-2.0.63.tgz#c407d78c511543ffd60216c59299bcada20103cf"
+  integrity sha512-+hK1H7fn+EdIOiWaf4Anq3gKemG64VhWsvWvXtfSE0CFAL7xkQElc3DHMsB6e3jmJ228Y6VBdLVS+yMDb1gouQ==
+  dependencies:
+    "@biconomy-devx/common" "^2.0.63"
+    merkletreejs "^0.3.9"
+    viem "^2.5.0"
+
+"@biconomy-devx/modules@^2.0.63":
   version "2.0.64"
   resolved "https://registry.yarnpkg.com/@biconomy-devx/modules/-/modules-2.0.64.tgz#dc63f40243af63c5234e9562a3824feed5809190"
   integrity sha512-MKJEhOLKgCJm1tzDbZySxO239tRu5xzr07QxdC4CdEofOlJTDG3OLLkw9wOcEflo26VmYKXV5nUiNpvv50G4SA==
@@ -68,7 +66,7 @@
     merkletreejs "^0.3.9"
     viem "^1.20.3"
 
-"@biconomy-devx/paymaster@^2.0.64":
+"@biconomy-devx/paymaster@^2.0.63":
   version "2.0.64"
   resolved "https://registry.yarnpkg.com/@biconomy-devx/paymaster/-/paymaster-2.0.64.tgz#09b3e7301fc4de395395ed41aea2276ed460e913"
   integrity sha512-6SjrVrjuYUOBqnjP2lHq52ArsVlfua5Mo9nqCaeHk99ZGwjqymQVJPqmzPTk/zO1DFvSXkL1i/Ae7eXE+LPfiA==

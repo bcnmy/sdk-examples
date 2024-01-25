@@ -11,7 +11,7 @@ import {
 } from "@biconomy-devx/account";
 import config from "../../config.json";
 import { createECDSAOwnershipValidationModule } from "@biconomy-devx/modules";
-import { EthersSigner, createSmartAccountClient } from "@biconomy-devx/account";
+import { EthersSigner, createSmartWalletClient } from "@biconomy-devx/account";
 import { Hex } from "viem";
 
 export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
@@ -44,7 +44,7 @@ export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
   };
 
   // create biconomy smart account instance
-  const smartWallet = await createSmartAccountClient(smartWalletConfig);
+  const smartWallet = await createSmartWalletClient(smartWalletConfig);
 
   // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//
 
