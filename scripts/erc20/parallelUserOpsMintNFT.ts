@@ -101,7 +101,7 @@ export const parallelUserOpsMintNFTPayERC20 = async () => {
     ]);
     const selectedFeeQuote = feeQuotes[selectedOption];
 
-    const finalUserOp = await smartWallet.setPaymasterUserOp(partialUserOps[index], {
+    const finalUserOp = await smartWallet.getPaymasterUserOp(partialUserOps[index], {
       mode: PaymasterMode.ERC20,
       feeQuote: selectedFeeQuote,
       spender,

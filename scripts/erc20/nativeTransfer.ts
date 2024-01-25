@@ -75,7 +75,7 @@ export const nativeTransferPayERC20 = async (to: string, amount: number) => {
   ]);
   const selectedFeeQuote = feeQuotes[selectedOption];
 
-  const finalUserOp = await smartWallet.setPaymasterUserOp(userOp, {
+  const finalUserOp = await smartWallet.getPaymasterUserOp(userOp, {
     mode: PaymasterMode.ERC20,
     feeQuote: selectedFeeQuote,
     spender,

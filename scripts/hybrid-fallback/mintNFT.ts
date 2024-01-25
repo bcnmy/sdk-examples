@@ -92,7 +92,7 @@ export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
     ]);
     const selectedFeeQuote = feeQuotes[selectedOption];
 
-    finalUserOp = await smartWallet.setPaymasterUserOp(finalUserOp, {
+    finalUserOp = await smartWallet.getPaymasterUserOp(finalUserOp, {
       mode: PaymasterMode.ERC20,
       feeQuote: selectedFeeQuote,
       spender,
@@ -100,7 +100,7 @@ export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
     })
   } else if (feeQuotesOrDataResponse.paymasterAndData) {
     // this means sponsorship is successful
-    finalUserOp = await smartWallet.setPaymasterUserOp(finalUserOp, {mode: PaymasterMode.SPONSORED})
+    finalUserOp = await smartWallet.getPaymasterUserOp(finalUserOp, {mode: PaymasterMode.SPONSORED})
   }
 
   // ------------------------STEP 4: Sign the UserOp and send to the Bundler--------------------------------//
