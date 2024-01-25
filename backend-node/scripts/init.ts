@@ -97,11 +97,83 @@ export const init = async (chainId: string) => {
     `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
     INIT_CONFIG.biconomyPaymasterUrl =
     `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
-  } else {
-    throw new Error("Invalid network type");
+  } else if (chainId === "sepolia") {
+    INIT_CONFIG.chainId = ChainId.SEPOLIA;
+    INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.SEPOLIA];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
+  } else if (chainId === "base-goerli") {
+    INIT_CONFIG.chainId = ChainId.BASE_GOERLI_TESTNET;
+    INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.BASE_GOERLI_TESTNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
+  } else if (chainId === "base-mainnet") {
+    INIT_CONFIG.chainId = ChainId.BASE_MAINNET;
+    INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.BASE_MAINNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
+  } else if (chainId === "arbitrum-sepolia-testnet") {
+    INIT_CONFIG.chainId = ChainId.ARBITRUM_SEPOLIA;
+    INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.ARBITRUM_SEPOLIA];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
+  } else if (chainId === "linea-goerli") {
+    INIT_CONFIG.chainId = ChainId.LINEA_TESTNET;
+    INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.LINEA_TESTNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
+  } else if (chainId === "linea-mainnet") {
+    INIT_CONFIG.chainId = ChainId.LINEA_MAINNET;
+    INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.LINEA_MAINNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
+  } else if (chainId === "optimism-testnet") {
+    INIT_CONFIG.chainId = ChainId.OPTIMISM_GOERLI_TESTNET;
+    INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.OPTIMISM_GOERLI_TESTNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
+  } else if (chainId === "optimism-mainnet") {
+    INIT_CONFIG.chainId = ChainId.OPTIMISM_MAINNET;
+    INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.OPTIMISM_MAINNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
+  } else if (chainId === "avalanche-testnet") {
+    INIT_CONFIG.chainId = ChainId.AVALANCHE_TESTNET;
+    INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.AVALANCHE_TESTNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
+  } else if (chainId === "avalanche-mainnet") {
+    INIT_CONFIG.chainId = ChainId.AVALANCHE_MAINNET;
+    INIT_CONFIG.rpcUrl = RPC_PROVIDER_URLS[ChainId.AVALANCHE_MAINNET];
+    INIT_CONFIG.bundlerUrl =
+    `https://bundler.biconomy.io/api/v2/${INIT_CONFIG.chainId}/<BUNDLER_API_KEY_OBTAINED_FROM_BICONOMY>`;
+    INIT_CONFIG.biconomyPaymasterUrl =
+    `https://paymaster.biconomy.io/api/v1/${INIT_CONFIG.chainId}/<YOUR_PAYMASTER_API_KEY_FROM_DASHBOARD>`;
+  }
+  else {
+    throw new Error("Invalid network type for quickstart. If the chain is supported you can manually update config.json");
   }
   INIT_CONFIG.preferredToken = "";
   INIT_CONFIG.tokenList = [];
+  INIT_CONFIG.numOfParallelUserOps = 1;
   fs.writeFile(
     CONFIG_PATH,
     prettier.format(JSON.stringify(INIT_CONFIG, null, 2), { parser: "json" })

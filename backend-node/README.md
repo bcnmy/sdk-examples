@@ -16,7 +16,12 @@ yarn install
 
 ```bash
 yarn run smartAccount --help
+
 yarn run smartAccount init --network=mumbai
+
+# configured networks: ethereum, goerli, polygon, bsc-testnet, bsc, polygon-zkevm-testnet, polygon-zkevm, arbitrum-goerli-testnet, arbitrum-one-mainnet, arbitrum-nova-mainnet, sepolia, base-goerli, base-mainnet, arbitrum-sepolia-testnet, linea-goerli, linea-mainnet, optimism-testnet, optimism-mainnet, avalanche-testnet, avalanche-mainnet
+
+
 # get scw address
 
 # update the correct privateKey, biconomyPaymasterUrl, rpcUrl and bundlerUrl in config.json

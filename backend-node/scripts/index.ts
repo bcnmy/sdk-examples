@@ -25,7 +25,7 @@ yargs
   // Initialize config file
   .command(
     "init",
-    chalk.blue("Create a config file"),
+    chalk.blue("Create a config file (can use with --network flag)"),
     {
       network: {
         describe: chalk.cyan("Choose chain type"),
@@ -167,7 +167,7 @@ yargs
   )
   .command(
     "multiChainMint",
-    chalk.blue("Mint nft token"),
+    chalk.blue("Mint nft on two different chains with one signature"),
     {
       mode: {
         describe: chalk.cyan("Paymaster mode"),
