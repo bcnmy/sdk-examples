@@ -32,12 +32,12 @@ export const erc20Transfer = async (
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const smartWallet = await createSmartAccountClient({
+  const smartAccount = await createSmartAccountClient({
     signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
-  const scwAddress = await smartWallet.getAccountAddress();
+  const scwAddress = await smartAccount.getAccountAddress();
   console.log("SCW Address", scwAddress);
 
   // ------ 3. Generate transaction data
@@ -54,9 +54,11 @@ export const erc20Transfer = async (
   };
 
   // ------ 4. Send user operation and get tx hash
-  const tx = await smartWallet.sendTransaction(transferTx, {paymasterServiceData: {
-    mode: PaymasterMode.SPONSORED
-  }});
+  const tx = await smartAccount.sendTransaction(transferTx, {
+    paymasterServiceData: {
+      mode: PaymasterMode.SPONSORED,
+    },
+  });
   const { transactionHash } = await tx.waitForTxHash();
   console.log("transactionHash", transactionHash);
 };

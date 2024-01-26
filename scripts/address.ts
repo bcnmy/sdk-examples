@@ -17,11 +17,11 @@ export const getAddress = async () => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const smartWallet = await createSmartAccountClient({
+  const smartAccount = await createSmartAccountClient({
     signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
-  const scwAddress = await smartWallet.getAccountAddress();
+  const scwAddress = await smartAccount.getAccountAddress();
   console.log("SCW Address", scwAddress);
 };

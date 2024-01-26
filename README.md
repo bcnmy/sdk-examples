@@ -43,7 +43,7 @@ yarn run smartAccount mint --mode=PARALLEL_USER_OPS
 yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=0.001
 
 # replace the token address and receiver below
-yarn run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount=0.1 --token=0xdA5289fCAAF71d52a80A254da614a192b693e977
+yarn run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount=0.1 --token=0xeaBc4b91d9375796AA4F69cC764A4aB509080A58
 
 ## ERC20 - Token Paymaster
 

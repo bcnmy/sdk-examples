@@ -30,12 +30,12 @@ export const batchMintNftPayERC20 = async () => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const smartWallet = await createSmartAccountClient({
+  const smartAccount = await createSmartAccountClient({
     signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
-  const scwAddress = await smartWallet.getAccountAddress();
+  const scwAddress = await smartAccount.getAccountAddress();
   console.log("SCW Address", scwAddress);
 
   // ------ 3. Generate transaction data
@@ -47,35 +47,28 @@ export const batchMintNftPayERC20 = async () => {
     args: [scwAddress as Hex],
   });
 
-  // ------ 4. Build partial user operation
-  const userOp = await smartWallet.buildUserOp([
-    {
-      to: nftAddress,
-      data: nftData,
-    },
-    {
-      to: nftAddress,
-      data: nftData,
-    },
-  ]);
-  console.log("userOp", userOp);
-
   // ------ 5. Get Fee quotes (for ERC20 payment)
-  const biconomyPaymaster =
-    smartWallet.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
-  const feeQuotesResponse = await biconomyPaymaster.getPaymasterFeeQuotesOrData(
-    userOp,
+  const transaction = [
     {
-      // here we are explicitly telling by mode ERC20 that we want to pay in ERC20 tokens and expect fee quotes
+      to: nftAddress,
+      data: nftData,
+    },
+    {
+      to: nftAddress,
+      data: nftData,
+    },
+  ];
+
+  const feeQuotesResponse = await smartAccount.getTokenFees(transaction, {
+    paymasterServiceData: {
       mode: PaymasterMode.ERC20,
-      // one can pass tokenList empty array. and it would return fee quotes for all tokens supported by the Biconomy paymaster
-      tokenList: config.tokenList ? config.tokenList : [],
-      // preferredToken is optional. If you want to pay in a specific token, you can pass its address here and get fee quotes for that token only
       preferredToken: config.preferredToken,
-    }
-  );
-  const feeQuotes = feeQuotesResponse.feeQuotes as PaymasterFeeQuote[];
+    },
+  });
+
+  const feeQuotes = feeQuotesResponse.feeQuotes;
   const spender = feeQuotesResponse.tokenPaymasterAddress;
+  console.log({ feeQuotesResponse });
   // Generate list of options for the user to select
   const choices = feeQuotes?.map((quote: any, index: number) => ({
     name: `Option ${index + 1}: ${quote.maxGasFee}: ${quote.symbol} `,
@@ -90,16 +83,16 @@ export const batchMintNftPayERC20 = async () => {
       choices,
     },
   ]);
-  const selectedFeeQuote = feeQuotes[selectedOption];
+  const selectedFeeQuote = feeQuotes?.[selectedOption];
 
-  const finalUserOp = await smartWallet.getPaymasterUserOp(userOp, {
-    feeQuote: selectedFeeQuote,
-    spender,
-    mode: PaymasterMode.ERC20
+  const { waitForTxHash } = await smartAccount.sendTransaction(transaction, {
+    paymasterServiceData: {
+      mode: PaymasterMode.ERC20,
+      feeQuote: selectedFeeQuote,
+      spender,
+      maxApproval: true,
+    },
   });
-
-  // ------ 6. Send user operation and get tx hash
-  const tx = await smartWallet.sendUserOp(finalUserOp);
-  const { transactionHash } = await tx.waitForTxHash();
+  const { transactionHash } = await waitForTxHash();
   console.log("transactionHash", transactionHash);
 };

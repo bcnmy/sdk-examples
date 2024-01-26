@@ -8,10 +8,7 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import {
-  createSmartAccountClient,
-  PaymasterMode,
-} from "@biconomy/account";
+import { createSmartAccountClient, PaymasterMode } from "@biconomy/account";
 import config from "../../config.json";
 
 const numOfParallelUserOps = config.numOfParallelUserOps;
@@ -28,12 +25,12 @@ export const parallelUserOpsMintNft = async () => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const smartWallet = await createSmartAccountClient({
+  const smartAccount = await createSmartAccountClient({
     signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
-  const scwAddress = await smartWallet.getAccountAddress();
+  const scwAddress = await smartAccount.getAccountAddress();
   console.log("SCW Address", scwAddress);
 
   // ------ 3. Generate transaction data
@@ -49,7 +46,7 @@ export const parallelUserOpsMintNft = async () => {
   let partialUserOps = [];
   // Use a nonceKey that is unique, easy way is to increment the nonceKey
   for (let nonceKey = 0; nonceKey < numOfParallelUserOps; nonceKey++) {
-    let partialUserOp = await smartWallet.buildUserOp(
+    let partialUserOp = await smartAccount.buildUserOp(
       [
         {
           to: nftAddress,
@@ -61,9 +58,9 @@ export const parallelUserOpsMintNft = async () => {
           mode: PaymasterMode.SPONSORED,
         },
         nonceOptions: {
-          nonceKey
-        }
-      },
+          nonceKey,
+        },
+      }
     );
     partialUserOps.push(partialUserOp);
   }
@@ -92,7 +89,7 @@ export const parallelUserOpsMintNft = async () => {
           )}`
         )
       );
-      const userOpResponsePromise = smartWallet.sendUserOp(
+      const userOpResponsePromise = smartAccount.sendUserOp(
         shuffledPartialUserOps[index]
       );
       userOpResponsePromises.push(userOpResponsePromise);

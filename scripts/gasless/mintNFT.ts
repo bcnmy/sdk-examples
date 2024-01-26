@@ -8,10 +8,7 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import {
-  createSmartAccountClient,
-  PaymasterMode,
-} from "@biconomy/account";
+import { createSmartAccountClient, PaymasterMode } from "@biconomy/account";
 import config from "../../config.json";
 
 export const mintNft = async () => {
@@ -26,12 +23,12 @@ export const mintNft = async () => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const smartWallet = await createSmartAccountClient({
+  const smartAccount = await createSmartAccountClient({
     signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
-  const scwAddress = await smartWallet.getAccountAddress();
+  const scwAddress = await smartAccount.getAccountAddress();
   console.log("SCW Address", scwAddress);
 
   // ------ 3. Generate transaction data
@@ -43,17 +40,14 @@ export const mintNft = async () => {
     args: [scwAddress as Hex],
   });
 
-  // ------ 4. Build user operation
-  const userOp = await smartWallet.buildUserOp([
+  // ------ 4. Send transaction
+  const { waitForTxHash } = await smartAccount.sendTransaction(
     {
       to: nftAddress,
       data: nftData,
     },
-  ], {paymasterServiceData: {mode: PaymasterMode.SPONSORED}});
-  console.log("userOp", userOp);
-
-  // ------ 5. Send user operation and get tx hash
-  const tx = await smartWallet.sendUserOp(userOp);
-  const { transactionHash } = await tx.waitForTxHash();
+    { paymasterServiceData: { mode: PaymasterMode.SPONSORED } }
+  );
+  const { transactionHash } = await waitForTxHash();
   console.log("transactionHash", transactionHash);
 };
