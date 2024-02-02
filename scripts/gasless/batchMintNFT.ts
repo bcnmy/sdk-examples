@@ -8,7 +8,7 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { createSmartAccountClient, PaymasterMode } from "@biconomy/account";
+import { createSmartAccountClient, PaymasterMode } from "@biconomy-devx/account";
 import config from "../../config.json";
 
 export const batchMintNft = async () => {

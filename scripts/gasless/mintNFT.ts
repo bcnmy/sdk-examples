@@ -8,7 +8,7 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { createSmartAccountClient, PaymasterMode } from "@biconomy/account";
+import { createSmartAccountClient, PaymasterMode } from "@biconomy-devx/account";
 import config from "../../config.json";
 
 export const mintNft = async () => {
@@ -39,6 +39,10 @@ export const mintNft = async () => {
     functionName: "safeMint",
     args: [scwAddress as Hex],
   });
+
+  // negative cases of policies
+  // case of using webhooks
+  // case of using different SA
 
   // ------ 4. Send transaction
   const { waitForTxHash } = await smartAccount.sendTransaction(

@@ -1,7 +1,7 @@
 import { Hex, encodeFunctionData, parseAbi } from "viem";
 import { ethers } from "ethers";
 const chalk = require("chalk");
-import { createSmartAccountClient, PaymasterMode } from "@biconomy/account";
+import { createSmartAccountClient, PaymasterMode } from "@biconomy-devx/account";
 import config from "../../config.json";
 
 export const mintNftEthers = async () => {

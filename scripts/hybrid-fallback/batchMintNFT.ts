@@ -7,9 +7,9 @@ import {
   PaymasterMode,
   SponsorUserOperationDto,
   BiconomySmartAccountV2Config,
-} from "@biconomy/account";
+} from "@biconomy-devx/account";
 import config from "../../config.json";
-import { createSmartAccountClient } from "@biconomy/account";
+import { createSmartAccountClient } from "@biconomy-devx/account";
 
 export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
   // ------------------------STEP 1: Initialise Biconomy Smart Account SDK--------------------------------//

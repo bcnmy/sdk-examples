@@ -2,7 +2,7 @@ import { Hex, createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { createSmartAccountClient } from "@biconomy/account";
+import { createSmartAccountClient } from "@biconomy-devx/account";
 import config from "../config.json";
 
 export const getAddress = async () => {

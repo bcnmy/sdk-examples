@@ -6,13 +6,13 @@
   "scripts": {
     "start": "tsc --noEmit && ts-node scripts/index.ts",
     "smartAccount": "tsc --noEmit && ts-node scripts/index.ts",
-    "link:local": "yarn link '@biconomy/account' '@biconomy/modules'"
+    "link:local": "yarn link '@biconomy-devx/account' '@biconomy-devx/modules'"
   },
   "keywords": [],
   "license": "ISC",
   "dependencies": {
-    "@biconomy/account": "3.1.2",
-    "@biconomy/modules": "3.1.2",
+    "@biconomy-devx/account": "2.2.9",
+    "@biconomy-devx/modules": "2.2.9",
     "chalk": "^4.1.2",
     "ethers": "^5.7.2",
     "inquirer": "^8.0.0",

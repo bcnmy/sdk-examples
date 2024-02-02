@@ -14,7 +14,7 @@ import {
   PaymasterFeeQuote,
   PaymasterMode,
   SponsorUserOperationDto,
-} from "@biconomy/account";
+} from "@biconomy-devx/account";
 import config from "../../config.json";
 import inquirer from "inquirer";
 
@@ -62,9 +62,17 @@ export const batchMintNftPayERC20 = async () => {
   const feeQuotesResponse = await smartAccount.getTokenFees(transaction, {
     paymasterServiceData: {
       mode: PaymasterMode.ERC20,
-      preferredToken: config.preferredToken,
+      // preferredToken: config.preferredToken,
+      // tokenList: []
     },
   });
+
+  // getTokenFees
+  // --> buildUserOp
+  // --> getFeeQuotesOrData
+  // returns fee quotes only
+  
+  
 
   const feeQuotes = feeQuotesResponse.feeQuotes;
   const spender = feeQuotesResponse.tokenPaymasterAddress;
@@ -85,14 +93,23 @@ export const batchMintNftPayERC20 = async () => {
   ]);
   const selectedFeeQuote = feeQuotes?.[selectedOption];
 
+  console.log('selected fee quote ', selectedFeeQuote)
+
   const { waitForTxHash } = await smartAccount.sendTransaction(transaction, {
     paymasterServiceData: {
       mode: PaymasterMode.ERC20,
       feeQuote: selectedFeeQuote,
       spender,
-      maxApproval: true,
+      maxApproval: false,
     },
   });
+
+  // sendTransaction
+  // --> buildUserOp
+  //    --> getPaymasterUserop
+  //      --> buildTokenPaymasterUserOp
+  //      --> getPaymasterAndData
+  // --> sendUserOp
   const { transactionHash } = await waitForTxHash();
   console.log("transactionHash", transactionHash);
 };

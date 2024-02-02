@@ -8,13 +8,13 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { createSmartAccountClient } from "@biconomy/account";
+import { createSmartAccountClient } from "@biconomy-devx/account";
 import {
   IHybridPaymaster,
   PaymasterFeeQuote,
   PaymasterMode,
   SponsorUserOperationDto,
-} from "@biconomy/paymaster";
+} from "@biconomy-devx/paymaster";
 import config from "../../config.json";
 import inquirer from "inquirer";
 
