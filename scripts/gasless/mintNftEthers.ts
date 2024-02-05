@@ -2,7 +2,7 @@ import { Hex, encodeFunctionData, parseAbi } from "viem";
 import { ethers } from "ethers";
 const chalk = require("chalk");
 import {
-  createSmartWalletClient,
+  createSmartAccountClient,
   Paymaster,
   PaymasterMode,
 } from "@biconomy-devx/account";
@@ -16,7 +16,7 @@ export const mintNftEthers = async () => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const smartWallet = await createSmartWalletClient({
+  const smartWallet = await createSmartAccountClient({
     signer,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,

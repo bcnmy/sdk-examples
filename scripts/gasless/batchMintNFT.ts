@@ -9,7 +9,7 @@ import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
 import {
-  createSmartWalletClient,
+  createSmartAccountClient,
   PaymasterMode,
   Paymaster,
 } from "@biconomy-devx/account";
@@ -27,7 +27,7 @@ export const batchMintNft = async () => {
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
   // ------ 2. Create biconomy smart account instance
-  const smartWallet = await createSmartWalletClient({
+  const smartWallet = await createSmartAccountClient({
     signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
@@ -46,6 +46,10 @@ export const batchMintNft = async () => {
 
   // ------ 4. Build user operation
   const userOp = await smartWallet.buildUserOp([
+    {
+      to: nftAddress,
+      data: nftData,
+    },
     {
       to: nftAddress,
       data: nftData,

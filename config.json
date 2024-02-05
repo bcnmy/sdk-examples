@@ -1,5 +1,5 @@
 {
-  "privateKey": "0x7e156cb7f33ce7e7eda3cb0b6188e9639a3bb3d0d0dd194096ae21017677866d",
+  "privateKey": "<PRIVATE_KEY>",
   "accountIndex": 0,
   "chainId": 80001,
   "rpcUrl": "https://rpc.ankr.com/polygon_mumbai",
