@@ -11,8 +11,8 @@
   "keywords": [],
   "license": "ISC",
   "dependencies": {
-    "@biconomy-devx/account": "2.2.11",
-    "@biconomy-devx/modules": "2.2.11",
+    "@biconomy-devx/account": "2.2.12",
+    "@biconomy-devx/modules": "2.2.12",
     "chalk": "^4.1.2",
     "ethers": "^5.7.2",
     "inquirer": "^8.0.0",
