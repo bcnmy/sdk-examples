@@ -7,64 +7,64 @@
   resolved "https://registry.yarnpkg.com/@adraffy/ens-normalize/-/ens-normalize-1.10.0.tgz#d2a39395c587e092d77cbbc80acf956a54f38bf7"
   integrity sha512-nA9XHtlAkYfJxY7bce8DcN7eKxWWCWkU+1GR9d+U6MbNpfwQp8TI7vqOsBsMcHoT4mBu2kypKoSKnghEzOOq5Q==
 
-"@alchemy/aa-core@^2.3.1":
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/@alchemy/aa-core/-/aa-core-2.3.1.tgz#ebd0abc2a71d1e5803cbbd0b0584a62a681c9a27"
-  integrity sha512-iADsVGbhm4rbvFwcauKwD8u5AbzoE+8d8iQpagGHkPDpcNVzFP/FHv48jvdg9M52kf4h2XGdrQviT02bdJFTKw==
+"@alchemy/aa-core@3.0.0-alpha.4":
+  version "3.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@alchemy/aa-core/-/aa-core-3.0.0-alpha.4.tgz#3abe0911f7c35cc6f0fc0cd03faad5673a01f0a9"
+  integrity sha512-mTVMDciBYIrXRgJnDiew2nRhjeAMKIK3RijGR3TQ7Gn6cpY8ZKSiJoTM5yRCttx368jqz0BACD1mjTg/zU8+Cg==
   dependencies:
     abitype "^0.8.3"
     eventemitter3 "^5.0.1"
-    viem "^1.21.4"
+    viem "^2.5.0"
     zod "^3.22.4"
 
-"@biconomy-devx/account@2.2.9":
-  version "2.2.9"
-  resolved "https://registry.yarnpkg.com/@biconomy-devx/account/-/account-2.2.9.tgz#087051f8b27361285c11b2d4f3849c1133009fa3"
-  integrity sha512-IqaDYjnlwZAdrc+azyXZQYC6k+1G1TvFGM0QzkIs0Dwai8XjgT2fYmdeeNrC5yhq4X92/iSyXs54jKZIWEllEw==
+"@biconomy-devx/account@2.2.12":
+  version "2.2.12"
+  resolved "https://registry.yarnpkg.com/@biconomy-devx/account/-/account-2.2.12.tgz#bbc66874df813f7996684505fdf736d744e8dc3b"
+  integrity sha512-Xkg23h3mlYEYDPTHxHiRUwPh9k09dDHmCYsXK0tzs5L0Dg3hKNV14vgFBkrknycPjEpKxkPamt3tUMtSKpHsTA==
   dependencies:
-    "@alchemy/aa-core" "^2.3.1"
-    "@biconomy-devx/bundler" "2.2.9"
-    "@biconomy-devx/common" "2.2.9"
-    "@biconomy-devx/modules" "2.2.9"
-    "@biconomy-devx/paymaster" "2.2.9"
-    viem "^1.21.4"
+    "@alchemy/aa-core" "3.0.0-alpha.4"
+    "@biconomy-devx/bundler" "2.2.12"
+    "@biconomy-devx/common" "2.2.12"
+    "@biconomy-devx/modules" "2.2.12"
+    "@biconomy-devx/paymaster" "2.2.12"
+    viem "^2.7.3"
 
-"@biconomy-devx/bundler@2.2.9":
-  version "2.2.9"
-  resolved "https://registry.yarnpkg.com/@biconomy-devx/bundler/-/bundler-2.2.9.tgz#db30c47208b7f292c795c2865a045e4a303ccd6d"
-  integrity sha512-VmI3okX8RRN009TSOtrdB+6nH85UTOaKmM4Ik8iOU1+yhxkRHnZTpJtJuI6pGD4JF1Bgs/XxJt7eDdJW6vsJaQ==
+"@biconomy-devx/bundler@2.2.12":
+  version "2.2.12"
+  resolved "https://registry.yarnpkg.com/@biconomy-devx/bundler/-/bundler-2.2.12.tgz#1a92be097dab49a52925cb7db6a602d0a5c3bb86"
+  integrity sha512-X4CznUYC1qWgVvbXkqvY718soNAezDh44VU/wDxyjrvQEdD7gOz/fMkiPoGIQxAhUd2Ex5zsAZ78Aw4Lz09e7g==
   dependencies:
-    "@alchemy/aa-core" "^2.3.1"
-    "@biconomy-devx/common" "2.2.9"
-    viem "^1.21.4"
+    "@alchemy/aa-core" "3.0.0-alpha.4"
+    "@biconomy-devx/common" "2.2.12"
+    viem "^2.7.3"
 
-"@biconomy-devx/common@2.2.9":
-  version "2.2.9"
-  resolved "https://registry.yarnpkg.com/@biconomy-devx/common/-/common-2.2.9.tgz#7444cc82f6f758fcdd043f39d495b3420655026c"
-  integrity sha512-RDEsPRhwVeL+B91jQX64SYCjhq3ymN2TnvzdAPsKFggZJWn2n/DJ2UWMliAWGPINVbWly+Bm98w76WrwDCCe3Q==
+"@biconomy-devx/common@2.2.12":
+  version "2.2.12"
+  resolved "https://registry.yarnpkg.com/@biconomy-devx/common/-/common-2.2.12.tgz#c1297a806f2b39a808b1836b0bfd8bc64ab323bc"
+  integrity sha512-/6r9FR6UHmKuxdG+a8Um/Pre0m8eFDDlrarUC5sVWuhzwAJnfLHAwpZQRml8O0IMSAa3pKn9QKrPGswoYM2Mhg==
   dependencies:
-    "@alchemy/aa-core" "^2.3.1"
+    "@alchemy/aa-core" "3.0.0-alpha.4"
     "@ethersproject/abstract-signer" "^5.7.0"
-    viem "^1.21.4"
+    viem "^2.7.3"
 
-"@biconomy-devx/modules@2.2.9":
-  version "2.2.9"
-  resolved "https://registry.yarnpkg.com/@biconomy-devx/modules/-/modules-2.2.9.tgz#3127efeb4986be2ee47bb065f7426a6fef877cc9"
-  integrity sha512-ZpWp/amhSFkal/gxJmZ3zR5NUFqAevlWz9zYUYujZ+KMWIj3GdQ+ZRzAZcbsF9ulYcTOrzkt20Np/OoPtHTSjg==
+"@biconomy-devx/modules@2.2.12":
+  version "2.2.12"
+  resolved "https://registry.yarnpkg.com/@biconomy-devx/modules/-/modules-2.2.12.tgz#6146d85068406154299e71849c446db693a95833"
+  integrity sha512-rqc4juXzZovK6u6YI0QwL/Y9DDzzvz2k3efzcwYdb7dUBSgRTTm4C8T0SDt57MtzL0YWaWTcrDb+AaUfRggy7Q==
   dependencies:
-    "@alchemy/aa-core" "^2.3.1"
-    "@biconomy-devx/common" "2.2.9"
+    "@alchemy/aa-core" "3.0.0-alpha.4"
+    "@biconomy-devx/common" "2.2.12"
     merkletreejs "^0.3.11"
-    viem "^1.21.4"
+    viem "^2.7.3"
 
-"@biconomy-devx/paymaster@2.2.9":
-  version "2.2.9"
-  resolved "https://registry.yarnpkg.com/@biconomy-devx/paymaster/-/paymaster-2.2.9.tgz#a6c3b0ac12ad18939bed992b5eb19ecb8b6f0815"
-  integrity sha512-vvSwBQAUYQzYJbj/Ml1vzhShvfKMDmRX0ZUX/6tpUKnBoayy4cAUcmTkt6fNWX1F/NSWkR0Vh6Y7C8NyxLxR5Q==
+"@biconomy-devx/paymaster@2.2.12":
+  version "2.2.12"
+  resolved "https://registry.yarnpkg.com/@biconomy-devx/paymaster/-/paymaster-2.2.12.tgz#f8e14f7c9e729346fed9a69c656493b2ca4ff627"
+  integrity sha512-l7dIZjSxNuZSIkIukCl741RLZSTVhjarYR9iEycEW328/rNCBSAcsja/Bqc0L1jwlTMKntBg8Atq2vO9GKHgPA==
   dependencies:
-    "@alchemy/aa-core" "^2.3.1"
-    "@biconomy-devx/common" "2.2.9"
-    viem "^1.21.4"
+    "@alchemy/aa-core" "3.0.0-alpha.4"
+    "@biconomy-devx/common" "2.2.12"
+    viem "^2.7.3"
 
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
@@ -569,10 +569,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-abitype@0.9.8:
-  version "0.9.8"
-  resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.9.8.tgz#1f120b6b717459deafd213dfbf3a3dd1bf10ae8c"
-  integrity sha512-puLifILdm+8sjyss4S+fsUN09obiT1g2YW6CtcQF+QDzxR0euzgEB29MZujC6zMk2a6SVmtttq1fc6+YFA7WYQ==
+abitype@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/abitype/-/abitype-1.0.0.tgz#237176dace81d90d018bebf3a45cb42f2a2d9e97"
+  integrity sha512-NMeMah//6bJ56H5XRj8QCV4AwuW6hB6zqz2LnhhLdcWVQOsXki6/Pn3APeqxCma62nXIcmZWdu1DlHWS74umVQ==
 
 abitype@^0.8.3:
   version "0.8.11"
@@ -772,9 +772,9 @@ emoji-regex@^8.0.0:
   integrity sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==
 
 escalade@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/escalade/-/escalade-3.1.1.tgz#d8cfdc7000965c5a0174b4a82eaa5c0552742e40"
-  integrity sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/escalade/-/escalade-3.1.2.tgz#54076e9ab29ea5bf3d8f1ed62acffbb88272df27"
+  integrity sha512-ErCHMCae19vR8vQGe50xIsVomy19rg6gFu3+r3jkEO46suLMWBksvVyoGgQV+jOfl84ZSOSlmv6Gxa89PmTGmA==
 
 escape-string-regexp@^1.0.5:
   version "1.0.5"
@@ -1221,17 +1221,17 @@ v8-compile-cache-lib@^3.0.1:
   resolved "https://registry.yarnpkg.com/v8-compile-cache-lib/-/v8-compile-cache-lib-3.0.1.tgz#6336e8d71965cb3d35a1bbb7868445a7c05264bf"
   integrity sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==
 
-viem@^1.20.3, viem@^1.21.4:
-  version "1.21.4"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-1.21.4.tgz#883760e9222540a5a7e0339809202b45fe6a842d"
-  integrity sha512-BNVYdSaUjeS2zKQgPs+49e5JKocfo60Ib2yiXOWBT6LuVxY1I/6fFX3waEtpXvL1Xn4qu+BVitVtMh9lyThyhQ==
+viem@^2.5.0, viem@^2.7.3:
+  version "2.7.6"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.7.6.tgz#2ada30ece1469367b606137983e5655cf66d721e"
+  integrity sha512-43TF0VYcTeNef9dax1/BhqlRLXpAo6HAiQ68hrJ8XRhDOou73nHZEjeFl8Eai4UFFodKhu+PbRUFzuuoixOUfg==
   dependencies:
     "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"
     "@noble/hashes" "1.3.2"
     "@scure/bip32" "1.3.2"
     "@scure/bip39" "1.2.1"
-    abitype "0.9.8"
+    abitype "1.0.0"
     isows "1.0.3"
     ws "8.13.0"
 
@@ -1243,9 +1243,9 @@ wcwidth@^1.0.1:
     defaults "^1.0.3"
 
 web3-utils@^1.3.4:
-  version "1.10.3"
-  resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.10.3.tgz#f1db99c82549c7d9f8348f04ffe4e0188b449714"
-  integrity sha512-OqcUrEE16fDBbGoQtZXWdavsPzbGIDc5v3VrRTZ0XrIpefC/viZ1ZU9bGEemazyS0catk/3rkOOxpzTfY+XsyQ==
+  version "1.10.4"
+  resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.10.4.tgz#0daee7d6841641655d8b3726baf33b08eda1cbec"
+  integrity sha512-tsu8FiKJLk2PzhDl9fXbGUWTkkVXYhtTA+SmEFkKft+9BgwLxfCRpU96sWv7ICC8zixBNd3JURVoiR3dUXgP8A==
   dependencies:
     "@ethereumjs/util" "^8.1.0"
     bn.js "^5.2.1"
