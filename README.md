@@ -8,18 +8,57 @@ The SmartAccount package generates a smart wallet contract for each user EOA. It
 - [Biconomy Docs](https://docs.biconomy.io/sdk)
 - [Contract Addresses](https://biconomy.gitbook.io/sdk/contracts/contract-addresses)
 
-### Examples
+This is a cli to demonstrate how to use a private key to sign transactions on the backend with new Biconomy SDK.
+To enable logging export below flag
+export BICONOMY_SDK_DEBUG=true
 
-| Project                                                 |      Library       |         Provider         |
-| :------------------------------------------------------ | :----------------: | :----------------------: |
-| [backend-node-cli](/backend-node)                       |      Node.js       |      smart-account       |
-| [react-biconomy-web3Auth](/react-biconomy-web3Auth)     |      React.js      |    biconomy-web3Auth     |
-| [react-vite-social-login](/react-vite-social-login)     | React.js + vite.js |    biconomy-web3Auth     |
-| [nextjs-biconomy-web3Auth](/nextjs-biconomy-web3Auth)   |      Next.js       |    biconomy-web3Auth     |
-| [react-vite-particle-auth](/react-vite-particle-auth)   | React.js + vite.js |  biconomy-particleAuth   |
-| [react-native-web3Auth](/react-native-web3Auth)         |    React Native    | biconomy-web3Auth-native |
-| [react-native-smartAccount](/react_native_smartAccount) |    React Native    |   ethers (private key)   |
-| [nextjs-rainbow](/nextjs-rainbow)                       |      Next.js       |      rainbow wallet      |
-| [nextjs-web3modal](/nextjs-web3modal)                   |      Next.js       |        web3Modal         |
-| [vuejs-biconomy-web3auth](/vuejs-biconomy-web3auth)     |  Vue.js + vite.js  |    biconomy-web3Auth     |
-| [nextjs-biconomy-web3Auth-nextAuth-siwe](/nextjs-biconomy-web3Auth-nextAuth-siwe) | Next.js + NextAuth.js | biconomy-web3Auth + siwe |
+Set numOfParallelUserOps in config to the desired number if you want to execute parallel userOps
+
+## Setup
+
+```bash
+yarn install
+```
+
+## Run
+
+```bash
+yarn run smartAccount --help
+yarn run smartAccount init --network=mumbai
+# get scw address
+
+# update the correct privateKey, biconomyPaymasterUrl, rpcUrl and bundlerUrl in config.json
+yarn run smartAccount address
+
+
+## Gasless - Sponsorship Paymaster
+
+yarn run smartAccount mint
+yarn run smartAccount batchMint
+
+## Gasless - Sponsorship Paymaster to send parallel userOps
+yarn run smartAccount mint --mode=PARALLEL_USER_OPS
+
+# replace the receiver below
+yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=0.001
+
+# replace the token address and receiver below
+yarn run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount=0.1 --token=0xeaBc4b91d9375796AA4F69cC764A4aB509080A58
+
+## ERC20 - Token Paymaster
+
+yarn run smartAccount mint --mode=TOKEN
+yarn run smartAccount batchMint --mode=TOKEN
+
+## ERC20 - Token Paymaster to send parallel userOps
+
+yarn run smartAccount mint --mode=TOKEN_PARALLEL_USER_OPS
+
+# replace the receiver below
+yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=0.001 --mode=TOKEN
+
+# replace the token address and receiver below
+yarn run smartAccount erc20Transfer --to=0x2cf491602ad22944D9047282aBC00D3e52F56B37 --amount=0.1 --token=0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3 --mode=TOKEN
+
+
+```

@@ -1,0 +1,30 @@
+{
+  "name": "biconomy-sdk-cli",
+  "version": "1.0.0",
+  "description": "Biconomy SDK SmartAccount",
+  "main": "scripts/index.js",
+  "scripts": {
+    "start": "tsc --noEmit && ts-node scripts/index.ts",
+    "smartAccount": "tsc --noEmit && ts-node scripts/index.ts",
+    "link:local": "yarn link '@biconomy/account' '@biconomy/modules'"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "dependencies": {
+    "@biconomy/account": "4.0.0",
+    "chalk": "^4.1.2",
+    "ethers": "^5.7.2",
+    "inquirer": "^8.0.0",
+    "prettier": "^2.8.1",
+    "viem": "^2.7.3",
+    "yargs": "^17.7.1"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.3",
+    "@types/node": "^20.3.2",
+    "@types/prettier": "^2.7.3",
+    "@types/yargs": "^17.0.24",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  }
+}
