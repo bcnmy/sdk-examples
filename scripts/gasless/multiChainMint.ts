@@ -11,7 +11,7 @@ import { PaymasterMode, createSmartAccountClient } from "@biconomy/account";
 import {
   DEFAULT_MULTICHAIN_MODULE,
   createMultiChainValidationModule,
-} from "@biconomy/modules";
+} from "@biconomy/account";
 import config from "../../config.json";
 
 export const multiChainMint = async () => {

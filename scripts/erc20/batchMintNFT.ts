@@ -10,10 +10,7 @@ const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
 import {
   createSmartAccountClient,
-  IHybridPaymaster,
-  PaymasterFeeQuote,
   PaymasterMode,
-  SponsorUserOperationDto,
 } from "@biconomy/account";
 import config from "../../config.json";
 import inquirer from "inquirer";
@@ -66,13 +63,6 @@ export const batchMintNftPayERC20 = async () => {
       // tokenList: []
     },
   });
-
-  // getTokenFees
-  // --> buildUserOp
-  // --> getFeeQuotesOrData
-  // returns fee quotes only
-  
-  
 
   const feeQuotes = feeQuotesResponse.feeQuotes;
   const spender = feeQuotesResponse.tokenPaymasterAddress;
