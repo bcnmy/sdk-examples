@@ -31,9 +31,8 @@ export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
   // create biconomy smart account instance
   const smartWallet = await createSmartAccountClient(smartWalletConfig);
 
-  // ------------------------STEP 2: Build Partial User op from your user Transaction/s Request --------------------------------//
+  // ------------------------STEP 2: Build the transaction --------------------------------//
 
-  // generate mintNft data
   const nftInterface = new ethers.utils.Interface([
     "function safeMint(address _to)",
   ]);
@@ -49,35 +48,20 @@ export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
     data: data,
   };
 
-  // build partial userOp
-  // For sending a batch of transactions, we just need to append transaction objects in array like below
-  // we are minting now 2 of above NFTs hence payload is the same
-  // it should be in the accurate atomic order in which you want transactions to be executed
-  let partialUserOp = await smartWallet.buildUserOp([transaction, transaction]);
+  // ------------------------STEP 3: Prepare and send user operation --------------------------------//
 
-  let finalUserOp = partialUserOp;
-
-  // ------------------------STEP 3: Get direct paymasterAndData or Fee quotes (floating mode) from the paymaster--------------------------------//
-
-  const Paymaster =
-    smartWallet.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
-
-  const feeQuotesOrDataResponse = await Paymaster.getPaymasterFeeQuotesOrData(
-    partialUserOp,
+  const feeQuotesOrDataResponse = await smartWallet.getTokenFees(
+    transaction,
     {
-      // here we are leaving the mode open
-
-      // one can pass tokenList empty array. and it would return fee quotes for all tokens supported by the Biconomy paymaster
-      // this will only be considered if gasless sponsorship policy check fails
+     paymasterServiceData: {
       tokenList: config.tokenList ? config.tokenList : [],
-
-      // preferredToken is optional. If you want to pay in a specific token, you can pass its address here and get fee quotes for that token only
-      // this will only be considered if gasless sponsorship policy check fails
       preferredToken: config.preferredToken,
-
-      calculateGasLimits: true,
+      mode: PaymasterMode.ERC20,
+     }
     }
   );
+
+  let userOpResponse;
 
   if (feeQuotesOrDataResponse.feeQuotes) {
     // this means sponsorship is successful and now you can offer fee quotes to the user to pay with ERC20
@@ -101,30 +85,19 @@ export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
     ]);
     const selectedFeeQuote = feeQuotes[selectedOption];
 
-    finalUserOp = await smartWallet.getPaymasterUserOp(finalUserOp, {mode: PaymasterMode.ERC20, feeQuote: selectedFeeQuote, spender: spender, maxApproval: false});
+    userOpResponse = await smartWallet.sendTransaction(transaction, {paymasterServiceData: {
+      mode: PaymasterMode.ERC20, feeQuote: selectedFeeQuote, spender: spender, maxApproval: false
+    }});
   } else if (feeQuotesOrDataResponse.paymasterAndData) {
     // this means sponsorship is successful
-
-    finalUserOp = await smartWallet.getPaymasterUserOp(finalUserOp, {mode: PaymasterMode.SPONSORED});
+    userOpResponse = await smartWallet.sendTransaction(transaction, {paymasterServiceData: {mode: PaymasterMode.SPONSORED}});
   }
 
-  // ------------------------STEP 4: Sign the UserOp and send to the Bundler--------------------------------//
-
-  console.log(chalk.blue(`userOp: ${JSON.stringify(finalUserOp, null, "\t")}`));
-
-  // Below function gets the signature from the user (signer provided in Biconomy Smart Account)
-  // and also send the full op to attached bundler instance
-
-  try {
-    const userOpResponse = await smartWallet.sendUserOp(finalUserOp);
-    console.log(chalk.green(`userOp Hash: ${userOpResponse.userOpHash}`));
-    const transactionDetails = await userOpResponse.wait();
-    console.log(
-      chalk.blue(
-        `transactionDetails: ${JSON.stringify(transactionDetails, null, "\t")}`
-      )
-    );
-  } catch (e) {
-    console.log("error received ", e);
-  }
+  console.log(chalk.green(`userOp Hash: ${userOpResponse!.userOpHash}`));
+  const transactionDetails = await userOpResponse!.wait();
+  console.log(
+    chalk.blue(
+      `transactionDetails: ${JSON.stringify(transactionDetails, null, "\t")}`
+    )
+  );
 };
