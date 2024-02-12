@@ -2,7 +2,7 @@ import { Hex, createWalletClient, http, parseEther } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { createSmartAccountClient, PaymasterMode } from "@biconomy-devx/account";
+import { createSmartAccountClient, PaymasterMode } from "@biconomy/account";
 import config from "../../config.json";
 
 export const nativeTransferPayERC20 = async (to: string, amount: number) => {

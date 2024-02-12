@@ -12,7 +12,7 @@ import {
   createSmartAccountClient,
   Paymaster,
   PaymasterMode,
-} from "@biconomy-devx/account";
+} from "@biconomy/account";
 import config from "../../config.json";
 import { ERC20ABI } from "../utils/abi";
 

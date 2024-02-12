@@ -14,7 +14,7 @@ import {
   PaymasterFeeQuote,
   PaymasterMode,
   SponsorUserOperationDto,
-} from "@biconomy-devx/account";
+} from "@biconomy/account";
 import config from "../../config.json";
 import inquirer from "inquirer";
 

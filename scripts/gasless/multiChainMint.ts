@@ -7,11 +7,11 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { baseGoerli, polygonMumbai } from "viem/chains";
-import { PaymasterMode, createSmartAccountClient } from "@biconomy-devx/account";
+import { PaymasterMode, createSmartAccountClient } from "@biconomy/account";
 import {
   DEFAULT_MULTICHAIN_MODULE,
   createMultiChainValidationModule,
-} from "@biconomy-devx/modules";
+} from "@biconomy/modules";
 import config from "../../config.json";
 
 export const multiChainMint = async () => {

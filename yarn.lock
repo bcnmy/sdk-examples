@@ -17,53 +17,54 @@
     viem "^2.5.0"
     zod "^3.22.4"
 
-"@biconomy-devx/account@2.2.12":
-  version "2.2.12"
-  resolved "https://registry.yarnpkg.com/@biconomy-devx/account/-/account-2.2.12.tgz#bbc66874df813f7996684505fdf736d744e8dc3b"
-  integrity sha512-Xkg23h3mlYEYDPTHxHiRUwPh9k09dDHmCYsXK0tzs5L0Dg3hKNV14vgFBkrknycPjEpKxkPamt3tUMtSKpHsTA==
+"@biconomy/account@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@biconomy/account/-/account-4.0.0.tgz#b7d8af25eadca38b0b5e961cac968c28b61a8b85"
+  integrity sha512-fMiFZBTcwdylmG9sFakIZvfmMBV0qm8t6mqsjOq+2EIU06UatJCc8/KS/Vc9osscYyhB/wcvJmbB7WuKP6WkHw==
   dependencies:
     "@alchemy/aa-core" "3.0.0-alpha.4"
-    "@biconomy-devx/bundler" "2.2.12"
-    "@biconomy-devx/common" "2.2.12"
-    "@biconomy-devx/modules" "2.2.12"
-    "@biconomy-devx/paymaster" "2.2.12"
+    "@biconomy/bundler" "4.0.0"
+    "@biconomy/common" "4.0.0"
+    "@biconomy/modules" "4.0.0"
+    "@biconomy/paymaster" "4.0.0"
     viem "^2.7.3"
 
-"@biconomy-devx/bundler@2.2.12":
-  version "2.2.12"
-  resolved "https://registry.yarnpkg.com/@biconomy-devx/bundler/-/bundler-2.2.12.tgz#1a92be097dab49a52925cb7db6a602d0a5c3bb86"
-  integrity sha512-X4CznUYC1qWgVvbXkqvY718soNAezDh44VU/wDxyjrvQEdD7gOz/fMkiPoGIQxAhUd2Ex5zsAZ78Aw4Lz09e7g==
+"@biconomy/bundler@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@biconomy/bundler/-/bundler-4.0.0.tgz#0263054b2b3953463b3aafac350a4d4d416f43a7"
+  integrity sha512-iIGn0ITHVvg9zYKtWxIF6wwYr/aHvOmECMqF2EFgiI7WDqoJ+NFjQ6Ih5zHUr9ATqfU1ZKd5rfs7kx/qaYmrdg==
   dependencies:
     "@alchemy/aa-core" "3.0.0-alpha.4"
-    "@biconomy-devx/common" "2.2.12"
+    "@biconomy/common" "4.0.0"
     viem "^2.7.3"
 
-"@biconomy-devx/common@2.2.12":
-  version "2.2.12"
-  resolved "https://registry.yarnpkg.com/@biconomy-devx/common/-/common-2.2.12.tgz#c1297a806f2b39a808b1836b0bfd8bc64ab323bc"
-  integrity sha512-/6r9FR6UHmKuxdG+a8Um/Pre0m8eFDDlrarUC5sVWuhzwAJnfLHAwpZQRml8O0IMSAa3pKn9QKrPGswoYM2Mhg==
+"@biconomy/common@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@biconomy/common/-/common-4.0.0.tgz#36dfcad23d9a2706771faf7608b624652886d6f4"
+  integrity sha512-0Zw8g8CVcLWY2egFhwb2EAZ3EIoZpsAkWryNBmUbP34nbdjs+RYltqaJZgZT4NsnrmJVGoXpcdnwn50ne1NFAQ==
   dependencies:
     "@alchemy/aa-core" "3.0.0-alpha.4"
     "@ethersproject/abstract-signer" "^5.7.0"
     viem "^2.7.3"
 
-"@biconomy-devx/modules@2.2.12":
-  version "2.2.12"
-  resolved "https://registry.yarnpkg.com/@biconomy-devx/modules/-/modules-2.2.12.tgz#6146d85068406154299e71849c446db693a95833"
-  integrity sha512-rqc4juXzZovK6u6YI0QwL/Y9DDzzvz2k3efzcwYdb7dUBSgRTTm4C8T0SDt57MtzL0YWaWTcrDb+AaUfRggy7Q==
+"@biconomy/modules@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@biconomy/modules/-/modules-4.0.0.tgz#4f4cb397431541112c091380d0487dcb573c182a"
+  integrity sha512-FyYB6wT6kkUaJjQc6wNzpFM5yUREFRgWjgCmUXFhSAJRt+PVQgfi1ERosyuWUI4RK76wXvS82RBzqFY5G3p/XA==
   dependencies:
     "@alchemy/aa-core" "3.0.0-alpha.4"
-    "@biconomy-devx/common" "2.2.12"
+    "@biconomy/common" "4.0.0"
+    "@ethersproject/abi" "^5.7.0"
     merkletreejs "^0.3.11"
     viem "^2.7.3"
 
-"@biconomy-devx/paymaster@2.2.12":
-  version "2.2.12"
-  resolved "https://registry.yarnpkg.com/@biconomy-devx/paymaster/-/paymaster-2.2.12.tgz#f8e14f7c9e729346fed9a69c656493b2ca4ff627"
-  integrity sha512-l7dIZjSxNuZSIkIukCl741RLZSTVhjarYR9iEycEW328/rNCBSAcsja/Bqc0L1jwlTMKntBg8Atq2vO9GKHgPA==
+"@biconomy/paymaster@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@biconomy/paymaster/-/paymaster-4.0.0.tgz#f6ec4343e87cecf4c62ce9d0114d09f6f81f70c6"
+  integrity sha512-o1vu+ywJHuNLbWJuS3uHwp03aq9qjTr6WlRzqUgqZeBulqr6EGMZ7jwuMZXLxFdbuREHkSVjHkJfX1KFri8FzQ==
   dependencies:
     "@alchemy/aa-core" "3.0.0-alpha.4"
-    "@biconomy-devx/common" "2.2.12"
+    "@biconomy/common" "4.0.0"
     viem "^2.7.3"
 
 "@cspotcode/source-map-support@^0.8.0":
@@ -539,9 +540,9 @@
     rxjs "^7.2.0"
 
 "@types/node@*", "@types/node@^20.3.2":
-  version "20.11.16"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.16.tgz#4411f79411514eb8e2926f036c86c9f0e4ec6708"
-  integrity sha512-gKb0enTmRCzXSSUJDq6/sPcqrfCv2mkkG6Jt/clpn5eiCbKTY+SgZUxo+p8ZKMof5dCp9vHQUAB7wOUTod22wQ==
+  version "20.11.17"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.17.tgz#cdd642d0e62ef3a861f88ddbc2b61e32578a9292"
+  integrity sha512-QmgQZGWu1Yw9TDyAP9ZzpFJKynYNeOvwMJmaxABfieQoVoiVOS6MN1WSpqpRcbeA5+RW82kraAVxCCJg+780Qw==
   dependencies:
     undici-types "~5.26.4"
 
@@ -1222,9 +1223,9 @@ v8-compile-cache-lib@^3.0.1:
   integrity sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==
 
 viem@^2.5.0, viem@^2.7.3:
-  version "2.7.6"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.7.6.tgz#2ada30ece1469367b606137983e5655cf66d721e"
-  integrity sha512-43TF0VYcTeNef9dax1/BhqlRLXpAo6HAiQ68hrJ8XRhDOou73nHZEjeFl8Eai4UFFodKhu+PbRUFzuuoixOUfg==
+  version "2.7.8"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.7.8.tgz#ca60552190cdc501cf4e1d1140d8da7625b1b1f4"
+  integrity sha512-5r5pkBDBmihCvMx4b3MqtP0FoZCRWE2ML1DssU80+vhJQur0PKd4yHdLbbvoiGGVD6bYiA394juhfdSvXIGgFA==
   dependencies:
     "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"
