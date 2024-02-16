@@ -11,6 +11,7 @@ import { polygonMumbai } from "viem/chains";
 import {
   createSmartAccountClient,
   PaymasterMode,
+  UserOpStatus,
 } from "@biconomy/account";
 import config from "../../config.json";
 import inquirer from "inquirer";
@@ -85,14 +86,35 @@ export const batchMintNftPayERC20 = async () => {
 
   console.log('selected fee quote ', selectedFeeQuote)
 
-  const { waitForTxHash } = await smartAccount.sendTransaction(transaction, {
-    paymasterServiceData: {
-      mode: PaymasterMode.ERC20,
+  const userop = await smartAccount.buildUserOp([{
+    to: nftAddress,
+    data: nftData,
+  }, {
+    to: nftAddress,
+    data: nftData,
+  }],
+  /*{ paymasterServiceData: { mode: PaymasterMode.SPONSORED } }*/)
+
+  console.log('userop', userop)
+
+  const useropWithPnd = await smartAccount.getPaymasterUserOp(userop, 
+    { mode: PaymasterMode.ERC20, 
+      calculateGasLimits: false,
       feeQuote: selectedFeeQuote,
-      spender,
-      maxApproval: false,
-    },
-  });
+      spender: spender,
+    } )
+
+  console.log('useropWithPnd', useropWithPnd)
+
+  const userOpWithsignature = await smartAccount.signUserOp(useropWithPnd)
+  console.log('signature', userOpWithsignature.signature)
+
+  const userOpResponse = await smartAccount.sendUserOp(useropWithPnd)
+
+  const transactionDetails1: UserOpStatus =
+      await userOpResponse.waitForTxHash();
+    console.log("transachion hash", transactionDetails1.transactionHash);
+    
 
   // sendTransaction
   // --> buildUserOp
@@ -100,6 +122,6 @@ export const batchMintNftPayERC20 = async () => {
   //      --> buildTokenPaymasterUserOp
   //      --> getPaymasterAndData
   // --> sendUserOp
-  const { transactionHash } = await waitForTxHash();
-  console.log("transactionHash", transactionHash);
+  // const { transactionHash } = await waitForTxHash();
+  // console.log("transactionHash", transactionHash);
 };

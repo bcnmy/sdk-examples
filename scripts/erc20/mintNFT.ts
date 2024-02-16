@@ -14,6 +14,7 @@ import {
   IHybridPaymaster,
   PaymasterFeeQuote,
   SponsorUserOperationDto,
+  UserOpStatus,
 } from "@biconomy/account";
 import config from "../../config.json";
 import inquirer from "inquirer";
@@ -47,8 +48,32 @@ export const mintNftPayERC20 = async () => {
     args: [scwAddress as Hex],
   });
 
+  const userop = await smartAccount.buildUserOp([{
+    to: nftAddress,
+    data: nftData,
+  }],
+  )
+
+  console.log('userop', userop)
+
+  const useropWithPnd = await smartAccount.getPaymasterUserOp(userop, 
+    { mode: PaymasterMode.ERC20, 
+      calculateGasLimits: false,
+      preferredToken: '0xdA5289fCAAF71d52a80A254da614a192b693e977' } )
+
+  console.log('useropWithPnd', useropWithPnd)
+
+  const userOpWithsignature = await smartAccount.signUserOp(useropWithPnd)
+  console.log('signature', userOpWithsignature.signature)
+
+  /*const userOpResponse = await smartAccount.sendUserOp(useropWithPnd)
+
+  const transactionDetails1: UserOpStatus =
+      await userOpResponse.waitForTxHash();
+    console.log("transachion hash", transactionDetails1.transactionHash);*/
+
   // ------ 4. Send transaction
-  const { waitForTxHash } = await smartAccount.sendTransaction(
+  /*const { waitForTxHash } = await smartAccount.sendTransaction(
     {
       to: nftAddress,
       data: nftData,
@@ -62,5 +87,6 @@ export const mintNftPayERC20 = async () => {
   );
 
   const { transactionHash } = await waitForTxHash();
-  console.log("transactionHash", transactionHash);
+  console.log("transactionHash", transactionHash);*/
 };
+
