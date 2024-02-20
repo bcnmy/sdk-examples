@@ -1,5 +1,7 @@
 import {
+  CustomSource,
   Hex,
+  WalletClient,
   createWalletClient,
   encodeFunctionData,
   http,
@@ -11,12 +13,9 @@ import { polygonMumbai } from "viem/chains";
 import {
   createSmartAccountClient,
   PaymasterMode,
-  IHybridPaymaster,
-  PaymasterFeeQuote,
-  SponsorUserOperationDto,
+  SupportedSigner,
 } from "@biconomy/account";
 import config from "../../config.json";
-import inquirer from "inquirer";
 
 export const mintNftPayERC20 = async () => {
   // ----- 1. Generate EOA from private key
@@ -31,9 +30,9 @@ export const mintNftPayERC20 = async () => {
 
   // ------ 2. Create biconomy smart account instance
   const smartAccount = await createSmartAccountClient({
-    signer: client,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
+    signer: client as SupportedSigner,
   });
   const scwAddress = await smartAccount.getAccountAddress();
   console.log("SCW Address", scwAddress);

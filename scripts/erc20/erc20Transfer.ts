@@ -8,7 +8,11 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { createSmartAccountClient, PaymasterMode } from "@biconomy/account";
+import {
+  createSmartAccountClient,
+  PaymasterMode,
+  SupportedSigner,
+} from "@biconomy/account";
 import config from "../../config.json";
 import { ERC20ABI } from "../utils/abi";
 
@@ -29,7 +33,7 @@ export const erc20TransferPayERC20 = async (
 
   // ------ 2. Create biconomy smart account instance
   const smartAccount = await createSmartAccountClient({
-    signer: client,
+    signer: client as SupportedSigner,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });

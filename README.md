@@ -1,7 +1,6 @@
 ## SDK by Example
 
-This repository contains a set of examples that demonstrate how to use the Biconomy SDk smart-account to build decentralised applications.
-The SmartAccount package generates a smart wallet contract for each user EOA. It takes a provider, provider can be anything, here we have different examples of providers.
+This repository contains a set of examples that demonstrate how to use the Biconomy SDk smart-account to build decentralised applications. The SmartAccount package generates a smart wallet contract for each user EOA. It takes a provider, provider can be anything, here we have different examples of providers.
 
 ### Important Links
 
@@ -14,25 +13,29 @@ export BICONOMY_SDK_DEBUG=true
 
 Set numOfParallelUserOps in config to the desired number if you want to execute parallel userOps
 
-## Setup
+## 1. Setup
 
 ```bash
 yarn install
 ```
 
-## Run
+## 2. Edit your config.json file
+
+Retrieve relevant bundlerUrl / paymaster api keys from the biconomy dashboard.
+
+- [bundlerUrl](https://docs.biconomy.io/dashboard#bundler-url)
+- [biconomyPaymasterApiKey](https://docs.biconomy.io/dashboard/paymaster)
+
+## 3. Run
 
 ```bash
 yarn run smartAccount --help
-yarn run smartAccount init --network=mumbai
 # get scw address
 
 # update the correct privateKey, biconomyPaymasterUrl, rpcUrl and bundlerUrl in config.json
 yarn run smartAccount address
 
-
 ## Gasless - Sponsorship Paymaster
-
 yarn run smartAccount mint
 yarn run smartAccount batchMint
 
@@ -59,6 +62,4 @@ yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 -
 
 # replace the token address and receiver below
 yarn run smartAccount erc20Transfer --to=0x2cf491602ad22944D9047282aBC00D3e52F56B37 --amount=0.1 --token=0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3 --mode=TOKEN
-
-
 ```

@@ -12,6 +12,7 @@ import {
   createSmartAccountClient,
   Paymaster,
   PaymasterMode,
+  SupportedSigner,
 } from "@biconomy/account";
 import config from "../../config.json";
 import { ERC20ABI } from "../utils/abi";
@@ -33,7 +34,7 @@ export const erc20Transfer = async (
 
   // ------ 2. Create biconomy smart account instance
   const smartAccount = await createSmartAccountClient({
-    signer: client,
+    signer: client as SupportedSigner,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });

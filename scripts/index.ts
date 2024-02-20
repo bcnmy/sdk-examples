@@ -13,8 +13,6 @@ import { mintNftPayERC20 } from "./erc20/mintNFT";
 import { parallelUserOpsMintNFTPayERC20 } from "./erc20/parallelUserOpsMintNFT";
 import { batchMintNft } from "./gasless/batchMintNFT";
 import { batchMintNftPayERC20 } from "./erc20/batchMintNFT";
-import { batchMintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/batchMintNFT";
-import { mintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/mintNFT";
 import { multiChainMint } from "./gasless/multiChainMint";
 
 yargs
@@ -119,8 +117,6 @@ yargs
         mintNftPayERC20();
       } else if (argv.mode === "ETHERS") {
         mintNftEthers();
-      } else if (argv.mode === "HYBRID") {
-        mintNftTrySponsorshipOtherwisePayERC20();
       } else if (argv.mode === "TOKEN_PARALLEL_USER_OPS") {
         parallelUserOpsMintNFTPayERC20();
       } else if (argv.mode === "PARALLEL_USER_OPS") {
@@ -161,7 +157,7 @@ yargs
     },
     (argv) => {
       console.log(chalk.magenta("Minting an NFT token to the SmartAccount..."));
-        mintNftEthers();
+      mintNftEthers();
     }
   )
   // Batch mint nft token to SmartAccount
@@ -181,8 +177,6 @@ yargs
       );
       if (argv.mode === "TOKEN") {
         batchMintNftPayERC20();
-      } else if (argv.mode === "HYBRID") {
-        batchMintNftTrySponsorshipOtherwisePayERC20();
       } else {
         batchMintNft();
       }

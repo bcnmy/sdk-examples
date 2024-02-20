@@ -2,7 +2,11 @@ import { Hex, createWalletClient, http, parseEther } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import { polygonMumbai } from "viem/chains";
-import { createSmartAccountClient, PaymasterMode } from "@biconomy/account";
+import {
+  createSmartAccountClient,
+  PaymasterMode,
+  SupportedSigner,
+} from "@biconomy/account";
 import config from "../../config.json";
 
 export const nativeTransfer = async (to: string, amount: number) => {
@@ -18,7 +22,7 @@ export const nativeTransfer = async (to: string, amount: number) => {
 
   // ------ 2. Create biconomy smart account instance
   const smartAccount = await createSmartAccountClient({
-    signer: client,
+    signer: client as SupportedSigner,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });

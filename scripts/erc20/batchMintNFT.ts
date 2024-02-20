@@ -11,6 +11,7 @@ import { polygonMumbai } from "viem/chains";
 import {
   createSmartAccountClient,
   PaymasterMode,
+  SupportedSigner,
 } from "@biconomy/account";
 import config from "../../config.json";
 import inquirer from "inquirer";
@@ -28,7 +29,7 @@ export const batchMintNftPayERC20 = async () => {
 
   // ------ 2. Create biconomy smart account instance
   const smartAccount = await createSmartAccountClient({
-    signer: client,
+    signer: client as SupportedSigner,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });
@@ -83,7 +84,7 @@ export const batchMintNftPayERC20 = async () => {
   ]);
   const selectedFeeQuote = feeQuotes?.[selectedOption];
 
-  console.log('selected fee quote ', selectedFeeQuote)
+  console.log("selected fee quote ", selectedFeeQuote);
 
   const { waitForTxHash } = await smartAccount.sendTransaction(transaction, {
     paymasterServiceData: {
