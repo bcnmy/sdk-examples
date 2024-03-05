@@ -67,13 +67,6 @@ export const batchMintNftPayERC20 = async () => {
 
   const feeQuotes = feeQuotesResponse.feeQuotes;
 
-  const supportedTokens = await smartAccount.getSupportedTokens();
-  if (supportedTokens.length !== feeQuotes?.length) {
-    throw new Error(
-      "Number of supported tokens and fee quotes should be the same"
-    );
-  }
-
   const spender = feeQuotesResponse.tokenPaymasterAddress;
   console.log({ feeQuotesResponse });
   // Generate list of options for the user to select

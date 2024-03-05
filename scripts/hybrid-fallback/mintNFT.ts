@@ -59,13 +59,6 @@ export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
     const feeQuotes = feeQuotesOrDataResponse.feeQuotes as PaymasterFeeQuote[];
     const spender: Hex = feeQuotesOrDataResponse.tokenPaymasterAddress || "0x";
 
-    const supportedTokens = await smartWallet.getSupportedTokens();
-    if (supportedTokens.length !== feeQuotes?.length) {
-      throw new Error(
-        "Number of supported tokens and fee quotes should be the same"
-      );
-    }
-
     // Generate list of options for the user to select
     const choices = feeQuotes?.map((quote: any, index: number) => ({
       name: `Option ${index + 1}: ${quote.maxGasFee}: ${quote.symbol} `,
