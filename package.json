@@ -6,17 +6,17 @@
   "scripts": {
     "start": "tsc --noEmit && ts-node scripts/index.ts",
     "smartAccount": "tsc --noEmit && ts-node scripts/index.ts",
-    "link:local": "yarn link '@biconomy/account' '@biconomy/modules'"
+    "link:local": "yarn link '@biconomy-devx/account' '@biconomy-devx/modules'"
   },
   "keywords": [],
   "license": "ISC",
   "dependencies": {
-    "@biconomy/account": "4.0.0",
+    "@biconomy-devx/account": "4.1.0",
     "chalk": "^4.1.2",
     "ethers": "^5.7.2",
     "inquirer": "^8.0.0",
     "prettier": "^2.8.1",
-    "viem": "^2.7.3",
+    "viem": "^2.7.12",
     "yargs": "^17.7.1"
   },
   "devDependencies": {

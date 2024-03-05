@@ -1,13 +1,17 @@
 import { Hex, encodeFunctionData, parseAbi } from "viem";
 import { ethers } from "ethers";
 const chalk = require("chalk");
-import { createSmartAccountClient, PaymasterMode } from "@biconomy/account";
+import {
+  createSmartAccountClient,
+  PaymasterMode,
+  SupportedSigner,
+} from "@biconomy-devx/account";
 import config from "../../config.json";
 
 export const mintNftEthers = async () => {
   // ----- 1. Generate EOA from private key
   let provider = new ethers.providers.JsonRpcProvider(config.rpcUrl);
-  let signer = new ethers.Wallet(config.privateKey, provider);
+  let signer: SupportedSigner = new ethers.Wallet(config.privateKey, provider);
   const eoa = await signer.getAddress();
   console.log(chalk.blue(`EOA address: ${eoa}`));
 

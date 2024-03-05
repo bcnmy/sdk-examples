@@ -7,16 +7,13 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
-import { polygonMumbai } from "viem/chains";
-import { createSmartAccountClient } from "@biconomy/account";
 import {
-  IHybridPaymaster,
-  PaymasterFeeQuote,
-  PaymasterMode,
-  SponsorUserOperationDto,
-} from "@biconomy/paymaster";
+  createSmartAccountClient,
+  SupportedSigner,
+} from "@biconomy-devx/account";
+import { PaymasterMode } from "@biconomy-devx/paymaster";
 import config from "../../config.json";
-import inquirer from "inquirer";
+import { getChain } from "../utils/getChain";
 
 const numOfParallelUserOps = config.numOfParallelUserOps;
 
@@ -25,7 +22,7 @@ export const parallelUserOpsMintNFTPayERC20 = async () => {
   const account = privateKeyToAccount(config.privateKey as Hex);
   const client = createWalletClient({
     account,
-    chain: polygonMumbai,
+    chain: getChain(config.chainId),
     transport: http(),
   });
   const eoa = client.account.address;
@@ -33,7 +30,7 @@ export const parallelUserOpsMintNFTPayERC20 = async () => {
 
   // ------ 2. Create biconomy smart account instance
   const smartAccount = await createSmartAccountClient({
-    signer: client,
+    signer: client as SupportedSigner,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });

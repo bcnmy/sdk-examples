@@ -6,20 +6,25 @@ import {
   parseAbi,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { baseGoerli, polygonMumbai } from "viem/chains";
-import { PaymasterMode, createSmartAccountClient } from "@biconomy/account";
+import { baseGoerli } from "viem/chains";
+import {
+  PaymasterMode,
+  createSmartAccountClient,
+} from "@biconomy-devx/account";
 import {
   DEFAULT_MULTICHAIN_MODULE,
   createMultiChainValidationModule,
-} from "@biconomy/account";
+  SupportedSigner,
+} from "@biconomy-devx/account";
 import config from "../../config.json";
+import { getChain } from "../utils/getChain";
 
 export const multiChainMint = async () => {
   // ----- 1. Generate EOA from private key
   const account = privateKeyToAccount(config.privateKey as Hex);
   const mumbaiClient = createWalletClient({
     account,
-    chain: polygonMumbai,
+    chain: getChain(config.chainId),
     transport: http(),
   });
   const baseClient = createWalletClient({
@@ -30,11 +35,11 @@ export const multiChainMint = async () => {
 
   // ------ 2. Create module and biconomy smart account instance
   const multiChainModule = await createMultiChainValidationModule({
-    signer: mumbaiClient,
+    signer: mumbaiClient as SupportedSigner,
     moduleAddress: DEFAULT_MULTICHAIN_MODULE,
   });
   const smartAccount1 = await createSmartAccountClient({
-    signer: mumbaiClient,
+    signer: mumbaiClient as SupportedSigner,
     chainId: 80001,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
@@ -45,7 +50,7 @@ export const multiChainMint = async () => {
   console.log("SCW Address 1", scwAddress1);
 
   const smartAccount2 = await createSmartAccountClient({
-    signer: baseClient,
+    signer: baseClient as SupportedSigner,
     chainId: 84531,
     bundlerUrl:
       "https://bundler.biconomy.io/api/v2/84531/nJPK7B3ru.dd7f7861-190d-41bd-af80-6877f74b8f44",
