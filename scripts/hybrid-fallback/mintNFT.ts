@@ -5,7 +5,7 @@ import {
   createSmartAccountClient,
   PaymasterMode,
   PaymasterFeeQuote,
-} from "@biconomy-devx/account";
+} from "@biconomy/account";
 import config from "../../config.json";
 import { Hex } from "viem";
 

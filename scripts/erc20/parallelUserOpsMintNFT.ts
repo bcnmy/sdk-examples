@@ -7,11 +7,8 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
-import {
-  createSmartAccountClient,
-  SupportedSigner,
-} from "@biconomy-devx/account";
-import { PaymasterMode } from "@biconomy-devx/paymaster";
+import { createSmartAccountClient, SupportedSigner } from "@biconomy/account";
+import { PaymasterMode } from "@biconomy/paymaster";
 import config from "../../config.json";
 import { getChain } from "../utils/getChain";
 

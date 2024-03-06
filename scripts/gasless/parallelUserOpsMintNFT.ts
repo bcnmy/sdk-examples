@@ -12,7 +12,7 @@ import {
   createSmartAccountClient,
   PaymasterMode,
   SupportedSigner,
-} from "@biconomy-devx/account";
+} from "@biconomy/account";
 import { getChain } from "../utils/getChain";
 
 const numOfParallelUserOps = config.numOfParallelUserOps;
