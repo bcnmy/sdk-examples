@@ -16,6 +16,8 @@ import { batchMintNftPayERC20 } from "./erc20/batchMintNFT";
 import { batchMintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/batchMintNFT";
 import { mintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/mintNFT";
 import { multiChainMint } from "./gasless/multiChainMint";
+import { deploySmartContractPayERC20 } from "./erc20/deploy";
+import { deploySmartContractGasless } from "./gasless/deploy";
 
 yargs
   .scriptName(chalk.green("smartAccount"))
@@ -161,7 +163,7 @@ yargs
     },
     (argv) => {
       console.log(chalk.magenta("Minting an NFT token to the SmartAccount..."));
-        mintNftEthers();
+      mintNftEthers();
     }
   )
   // Batch mint nft token to SmartAccount
@@ -185,6 +187,25 @@ yargs
         batchMintNftTrySponsorshipOtherwisePayERC20();
       } else {
         batchMintNft();
+      }
+    }
+  )
+  .command(
+    "deploy",
+    chalk.blue("Deploy smart account"),
+    {
+      mode: {
+        describe: chalk.cyan("Paymaster mode"),
+        demandOption: false,
+        type: "string",
+      },
+    },
+    (argv) => {
+      console.log(chalk.magenta("Deploying SmartAccount..."));
+      if (argv.mode === "TOKEN") {
+        deploySmartContractPayERC20();
+      } else {
+        deploySmartContractGasless();
       }
     }
   )

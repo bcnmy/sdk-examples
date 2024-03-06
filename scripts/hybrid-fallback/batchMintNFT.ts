@@ -2,10 +2,8 @@ import { ethers } from "ethers";
 const chalk = require("chalk");
 import inquirer from "inquirer";
 import {
-  IHybridPaymaster,
   PaymasterFeeQuote,
   PaymasterMode,
-  SponsorUserOperationDto,
   BiconomySmartAccountV2Config,
 } from "@biconomy/account";
 import config from "../../config.json";
@@ -50,16 +48,13 @@ export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
 
   // ------------------------STEP 3: Prepare and send user operation --------------------------------//
 
-  const feeQuotesOrDataResponse = await smartWallet.getTokenFees(
-    transaction,
-    {
-     paymasterServiceData: {
+  const feeQuotesOrDataResponse = await smartWallet.getTokenFees(transaction, {
+    paymasterServiceData: {
       tokenList: config.tokenList ? config.tokenList : [],
       preferredToken: config.preferredToken,
       mode: PaymasterMode.ERC20,
-     }
-    }
-  );
+    },
+  });
 
   let userOpResponse;
 
@@ -85,12 +80,19 @@ export const batchMintNftTrySponsorshipOtherwisePayERC20 = async () => {
     ]);
     const selectedFeeQuote = feeQuotes[selectedOption];
 
-    userOpResponse = await smartWallet.sendTransaction(transaction, {paymasterServiceData: {
-      mode: PaymasterMode.ERC20, feeQuote: selectedFeeQuote, spender: spender, maxApproval: false
-    }});
+    userOpResponse = await smartWallet.sendTransaction(transaction, {
+      paymasterServiceData: {
+        mode: PaymasterMode.ERC20,
+        feeQuote: selectedFeeQuote,
+        spender: spender,
+        maxApproval: false,
+      },
+    });
   } else if (feeQuotesOrDataResponse.paymasterAndData) {
     // this means sponsorship is successful
-    userOpResponse = await smartWallet.sendTransaction(transaction, {paymasterServiceData: {mode: PaymasterMode.SPONSORED}});
+    userOpResponse = await smartWallet.sendTransaction(transaction, {
+      paymasterServiceData: { mode: PaymasterMode.SPONSORED },
+    });
   }
 
   console.log(chalk.green(`userOp Hash: ${userOpResponse!.userOpHash}`));

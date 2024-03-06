@@ -1,16 +1,20 @@
 import { Hex, createWalletClient, http, parseEther } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
-import { polygonMumbai } from "viem/chains";
-import { createSmartAccountClient, PaymasterMode } from "@biconomy/account";
+import {
+  createSmartAccountClient,
+  PaymasterMode,
+  SupportedSigner,
+} from "@biconomy/account";
 import config from "../../config.json";
+import { getChain } from "../utils/getChain";
 
 export const nativeTransferPayERC20 = async (to: string, amount: number) => {
   // ----- 1. Generate EOA from private key
   const account = privateKeyToAccount(config.privateKey as Hex);
   const client = createWalletClient({
     account,
-    chain: polygonMumbai,
+    chain: getChain(config.chainId),
     transport: http(),
   });
   const eoa = client.account.address;
@@ -18,7 +22,7 @@ export const nativeTransferPayERC20 = async (to: string, amount: number) => {
 
   // ------ 2. Create biconomy smart account instance
   const smartAccount = await createSmartAccountClient({
-    signer: client,
+    signer: client as SupportedSigner,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
   });

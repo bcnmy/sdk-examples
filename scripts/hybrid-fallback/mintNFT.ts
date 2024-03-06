@@ -43,17 +43,13 @@ export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
   };
 
   // ------------------------STEP 3: Prepare and send user operation --------------------------------//
-
-  const feeQuotesOrDataResponse = await smartWallet.getTokenFees(
-    transaction,
-    {
-      paymasterServiceData: {
-        tokenList: config.tokenList ? config.tokenList : [],
-        preferredToken: config.preferredToken,
-        mode: PaymasterMode.ERC20,
-      }
-    }
-  );
+  const feeQuotesOrDataResponse = await smartWallet.getTokenFees(transaction, {
+    paymasterServiceData: {
+      tokenList: config.tokenList ? config.tokenList : [],
+      preferredToken: config.preferredToken,
+      mode: PaymasterMode.ERC20,
+    },
+  });
 
   let userOpResponse;
 
@@ -85,11 +81,13 @@ export const mintNftTrySponsorshipOtherwisePayERC20 = async () => {
         feeQuote: selectedFeeQuote,
         spender,
         maxApproval: false,
-      }
-    })
+      },
+    });
   } else if (feeQuotesOrDataResponse.paymasterAndData) {
     // this means sponsorship is successful
-    userOpResponse = await smartWallet.sendTransaction(transaction, {paymasterServiceData: {mode: PaymasterMode.SPONSORED}})
+    userOpResponse = await smartWallet.sendTransaction(transaction, {
+      paymasterServiceData: { mode: PaymasterMode.SPONSORED },
+    });
   }
 
   console.log(chalk.green(`userOp Hash: ${userOpResponse!.userOpHash}`));
