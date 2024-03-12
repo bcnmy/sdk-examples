@@ -29,42 +29,42 @@
     "@biconomy/paymaster" "^4.1.0"
     viem "^2.7.12"
 
-"@biconomy/bundler@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@biconomy/bundler/-/bundler-4.1.0.tgz#9a53736ed91c5d7f8b6e70f7b41c739b8fb9d015"
-  integrity "sha1-FV67dqqo+UjJgRwtZ3WeYMUlAkI= sha512-QV6wQYogGvizEp0VzEKgbQZjWpuRmYTbYWkgDYKlTkOncl7IUbEBZYP74ZHWiFzqW1h8LpvyDIaejgbaLmqx+Q=="
+"@biconomy/bundler@^4.1.0":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@biconomy/bundler/-/bundler-4.1.1.tgz#9d97afa4e5db8a028aa511377270a000a87510c6"
+  integrity sha512-bji/wo5x3V3QpSmvagDClHmYg7L9vUU+5jM1oE7MDgTI6F1ZQqHHEnUj3wBd9hyojLbMqDMmqilow6dFbZMcKw==
   dependencies:
     "@alchemy/aa-core" "^3.1.1"
-    "@biconomy/common" "^4.1.0"
+    "@biconomy/common" "^4.1.1"
     viem "^2.7.12"
 
-"@biconomy/common@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@biconomy/common/-/common-4.1.0.tgz#1a4f644a4913f2edd0f6ca4579009d83164207e5"
-  integrity "sha1-29JyBL6oJej4TSF19t2EbLhULIE= sha512-M2kdQM2DXqYXMznF9WLdOAFyaFMSj4n9tvDZuRvWjGPw+ki3JKfKxrMRoFjRI2lUjSU1s4CDgYrdYT2Fd4xv2w=="
+"@biconomy/common@^4.1.0", "@biconomy/common@^4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@biconomy/common/-/common-4.1.1.tgz#448944bb82001fcc2f91c176bfaf93600f5495bd"
+  integrity sha512-w0SL4Rc2UWa0+sRzRo+kepFSB1ayop3DbGwyPQ/Tb6LQZ0UCrkIKMelJ9E8FuU2X1jQu7BtjrtS8orNZL14TfA==
   dependencies:
     "@alchemy/aa-core" "^3.1.1"
     "@ethersproject/abstract-signer" "^5.7.0"
     viem "^2.7.12"
 
-"@biconomy/modules@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@biconomy/modules/-/modules-4.1.0.tgz#1d1b86967297bd9a2795912f103eb54c3b79996d"
-  integrity "sha1-TTxY9ijPq0OPLRBegs9YGxJ7QMo= sha512-YCszYZrXbifSLMsvYB2QxTNsJ5+VDcG0l9t+Tid6a/7doHNCPlHT318w1ZUHBx6kFAcmyGE1LrJAPgB/wJS/uw=="
+"@biconomy/modules@^4.1.0":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@biconomy/modules/-/modules-4.1.1.tgz#36b9d54a6b5485e751ab8f8368deaeeb71fb43d4"
+  integrity sha512-FGaQ+Ve/uZ4ztJu/MsvQzP0e33PaF8Mw9hIrhfwMS3pXWdVeOtpGySxna43ODfFinwo+jEIB9/vuM/1tAbUzMQ==
   dependencies:
     "@alchemy/aa-core" "^3.1.1"
-    "@biconomy/common" "^4.1.0"
+    "@biconomy/common" "^4.1.1"
     "@ethersproject/abi" "^5.7.0"
     merkletreejs "^0.3.11"
     viem "^2.7.12"
 
-"@biconomy/paymaster@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@biconomy/paymaster/-/paymaster-4.1.0.tgz#b093159bf7c3b174d28d72efef366a1ffb59b884"
-  integrity "sha1-GJ0nVa0PAReJW1p+Q4VnqKVeRek= sha512-aoWYgyTSPCnL6Gt2f9lVOL68PAR8If+EOWGvgxmxFl2iyrmWfgeRnbx4r7SpCabR0WiP73KfOGl40X7s+dBDjQ=="
+"@biconomy/paymaster@^4.1.0":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@biconomy/paymaster/-/paymaster-4.1.1.tgz#97f60dbb8b2ea1d7bda2f25b351ef2e06aafd87a"
+  integrity sha512-Vj+a+jtNpHtykD3CerkaNnaS66rccTRYzI8rAl7jd2HuWZAzxxs8LDmsS0EZvu1crJMqXzLb6435hFn+qvn7kQ==
   dependencies:
     "@alchemy/aa-core" "^3.1.1"
-    "@biconomy/common" "^4.1.0"
+    "@biconomy/common" "^4.1.1"
     viem "^2.7.12"
 
 "@cspotcode/source-map-support@^0.8.0":
