@@ -36,7 +36,6 @@ export const mintNft = async () => {
   const smartAccount = await createSmartAccountClient({
     signer: client as SupportedSigner,
     bundlerUrl: config.bundlerUrl,
-    biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
     paymaster,
   });
   const scwAddress = await smartAccount.getAccountAddress();
