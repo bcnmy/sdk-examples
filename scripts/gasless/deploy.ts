@@ -5,7 +5,7 @@ import {
   createSmartAccountClient,
   PaymasterMode,
   SupportedSigner,
-} from "@biconomy/account";
+} from "@biconomy-devx/account";
 import config from "../../config.json";
 import { getRandomInteger } from "../utils/getRandomInteger";
 import { getChain } from "../utils/getChain";

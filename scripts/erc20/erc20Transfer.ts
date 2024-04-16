@@ -11,7 +11,7 @@ import {
   createSmartAccountClient,
   PaymasterMode,
   SupportedSigner,
-} from "@biconomy/account";
+} from "@biconomy-devx/account";
 import config from "../../config.json";
 import { ERC20ABI } from "../utils/abi";
 import { getChain } from "../utils/getChain";

@@ -7,65 +7,12 @@
   resolved "https://registry.yarnpkg.com/@adraffy/ens-normalize/-/ens-normalize-1.10.0.tgz#d2a39395c587e092d77cbbc80acf956a54f38bf7"
   integrity "sha1-0qOTlcWH4JLXfLvICs+ValTzi/c= sha512-nA9XHtlAkYfJxY7bce8DcN7eKxWWCWkU+1GR9d+U6MbNpfwQp8TI7vqOsBsMcHoT4mBu2kypKoSKnghEzOOq5Q=="
 
-"@alchemy/aa-core@^3.1.1":
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/@alchemy/aa-core/-/aa-core-3.4.0.tgz#08e514bf2f97a9c1452424a7f7915aa48daf4db2"
-  integrity "sha1-COUUvy+XqcFFJCSn95FapI2vTbI= sha512-kEqsMwweMxQU6b8mKNmkUacyZRxdU7WBBiAYNmGxJK5djOdsGlfCBZGHu2AyAb8ogfrGWX8J+uVuYTnCIZS6ew=="
+"@biconomy-devx/account@4.2.8":
+  version "4.2.8"
+  resolved "https://registry.yarnpkg.com/@biconomy-devx/account/-/account-4.2.8.tgz#0880037267b2c682215d4fcc0edfd55d6e6d8a99"
+  integrity sha512-22OxOXTTl2idZrfC5SGqJRyxHflyQxmrMn+ZAR8wLQvnMrBWbBaFvGmvnL+CyW4fqKefdzWcYWrRBxBR+Iu2og==
   dependencies:
-    abitype "^0.8.3"
-    eventemitter3 "^5.0.1"
-    viem "^2.7.8"
-    zod "^3.22.4"
-
-"@biconomy/account@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@biconomy/account/-/account-4.1.0.tgz#284e3771c235ff36bb5766bd0e4d53b3df9e8876"
-  integrity "sha1-Bp/Eop6ehjaStE93cECZFdxy65o= sha512-AbktyTGjUGiNE1Fi9IrI/PFdvirDYhcGyBfRdfUD2R8GAFB70hzTuhWXMlXrJaaei3sUbiSMNGkHnKI8jFFDiQ=="
-  dependencies:
-    "@alchemy/aa-core" "^3.1.1"
-    "@biconomy/bundler" "^4.1.0"
-    "@biconomy/common" "^4.1.0"
-    "@biconomy/modules" "^4.1.0"
-    "@biconomy/paymaster" "^4.1.0"
-    viem "^2.7.12"
-
-"@biconomy/bundler@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@biconomy/bundler/-/bundler-4.1.0.tgz#9a53736ed91c5d7f8b6e70f7b41c739b8fb9d015"
-  integrity "sha1-FV67dqqo+UjJgRwtZ3WeYMUlAkI= sha512-QV6wQYogGvizEp0VzEKgbQZjWpuRmYTbYWkgDYKlTkOncl7IUbEBZYP74ZHWiFzqW1h8LpvyDIaejgbaLmqx+Q=="
-  dependencies:
-    "@alchemy/aa-core" "^3.1.1"
-    "@biconomy/common" "^4.1.0"
-    viem "^2.7.12"
-
-"@biconomy/common@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@biconomy/common/-/common-4.1.0.tgz#1a4f644a4913f2edd0f6ca4579009d83164207e5"
-  integrity "sha1-29JyBL6oJej4TSF19t2EbLhULIE= sha512-M2kdQM2DXqYXMznF9WLdOAFyaFMSj4n9tvDZuRvWjGPw+ki3JKfKxrMRoFjRI2lUjSU1s4CDgYrdYT2Fd4xv2w=="
-  dependencies:
-    "@alchemy/aa-core" "^3.1.1"
-    "@ethersproject/abstract-signer" "^5.7.0"
-    viem "^2.7.12"
-
-"@biconomy/modules@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@biconomy/modules/-/modules-4.1.0.tgz#1d1b86967297bd9a2795912f103eb54c3b79996d"
-  integrity "sha1-TTxY9ijPq0OPLRBegs9YGxJ7QMo= sha512-YCszYZrXbifSLMsvYB2QxTNsJ5+VDcG0l9t+Tid6a/7doHNCPlHT318w1ZUHBx6kFAcmyGE1LrJAPgB/wJS/uw=="
-  dependencies:
-    "@alchemy/aa-core" "^3.1.1"
-    "@biconomy/common" "^4.1.0"
-    "@ethersproject/abi" "^5.7.0"
     merkletreejs "^0.3.11"
-    viem "^2.7.12"
-
-"@biconomy/paymaster@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@biconomy/paymaster/-/paymaster-4.1.0.tgz#b093159bf7c3b174d28d72efef366a1ffb59b884"
-  integrity "sha1-GJ0nVa0PAReJW1p+Q4VnqKVeRek= sha512-aoWYgyTSPCnL6Gt2f9lVOL68PAR8If+EOWGvgxmxFl2iyrmWfgeRnbx4r7SpCabR0WiP73KfOGl40X7s+dBDjQ=="
-  dependencies:
-    "@alchemy/aa-core" "^3.1.1"
-    "@biconomy/common" "^4.1.0"
-    viem "^2.7.12"
 
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
@@ -575,11 +522,6 @@ abitype@1.0.0:
   resolved "https://registry.yarnpkg.com/abitype/-/abitype-1.0.0.tgz#237176dace81d90d018bebf3a45cb42f2a2d9e97"
   integrity "sha1-I3F22s6B2Q0Bi+vzpFy0Lyotnpc= sha512-NMeMah//6bJ56H5XRj8QCV4AwuW6hB6zqz2LnhhLdcWVQOsXki6/Pn3APeqxCma62nXIcmZWdu1DlHWS74umVQ=="
 
-abitype@^0.8.3:
-  version "0.8.11"
-  resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.8.11.tgz#66e1cf2cbf46f48d0e57132d7c1c392447536cc1"
-  integrity "sha1-ZuHPLL9G9I0OVxMtfBw5JEdTbME= sha512-bM4v2dKvX08sZ9IU38IN5BKmN+ZkOSd2oI4a9f0ejHYZQYV6cDr7j+d95ga0z2XHG36Y4jzoG5Z7qDqxp7fi/A=="
-
 acorn-walk@^8.1.1:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-8.3.2.tgz#7703af9415f1b6db9315d6895503862e231d34aa"
@@ -842,11 +784,6 @@ ethjs-unit@0.1.6:
   dependencies:
     bn.js "4.11.6"
     number-to-bn "1.7.0"
-
-eventemitter3@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-5.0.1.tgz#53f5ffd0a492ac800721bb42c66b841de96423c4"
-  integrity "sha1-U/X/0KSSrIAHIbtCxmuEHelkI8Q= sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA=="
 
 external-editor@^3.0.3:
   version "3.1.0"
@@ -1222,7 +1159,7 @@ v8-compile-cache-lib@^3.0.1:
   resolved "https://registry.yarnpkg.com/v8-compile-cache-lib/-/v8-compile-cache-lib-3.0.1.tgz#6336e8d71965cb3d35a1bbb7868445a7c05264bf"
   integrity "sha1-Yzbo1xllyz01obu3hoRFp8BSZL8= sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg=="
 
-viem@^2.7.12, viem@^2.7.8:
+viem@^2.7.12:
   version "2.7.12"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.7.12.tgz#c79f68d77f5e46c3b78443df54afb067cbc827c3"
   integrity "sha1-x59o139eRsO3hEPfVK+wZ8vIJ8M= sha512-NbV+Bycw0I4X8y6A04mgJ6+Imt7xXwflgnqisR3JXoJRNc77YSaQCscFN/dmwGLESTkgegJvi+j4nZY32GTpwQ=="
@@ -1312,8 +1249,3 @@ yn@3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/yn/-/yn-3.1.1.tgz#1e87401a09d767c1d5eab26a6e4c185182d2eb50"
   integrity "sha1-HodAGgnXZ8HV6rJqbkwYUYLS61A= sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q=="
-
-zod@^3.22.4:
-  version "3.22.4"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.4.tgz#f31c3a9386f61b1f228af56faa9255e845cf3fff"
-  integrity "sha1-8xw6k4b2Gx8iivVvqpJV6EXPP/8= sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg=="

@@ -1,7 +1,7 @@
 import { Hex, createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
-import { SupportedSigner, createSmartAccountClient } from "@biconomy/account";
+import { SupportedSigner, createSmartAccountClient } from "@biconomy-devx/account";
 import config from "../config.json";
 import { getChain } from "./utils/getChain";
 
