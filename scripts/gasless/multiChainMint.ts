@@ -7,12 +7,12 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { baseGoerli } from "viem/chains";
-import { PaymasterMode, createSmartAccountClient } from "@biconomy-devx/account";
+import { PaymasterMode, createSmartAccountClient } from "@biconomy/account";
 import {
   DEFAULT_MULTICHAIN_MODULE,
   createMultiChainValidationModule,
   SupportedSigner,
-} from "@biconomy-devx/account";
+} from "@biconomy/account";
 import config from "../../config.json";
 import { getChain } from "../utils/getChain";
 

@@ -5,7 +5,7 @@ import {
   createSmartAccountClient,
   PaymasterMode,
   SupportedSigner,
-} from "@biconomy-devx/account";
+} from "@biconomy/account";
 import config from "../../config.json";
 
 export const mintNftEthers = async () => {

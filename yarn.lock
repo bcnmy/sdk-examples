@@ -7,9 +7,9 @@
   resolved "https://registry.yarnpkg.com/@adraffy/ens-normalize/-/ens-normalize-1.10.0.tgz#d2a39395c587e092d77cbbc80acf956a54f38bf7"
   integrity "sha1-0qOTlcWH4JLXfLvICs+ValTzi/c= sha512-nA9XHtlAkYfJxY7bce8DcN7eKxWWCWkU+1GR9d+U6MbNpfwQp8TI7vqOsBsMcHoT4mBu2kypKoSKnghEzOOq5Q=="
 
-"@biconomy-devx/account@4.2.8":
+"@biconomy/account@4.2.8":
   version "4.2.8"
-  resolved "https://registry.yarnpkg.com/@biconomy-devx/account/-/account-4.2.8.tgz#0880037267b2c682215d4fcc0edfd55d6e6d8a99"
+  resolved "https://registry.yarnpkg.com/@biconomy/account/-/account-4.2.8.tgz#0880037267b2c682215d4fcc0edfd55d6e6d8a99"
   integrity sha512-22OxOXTTl2idZrfC5SGqJRyxHflyQxmrMn+ZAR8wLQvnMrBWbBaFvGmvnL+CyW4fqKefdzWcYWrRBxBR+Iu2og==
   dependencies:
     merkletreejs "^0.3.11"
