@@ -8,6 +8,7 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 const chalk = require("chalk");
 import {
+  createPaymaster,
   createSmartAccountClient,
   PaymasterMode,
   SupportedSigner,
@@ -26,11 +27,16 @@ export const mintNft = async () => {
   const eoa = client.account.address;
   console.log(chalk.blue(`EOA address: ${eoa}`));
 
+  const paymaster = await createPaymaster({
+    strictMode: true,
+    paymasterUrl: config.biconomyPaymasterUrl,
+  });
+
   // ------ 2. Create biconomy smart account instance
   const smartAccount = await createSmartAccountClient({
     signer: client as SupportedSigner,
     bundlerUrl: config.bundlerUrl,
-    biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
+    paymaster,
   });
   const scwAddress = await smartAccount.getAccountAddress();
   console.log("SCW Address", scwAddress);

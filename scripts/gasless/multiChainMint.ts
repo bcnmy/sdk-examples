@@ -19,7 +19,7 @@ import { getChain } from "../utils/getChain";
 export const multiChainMint = async () => {
   // ----- 1. Generate EOA from private key
   const account = privateKeyToAccount(config.privateKey as Hex);
-  const mumbaiClient = createWalletClient({
+  const walletClient = createWalletClient({
     account,
     chain: getChain(config.chainId),
     transport: http(),
@@ -32,12 +32,12 @@ export const multiChainMint = async () => {
 
   // ------ 2. Create module and biconomy smart account instance
   const multiChainModule = await createMultiChainValidationModule({
-    signer: mumbaiClient as SupportedSigner,
+    signer: walletClient as SupportedSigner,
     moduleAddress: DEFAULT_MULTICHAIN_MODULE,
   });
   const smartAccount1 = await createSmartAccountClient({
-    signer: mumbaiClient as SupportedSigner,
-    chainId: 80001,
+    signer: walletClient as SupportedSigner,
+    chainId: config.chainId,
     bundlerUrl: config.bundlerUrl,
     biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
     defaultValidationModule: multiChainModule,
@@ -93,7 +93,7 @@ export const multiChainMint = async () => {
   );
 
   const returnedOps = await multiChainModule.signUserOps([
-    { userOp: userOp1, chainId: 80001 },
+    { userOp: userOp1, chainId: config.chainId },
     { userOp: userOp2, chainId: 84531 },
   ]);
 
