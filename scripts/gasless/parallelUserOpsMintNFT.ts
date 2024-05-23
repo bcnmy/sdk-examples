@@ -49,7 +49,7 @@ export const parallelUserOpsMintNft = async () => {
   // ------ 4. Build user operations
   let partialUserOps = [];
   // Use a nonceKey that is unique, easy way is to increment the nonceKey
-  for (let nonceKey = 0; nonceKey < numOfParallelUserOps; nonceKey++) {
+  for (let nonceKey = 1; nonceKey < numOfParallelUserOps; nonceKey++) {
     let partialUserOp = await smartAccount.buildUserOp(
       [
         {
