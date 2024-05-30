@@ -1,13 +1,13 @@
 {
-	"privateKey": "0x",
-	"accountIndex": 0,
-	"chainId": 80002,
-	"rpcUrl": "https://rpc-amoy.polygon.technology",
-	"bundlerUrl": "https://bundler.biconomy.io/api/v2/80002/cJPK7B3ru.dd7f7861-190d-45ic-af80-6877f74b8f44",
-	"biconomyPaymasterUrl": "https://paymaster.biconomy.io/api/v1/80002/<PAYMASTER_API_KEY>",
-	"biconomyPaymasterApiKey": "<PAYMASTER_API_KEY>",
-	"biconomyPaymasterApiKeyBase": "<PAYMASTER_API_KEY>",
-	"preferredToken": "",
-	"numOfParallelUserOps": 2,
-	"tokenList": []
+  "privateKey": "",
+  "accountIndex": 0,
+  "chainId": 80002,
+  "rpcUrl": "https://rpc-amoy.polygon.technology",
+  "bundlerUrl": "https://bundler.biconomy.io/api/v2/80002/cJPK7B3ru.dd7f7861-190d-45ic-af80-6877f74b8f44",
+  "biconomyPaymasterUrl": "https://paymaster.biconomy.io/api/v1/80002/_sTfkyAEp.552504b5-9093-4d4b-94dd-701f85a267ea",
+  "biconomyPaymasterApiKey": "_sTfkyAEp.552504b5-9093-4d4b-94dd-701f85a267ea",
+  "biconomyPaymasterApiKeyBase": "_sTfkyAEp.552504b5-9093-4d4b-94dd-701f85a267ea",
+  "preferredToken": "0x747A4168DB14F57871fa8cda8B5455D8C2a8e90a",
+  "numOfParallelUserOps": 2,
+  "tokenList": ["0x747A4168DB14F57871fa8cda8B5455D8C2a8e90a"]
 }

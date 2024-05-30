@@ -1,23 +1,31 @@
 #!/usr/bin/env node
-import * as yargs from "yargs";
-const chalk = require("chalk");
-import { getAddress } from "./address";
-import { nativeTransfer } from "./gasless/nativeTransfer";
-import { nativeTransferPayERC20 } from "./erc20/nativeTransfer";
-import { erc20Transfer } from "./gasless/erc20Transfer";
-import { erc20TransferPayERC20 } from "./erc20/erc20Transfer";
-import { mintNft } from "./gasless/mintNFT";
-import { mintNftEthers } from "./gasless/mintNftEthers";
-import { parallelUserOpsMintNft } from "./gasless/parallelUserOpsMintNFT";
-import { mintNftPayERC20 } from "./erc20/mintNFT";
-import { parallelUserOpsMintNFTPayERC20 } from "./erc20/parallelUserOpsMintNFT";
-import { batchMintNft } from "./gasless/batchMintNFT";
-import { batchMintNftPayERC20 } from "./erc20/batchMintNFT";
-import { batchMintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/batchMintNFT";
-import { mintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/mintNFT";
-import { multiChainMint } from "./gasless/multiChainMint";
-import { deploySmartContractPayERC20 } from "./erc20/deploy";
-import { deploySmartContractGasless } from "./gasless/deploy";
+import * as yargs from "yargs"
+const chalk = require("chalk")
+import { getAddress } from "./address"
+import { batchMintNftPayERC20 } from "./erc20/batchMintNFT"
+import { deploySmartContractPayERC20 } from "./erc20/deploy"
+import { erc20TransferPayERC20 } from "./erc20/erc20Transfer"
+import { mintNftPayERC20 } from "./erc20/mintNFT"
+import { nativeTransferPayERC20 } from "./erc20/nativeTransfer"
+import { parallelUserOpsMintNFTPayERC20 } from "./erc20/parallelUserOpsMintNFT"
+import { batchMintNft } from "./gasless/batchMintNFT"
+import { deploySmartContractGasless } from "./gasless/deploy"
+import { erc20Transfer } from "./gasless/erc20Transfer"
+import { mintNft } from "./gasless/mintNFT"
+import { mintNftEthers } from "./gasless/mintNftEthers"
+import { multiChainMint } from "./gasless/multiChainMint"
+import { nativeTransfer } from "./gasless/nativeTransfer"
+import { parallelUserOpsMintNft } from "./gasless/parallelUserOpsMintNFT"
+import { batchMintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/batchMintNFT"
+import { mintNftTrySponsorshipOtherwisePayERC20 } from "./hybrid-fallback/mintNFT"
+import { createSession } from "./session/createSession"
+import { createSessions } from "./session/createSessions"
+import { createTokenPaySession } from "./session/createTokenPaySession"
+import { createTokenPaySessions } from "./session/createTokenPaySessions"
+import { useSession } from "./session/useSession"
+import { useSessions } from "./session/useSessions"
+import { useTokenPaySession } from "./session/useTokenPaySession"
+import { useTokenPaySessions } from "./session/useTokenPaySessions"
 
 yargs
   .scriptName(chalk.green("smartAccount"))
@@ -26,7 +34,7 @@ yargs
   .recommendCommands()
   // Get SmartAccount address
   .command("address", chalk.blue("Get counterfactual address"), {}, () => {
-    getAddress();
+    getAddress()
   })
   // Transfer native assets (ether/matic)
   .command(
@@ -36,29 +44,29 @@ yargs
       to: {
         describe: chalk.cyan("Recipient address"),
         demandOption: true,
-        type: "string",
+        type: "string"
       },
       amount: {
         describe: chalk.cyan("Amount of ether to transfer"),
         demandOption: true,
-        type: "number",
+        type: "number"
       },
       mode: {
         describe: chalk.cyan("Paymaster mode"),
         demandOption: false,
-        type: "string",
-      },
+        type: "string"
+      }
     },
     (argv) => {
-      const amount = argv.amount;
-      const recipientAddress = argv.to;
+      const amount = argv.amount
+      const recipientAddress = argv.to
       console.log(
         chalk.magenta(`Transferring ${amount} ether to ${recipientAddress}...`)
-      );
+      )
       if (argv.mode === "TOKEN") {
-        nativeTransferPayERC20(recipientAddress, amount);
+        nativeTransferPayERC20(recipientAddress, amount)
       } else {
-        nativeTransfer(recipientAddress, amount);
+        nativeTransfer(recipientAddress, amount)
       }
     }
   )
@@ -70,37 +78,106 @@ yargs
       to: {
         describe: chalk.cyan("Recipient address"),
         demandOption: true,
-        type: "string",
+        type: "string"
       },
       amount: {
         describe: chalk.cyan("Amount of tokens to transfer"),
         demandOption: true,
-        type: "number",
+        type: "number"
       },
       token: {
         describe: chalk.cyan("Token address"),
         demandOption: true,
-        type: "string",
+        type: "string"
       },
       mode: {
         describe: chalk.cyan("Paymaster mode"),
         demandOption: false,
-        type: "string",
-      },
+        type: "string"
+      }
     },
     (argv) => {
-      const amount = argv.amount;
-      const tokenAddress = argv.token;
-      const recipientAddress = argv.to;
+      const amount = argv.amount
+      const tokenAddress = argv.token
+      const recipientAddress = argv.to
       console.log(
         chalk.magenta(
           `Transferring ${amount} tokens of ${tokenAddress} to ${recipientAddress}...`
         )
-      );
+      )
       if (argv.mode === "TOKEN") {
-        erc20TransferPayERC20(recipientAddress, amount, tokenAddress);
+        erc20TransferPayERC20(recipientAddress, amount, tokenAddress)
       } else {
-        erc20Transfer(recipientAddress, amount, tokenAddress);
+        erc20Transfer(recipientAddress, amount, tokenAddress)
+      }
+    }
+  )
+  .command(
+    "session",
+    chalk.blue("Create or use a session"),
+    {
+      mode: {
+        describe: chalk.cyan("Session mode"),
+        demandOption: false,
+        type: "string"
+      },
+      amount: {
+        describe: chalk.cyan("Amount of the token to transfer"),
+        demandOption: false,
+        type: "number"
+      },
+      batch: {
+        describe: chalk.cyan("Batch mode"),
+        demandOption: false,
+        type: "boolean"
+      },
+      token: {
+        describe: chalk.cyan("Token Payment mode"),
+        demandOption: false,
+        type: "boolean"
+      }
+    },
+    (argv) => {
+      const amount = argv.amount ?? 0.0001
+      const batch = argv.batch ?? false
+      const token = argv.token ?? false
+      const mode = argv.mode ?? "CREATE"
+      if (mode === "USE") {
+        if (batch) {
+          if (token) {
+            console.log(chalk.cyan("Use a batch session with token pay"))
+            useTokenPaySessions()
+          } else {
+            console.log(chalk.cyan("Use a batch session with sponsorship"))
+            useSessions(amount)
+          }
+        } else {
+          if (token) {
+            console.log(chalk.cyan("Use a single session with token pay"))
+            useTokenPaySession()
+          } else {
+            console.log(chalk.cyan("Use a single session with sponsorship"))
+            useSession()
+          }
+        }
+      } else {
+        if (batch) {
+          if (token) {
+            console.log(chalk.cyan("Create a batch session with token pay"))
+            createTokenPaySessions()
+          } else {
+            console.log(chalk.cyan("Create a batch session with sponsorship"))
+            createSessions(amount)
+          }
+        } else {
+          if (token) {
+            console.log(chalk.cyan("Create a single session with token pay"))
+            createTokenPaySession()
+          } else {
+            console.log(chalk.cyan("Create a single session with sponsorship"))
+            createSession()
+          }
+        }
       }
     }
   )
@@ -112,23 +189,23 @@ yargs
       mode: {
         describe: chalk.cyan("Paymaster mode"),
         demandOption: false,
-        type: "string",
-      },
+        type: "string"
+      }
     },
     (argv) => {
-      console.log(chalk.magenta("Minting an NFT token to the SmartAccount..."));
+      console.log(chalk.magenta("Minting an NFT token to the SmartAccount..."))
       if (argv.mode === "TOKEN") {
-        mintNftPayERC20();
+        mintNftPayERC20()
       } else if (argv.mode === "ETHERS") {
-        mintNftEthers();
+        mintNftEthers()
       } else if (argv.mode === "HYBRID") {
-        mintNftTrySponsorshipOtherwisePayERC20();
+        mintNftTrySponsorshipOtherwisePayERC20()
       } else if (argv.mode === "TOKEN_PARALLEL_USER_OPS") {
-        parallelUserOpsMintNFTPayERC20();
+        parallelUserOpsMintNFTPayERC20()
       } else if (argv.mode === "PARALLEL_USER_OPS") {
-        parallelUserOpsMintNft();
+        parallelUserOpsMintNft()
       } else {
-        mintNft();
+        mintNft()
       }
     }
   )
@@ -139,15 +216,15 @@ yargs
       mode: {
         describe: chalk.cyan("Paymaster mode"),
         demandOption: false,
-        type: "string",
-      },
+        type: "string"
+      }
     },
     (argv) => {
-      console.log(chalk.magenta("Minting an NFT token to the SmartAccount..."));
+      console.log(chalk.magenta("Minting an NFT token to the SmartAccount..."))
       if (argv.mode === "TOKEN") {
-        mintNftPayERC20();
+        mintNftPayERC20()
       } else {
-        multiChainMint();
+        multiChainMint()
       }
     }
   )
@@ -158,12 +235,12 @@ yargs
       mode: {
         describe: chalk.cyan("Paymaster mode"),
         demandOption: false,
-        type: "string",
-      },
+        type: "string"
+      }
     },
     (argv) => {
-      console.log(chalk.magenta("Minting an NFT token to the SmartAccount..."));
-      mintNftEthers();
+      console.log(chalk.magenta("Minting an NFT token to the SmartAccount..."))
+      mintNftEthers()
     }
   )
   // Batch mint nft token to SmartAccount
@@ -174,19 +251,19 @@ yargs
       mode: {
         describe: chalk.cyan("Paymaster mode"),
         demandOption: false,
-        type: "string",
-      },
+        type: "string"
+      }
     },
     (argv) => {
       console.log(
         chalk.magenta("Batch minting 2 NFT tokens to the SmartAccount...")
-      );
+      )
       if (argv.mode === "TOKEN") {
-        batchMintNftPayERC20();
+        batchMintNftPayERC20()
       } else if (argv.mode === "HYBRID") {
-        batchMintNftTrySponsorshipOtherwisePayERC20();
+        batchMintNftTrySponsorshipOtherwisePayERC20()
       } else {
-        batchMintNft();
+        batchMintNft()
       }
     }
   )
@@ -197,16 +274,16 @@ yargs
       mode: {
         describe: chalk.cyan("Paymaster mode"),
         demandOption: false,
-        type: "string",
-      },
+        type: "string"
+      }
     },
     (argv) => {
-      console.log(chalk.magenta("Deploying SmartAccount..."));
+      console.log(chalk.magenta("Deploying SmartAccount..."))
       if (argv.mode === "TOKEN") {
-        deploySmartContractPayERC20();
+        deploySmartContractPayERC20()
       } else {
-        deploySmartContractGasless();
+        deploySmartContractGasless()
       }
     }
   )
-  .help().argv;
+  .help().argv
