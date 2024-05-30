@@ -105,6 +105,15 @@ export const useTokenPaySession = async () => {
       }
     })
 
+  const { success: txApprovalSuccess } = await waitForApprovalTx()
+  console.log(
+    `${
+      txApprovalSuccess
+        ? chalk.green("txApprovalSuccess Success")
+        : chalk.red("txApprovalSuccess Failed")
+    }`
+  )
+
   const { wait: waitForMintTx } = await smartAccountWithSession.sendTransaction(
     nftMintTx,
     {
@@ -117,15 +126,7 @@ export const useTokenPaySession = async () => {
     }
   )
 
-  const { success: txApprovalSuccess } = await waitForApprovalTx()
   const { success: txMintSuccess } = await waitForMintTx()
-  console.log(
-    `${
-      txApprovalSuccess
-        ? chalk.green("txApprovalSuccess Success")
-        : chalk.red("txApprovalSuccess Failed")
-    }`
-  )
   console.log(
     `${
       txMintSuccess
