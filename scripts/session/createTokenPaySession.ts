@@ -7,7 +7,7 @@ import {
   createSessionKeyEOA,
   createSmartAccountClient,
   getChain
-} from "@biconomy-devx/account"
+} from "@biconomy/account"
 import chalk from "chalk"
 import { http, type Hex, createWalletClient, parseAbi } from "viem"
 import { privateKeyToAccount } from "viem/accounts"

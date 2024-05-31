@@ -8,7 +8,7 @@ import {
   getBatchSessionTxParams,
   getChain,
   getSingleSessionTxParams
-} from "@biconomy-devx/account"
+} from "@biconomy/account"
 import chalk from "chalk"
 import {
   http,

@@ -10,8 +10,8 @@ const chalk = require("chalk")
 import {
   type SupportedSigner,
   createSmartAccountClient
-} from "@biconomy-devx/account"
-import { PaymasterMode } from "@biconomy-devx/account"
+} from "@biconomy/account"
+import { PaymasterMode } from "@biconomy/account"
 import config from "../../config.json"
 import { getChain } from "../utils/getChain"
 

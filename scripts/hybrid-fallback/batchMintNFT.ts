@@ -4,8 +4,8 @@ import {
   type BiconomySmartAccountV2Config,
   type PaymasterFeeQuote,
   PaymasterMode
-} from "@biconomy-devx/account"
-import { createSmartAccountClient } from "@biconomy-devx/account"
+} from "@biconomy/account"
+import { createSmartAccountClient } from "@biconomy/account"
 import inquirer from "inquirer"
 import config from "../../config.json"
 

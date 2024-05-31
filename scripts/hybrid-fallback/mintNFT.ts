@@ -4,7 +4,7 @@ import {
   type PaymasterFeeQuote,
   PaymasterMode,
   createSmartAccountClient
-} from "@biconomy-devx/account"
+} from "@biconomy/account"
 import inquirer from "inquirer"
 import type { Hex } from "viem"
 import config from "../../config.json"

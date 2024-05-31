@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "tsc --noEmit && ts-node scripts/index.ts",
 		"smartAccount": "tsc --noEmit && ts-node scripts/index.ts",
-		"link:local": "bun link @biconomy-devx/account",
+		"link:local": "bun link @biconomy/account",
 		"format": "biome format . --write",
 		"lint": "biome check .",
 		"lint:fix": "bun run lint --apply"
@@ -14,7 +14,7 @@
 	"keywords": [],
 	"license": "ISC",
 	"dependencies": {
-		"@biconomy-devx/account": "4.4.27",
+		"@biconomy/account": "4.4.5",
 		"chalk": "^4.1.2",
 		"ethers": "^5.7.2",
 		"inquirer": "^8.0.0",

@@ -12,7 +12,7 @@ import {
   type SupportedSigner,
   createPaymaster,
   createSmartAccountClient
-} from "@biconomy-devx/account"
+} from "@biconomy/account"
 import config from "../../config.json"
 import { getChain } from "../utils/getChain"
 

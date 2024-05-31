@@ -1,9 +1,9 @@
-import { PaymasterMode, createSmartAccountClient } from "@biconomy-devx/account"
+import { PaymasterMode, createSmartAccountClient } from "@biconomy/account"
 import {
   DEFAULT_MULTICHAIN_MODULE,
   type SupportedSigner,
   createMultiChainValidationModule
-} from "@biconomy-devx/account"
+} from "@biconomy/account"
 import {
   http,
   type Hex,
