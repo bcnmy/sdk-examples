@@ -1,44 +1,44 @@
-import { Hex, createWalletClient, http, parseEther } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
-const chalk = require("chalk");
+import { http, type Hex, createWalletClient, parseEther } from "viem"
+import { privateKeyToAccount } from "viem/accounts"
+const chalk = require("chalk")
 import {
-  createSmartAccountClient,
   PaymasterMode,
-  SupportedSigner,
-} from "@biconomy/account";
-import config from "../../config.json";
-import { getChain } from "../utils/getChain";
+  type SupportedSigner,
+  createSmartAccountClient
+} from "@biconomy/account"
+import config from "../../config.json"
+import { getChain } from "../utils/getChain"
 
 export const nativeTransfer = async (to: string, amount: number) => {
   // ----- 1. Generate EOA from private key
-  const account = privateKeyToAccount(config.privateKey as Hex);
+  const account = privateKeyToAccount(config.privateKey as Hex)
   const client = createWalletClient({
     account,
     chain: getChain(config.chainId),
-    transport: http(),
-  });
-  const eoa = client.account.address;
-  console.log(chalk.blue(`EOA address: ${eoa}`));
+    transport: http()
+  })
+  const eoa = client.account.address
+  console.log(chalk.blue(`EOA address: ${eoa}`))
 
   // ------ 2. Create biconomy smart account instance
   const smartAccount = await createSmartAccountClient({
     signer: client as SupportedSigner,
     bundlerUrl: config.bundlerUrl,
-    biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
-  });
-  const scwAddress = await smartAccount.getAccountAddress();
-  console.log("SCW Address", scwAddress);
+    biconomyPaymasterApiKey: config.biconomyPaymasterApiKey
+  })
+  const scwAddress = await smartAccount.getAccountAddress()
+  console.log("SCW Address", scwAddress)
 
   // ------ 3. Generate transaction data
   const txData = {
     to,
-    value: parseEther(amount.toString()),
-  };
+    value: parseEther(amount.toString())
+  }
 
   // ------ 4. Send user operation and get tx hash
   const { waitForTxHash } = await smartAccount.sendTransaction(txData, {
-    paymasterServiceData: { mode: PaymasterMode.SPONSORED },
-  });
-  const { transactionHash } = await waitForTxHash();
-  console.log("transactionHash", transactionHash);
-};
+    paymasterServiceData: { mode: PaymasterMode.SPONSORED }
+  })
+  const { transactionHash } = await waitForTxHash()
+  console.log("transactionHash", transactionHash)
+}

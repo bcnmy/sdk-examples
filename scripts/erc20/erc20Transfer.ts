@@ -1,20 +1,20 @@
 import {
-  Hex,
+  http,
+  type Hex,
   createWalletClient,
   encodeFunctionData,
-  http,
-  parseEther,
-} from "viem";
-import { privateKeyToAccount } from "viem/accounts";
-const chalk = require("chalk");
+  parseEther
+} from "viem"
+import { privateKeyToAccount } from "viem/accounts"
+const chalk = require("chalk")
 import {
-  createSmartAccountClient,
   PaymasterMode,
-  SupportedSigner,
-} from "@biconomy/account";
-import config from "../../config.json";
-import { ERC20ABI } from "../utils/abi";
-import { getChain } from "../utils/getChain";
+  type SupportedSigner,
+  createSmartAccountClient
+} from "@biconomy/account"
+import config from "../../config.json"
+import { ERC20ABI } from "../utils/abi"
+import { getChain } from "../utils/getChain"
 
 export const erc20TransferPayERC20 = async (
   recipientAddress: string,
@@ -22,45 +22,45 @@ export const erc20TransferPayERC20 = async (
   tokenAddress: string
 ) => {
   // ----- 1. Generate EOA from private key
-  const account = privateKeyToAccount(config.privateKey as Hex);
+  const account = privateKeyToAccount(config.privateKey as Hex)
   const client = createWalletClient({
     account,
     transport: http(),
-    chain: getChain(config.chainId),
-  });
-  const eoa = client.account.address;
-  console.log(chalk.blue(`EOA address: ${eoa}`));
+    chain: getChain(config.chainId)
+  })
+  const eoa = client.account.address
+  console.log(chalk.blue(`EOA address: ${eoa}`))
 
   // ------ 2. Create biconomy smart account instance
   const smartAccount = await createSmartAccountClient({
     signer: client as SupportedSigner,
     bundlerUrl: config.bundlerUrl,
-    biconomyPaymasterApiKey: config.biconomyPaymasterApiKey,
-  });
-  const scwAddress = await smartAccount.getAccountAddress();
-  console.log("SCW Address", scwAddress);
+    biconomyPaymasterApiKey: config.biconomyPaymasterApiKey
+  })
+  const scwAddress = await smartAccount.getAccountAddress()
+  console.log("SCW Address", scwAddress)
 
   // ------ 3. Generate transaction data
-  console.log("imp", parseEther(amount.toString()));
+  console.log("imp", parseEther(amount.toString()))
   const data = encodeFunctionData({
     abi: ERC20ABI,
     functionName: "transfer",
-    args: [recipientAddress, parseEther(amount.toString())], // parsing token value with base 18
-  });
+    args: [recipientAddress, parseEther(amount.toString())] // parsing token value with base 18
+  })
 
   // ------ 4. Send transaction
   const transaction = {
     to: tokenAddress,
-    data: data,
-  };
+    data: data
+  }
 
   const { waitForTxHash } = await smartAccount.sendTransaction(transaction, {
     paymasterServiceData: {
       mode: PaymasterMode.ERC20,
-      preferredToken: config.preferredToken,
-    },
-  });
+      preferredToken: config.preferredToken
+    }
+  })
 
-  const { transactionHash } = await waitForTxHash();
-  console.log("transactionHash", transactionHash);
-};
+  const { transactionHash } = await waitForTxHash()
+  console.log("transactionHash", transactionHash)
+}

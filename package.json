@@ -6,20 +6,24 @@
 	"scripts": {
 		"start": "tsc --noEmit && ts-node scripts/index.ts",
 		"smartAccount": "tsc --noEmit && ts-node scripts/index.ts",
-		"link:local": "yarn link '@biconomy/account'"
+		"link:local": "bun link @biconomy/account",
+		"format": "biome format . --write",
+		"lint": "biome check .",
+		"lint:fix": "bun run lint --apply"
 	},
 	"keywords": [],
 	"license": "ISC",
 	"dependencies": {
-		"@biconomy/account": "4.4.1",
+		"@biconomy/account": "4.4.5",
 		"chalk": "^4.1.2",
 		"ethers": "^5.7.2",
 		"inquirer": "^8.0.0",
 		"prettier": "^2.8.1",
-		"viem": "^2.7.12",
+		"viem": "^2.13.1",
 		"yargs": "^17.7.1"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "1.6.0",
 		"@types/inquirer": "^9.0.3",
 		"@types/node": "^20.3.2",
 		"@types/prettier": "^2.7.3",

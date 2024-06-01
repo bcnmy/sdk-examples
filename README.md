@@ -16,7 +16,7 @@ Set numOfParallelUserOps in config to the desired number if you want to execute 
 ## 1. Setup
 
 ```bash
-yarn install
+bun i
 ```
 
 ## 2. Edit your config.json file
@@ -29,38 +29,52 @@ Retrieve relevant bundlerUrl / paymaster api keys from the biconomy dashboard.
 ## 3. Run
 
 ```bash
-yarn run smartAccount --help
+bun run smartAccount --help
 # get scw address
 
 # update the correct privateKey, biconomyPaymasterUrl, rpcUrl and bundlerUrl in config.json
-yarn run smartAccount address
+bun run smartAccount address
+
+## Sessions
+
+# single session with sponsorship
+bun run smartAccount session --mode=CREATE
+bun run smartAccount session --mode=USE
+
+# single session with token payment
+bun run smartAccount session --mode=CREATE --token=true
+bun run smartAccount session --mode=USE --token=true
+
+# batch session with token payment
+bun run smartAccount session --mode=CREATE --token=true --batch=true
+bun run smartAccount session --mode=USE --token=true --batch=true
 
 ## Gasless - Sponsorship Paymaster
-yarn run smartAccount deploy
-yarn run smartAccount mint
-yarn run smartAccount batchMint
+bun run smartAccount deploy
+bun run smartAccount mint
+bun run smartAccount batchMint
 
 ## Gasless - Sponsorship Paymaster to send parallel userOps
-yarn run smartAccount mint --mode=PARALLEL_USER_OPS
+bun run smartAccount mint --mode=PARALLEL_USER_OPS
 
 # replace the receiver below
-yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=0.001
+bun run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=0.001
 
 # replace the token address and receiver below
-yarn run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount=0.1 --token=0xeaBc4b91d9375796AA4F69cC764A4aB509080A58
+bun run smartAccount erc20Transfer --to=0x1234567890123456789012345678901234567890 --amount=0.1 --token=0xeaBc4b91d9375796AA4F69cC764A4aB509080A58
 
 ## ERC20 - Token Paymaster
-yarn run smartAccount deploy --mode=TOKEN
-yarn run smartAccount mint --mode=TOKEN
-yarn run smartAccount batchMint --mode=TOKEN
+bun run smartAccount deploy --mode=TOKEN
+bun run smartAccount mint --mode=TOKEN
+bun run smartAccount batchMint --mode=TOKEN
 
 ## ERC20 - Token Paymaster to send parallel userOps
 
-yarn run smartAccount mint --mode=TOKEN_PARALLEL_USER_OPS
+bun run smartAccount mint --mode=TOKEN_PARALLEL_USER_OPS
 
 # replace the receiver below
-yarn run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=0.001 --mode=TOKEN
+bun run smartAccount transfer --to=0x1234567890123456789012345678901234567890 --amount=0.001 --mode=TOKEN
 
 # replace the token address and receiver below
-yarn run smartAccount erc20Transfer --to=0x2cf491602ad22944D9047282aBC00D3e52F56B37 --amount=0.1 --token=0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3 --mode=TOKEN
+bun run smartAccount erc20Transfer --to=0x2cf491602ad22944D9047282aBC00D3e52F56B37 --amount=0.1 --token=0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3 --mode=TOKEN
 ```
