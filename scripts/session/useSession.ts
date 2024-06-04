@@ -1,6 +1,5 @@
 import {
   PaymasterMode,
-  SessionFileStorage,
   type SupportedSigner,
   createSessionSmartAccountClient,
   createSmartAccountClient,
@@ -17,6 +16,7 @@ import {
 } from "viem"
 import { privateKeyToAccount } from "viem/accounts"
 import config from "../../config.json"
+import { SessionFileStorage } from "@biconomy/session-file-storage"
 
 const STORE_URL = __dirname
 

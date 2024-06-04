@@ -1,7 +1,6 @@
 import {
   BICONOMY_TOKEN_PAYMASTER,
   PaymasterMode,
-  SessionFileStorage,
   type SupportedSigner,
   createSessionSmartAccountClient,
   createSmartAccountClient,
@@ -18,6 +17,7 @@ import {
 } from "viem"
 import { privateKeyToAccount } from "viem/accounts"
 import config from "../../config.json"
+import { SessionFileStorage } from "@biconomy/session-file-storage"
 
 const STORE_URL = __dirname
 
@@ -107,10 +107,9 @@ export const useTokenPaySession = async () => {
 
   const { success: txApprovalSuccess } = await waitForApprovalTx()
   console.log(
-    `${
-      txApprovalSuccess
-        ? chalk.green("txApprovalSuccess Success")
-        : chalk.red("txApprovalSuccess Failed")
+    `${txApprovalSuccess
+      ? chalk.green("txApprovalSuccess Success")
+      : chalk.red("txApprovalSuccess Failed")
     }`
   )
 
@@ -128,10 +127,9 @@ export const useTokenPaySession = async () => {
 
   const { success: txMintSuccess } = await waitForMintTx()
   console.log(
-    `${
-      txMintSuccess
-        ? chalk.green("txMintSuccess Success")
-        : chalk.red("txMintSuccess Failed")
+    `${txMintSuccess
+      ? chalk.green("txMintSuccess Success")
+      : chalk.red("txMintSuccess Failed")
     }`
   )
 }
