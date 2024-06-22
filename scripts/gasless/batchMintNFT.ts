@@ -46,10 +46,14 @@ export const batchMintNft = async () => {
 
   // ------ 4. Send transaction
   const { waitForTxHash } = await smartAccount.sendTransaction(
-    {
+    [{
       to: nftAddress,
       data: nftData,
     },
+    {
+      to: nftAddress,
+      data: nftData,
+    }],
     { paymasterServiceData: { mode: PaymasterMode.SPONSORED } }
   );
   const { transactionHash } = await waitForTxHash();
