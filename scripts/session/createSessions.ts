@@ -1,8 +1,6 @@
 import {
   type CreateSessionDataParams,
   PaymasterMode,
-  type Policy,
-  SessionFileStorage,
   createABISessionDatum,
   createBatchSession,
   createERC20SessionDatum,
@@ -11,6 +9,8 @@ import {
   createSmartAccountClient,
   getChain
 } from "@biconomy/account"
+import { SessionFileStorage } from "@biconomy/session-file-storage"
+
 import chalk from "chalk"
 import {
   http,

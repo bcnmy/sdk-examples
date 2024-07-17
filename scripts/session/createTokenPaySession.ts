@@ -2,12 +2,13 @@ import {
   BICONOMY_TOKEN_PAYMASTER,
   PaymasterMode,
   type Policy,
-  SessionFileStorage,
   createSession,
   createSessionKeyEOA,
   createSmartAccountClient,
   getChain
 } from "@biconomy/account"
+import { SessionFileStorage } from "@biconomy/session-file-storage"
+
 import chalk from "chalk"
 import { http, type Hex, createWalletClient, parseAbi } from "viem"
 import { privateKeyToAccount } from "viem/accounts"
